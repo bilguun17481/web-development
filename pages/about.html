@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="O společnosti Elektro Dvořák - více než 20 let zkušeností v oblasti elektroinstalačního materiálu">
+    <title>O nás - Elektro Dvořák</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .about-page {
+            margin-top: var(--header-height);
+        }
+
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .about-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .about-hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .about-content {
+            padding: 80px 0;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .about-text h2 {
+            margin-bottom: 25px;
+            font-size: 2rem;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        .about-image {
+            text-align: center;
+            font-size: 15rem;
+        }
+
+        .stats-section {
+            background: var(--light-gray);
+            padding: 80px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .timeline-section {
+            padding: 80px 0;
+        }
+
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .timeline-year {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-dot {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .timeline-content {
+            padding: 25px;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .timeline-item:nth-child(even) .timeline-year {
+            grid-column: 2;
+        }
+
+        .values-section {
+            background: var(--light-gray);
+            padding: 80px 0;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .value-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .value-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .value-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .team-section {
+            padding: 80px 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .team-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .team-role {
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .partners-section {
+            background: var(--white);
+            padding: 80px 0;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .partner-logo {
+            text-align: center;
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .partner-logo:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                font-size: 10rem;
+            }
+
+            .timeline::before {
+                left: 40px;
+            }
+
+            .timeline-item {
+                grid-template-columns: 80px 1fr;
+                gap: 20px;
+            }
+
+            .timeline-content {
+                grid-column: 2;
+            }
+
+            .timeline-item:nth-child(even) .timeline-content {
+                grid-column: 2;
+                grid-row: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-hero p {
+                font-size: 1.1rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">
+                <div class="logo-icon">ED</div>
+                <span>Elektro Dvořák</span>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Domů</a></li>
+                    <li><a href="categories.html">Produkty</a></li>
+                    <li><a href="about.html" class="active">O nás</a></li>
+                    <li><a href="contact.html">Kontakt</a></li>
+                </ul>
+
+                <div class="nav-icons">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-icon" onclick="window.location.href='cart.html'">
+                        🛒
+                        <span class="cart-badge">0</span>
+                    </span>
+                </div>
+
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SEKCE -->
+    <div class="about-hero">
+        <div class="container">
+            <h1>O společnosti Elektro Dvořák</h1>
+            <p>Váš spolehlivý partner v oblasti elektroinstalačního materiálu již více než 20 let</p>
+        </div>
+    </div>
+
+    <!-- HLAVNÍ OBSAH -->
+    <div class="about-content">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>Naše historie a poslání</h2>
+                    <p>
+                        Elektro Dvořák je rodinná firma s více než 20 lety zkušeností v oblasti prodeje
+                        elektroinstalačního materiálu. Začínali jsme jako malá prodejna v Praze 6 a během let jsme
+                        se vypracovali mezi uznávané dodavatele elektroinstalačního materiálu v celé České republice.
+                    </p>
+                    <p>
+                        Naším cílem je poskytovat našim zákazníkům kvalitní produkty za konkurenční ceny
+                        s profesionálním servisem. Spolupracujeme pouze s renomovanými výrobci a dodavateli,
+                        což nám umožňuje garantovat vysokou kvalitu všech nabízených výrobků.
+                    </p>
+                    <p>
+                        Jsme hrdí na to, že za dobu naší existence jsme získali tisíce spokojených zákazníků,
+                        kteří se k nám pravidelně vrací. Naše zkušenosti, profesionalita a individuální přístup
+                        k zákazníkům nás odlišují od konkurence.
+                    </p>
+                </div>
+                <div class="about-image">
+                    ⚡
+                </div>
+            </div>
+
+            <div class="about-grid" style="flex-direction: row-reverse;">
+                <div class="about-text">
+                    <h2>Proč si vybrat právě nás?</h2>
+                    <p>
+                        Naše dlouholeté zkušenosti v oboru a přímá spolupráce s výrobci nám umožňují nabízet
+                        nejnovější produkty za velmi výhodné ceny. Disponujeme rozsáhlým skladem, díky kterému
+                        můžeme expedovat objednávky ještě v den objednání.
+                    </p>
+                    <p>
+                        Náš tým odborníků vám rád pomůže s výběrem správného produktu pro vaše potřeby.
+                        Poskytujeme kompletní technické poradenství zdarma a pomůžeme vám s řešením i těch
+                        nejsložitějších instalací.
+                    </p>
+                    <p>
+                        Spolupracujeme s profesionálními elektrikáři, firmami i koncovými zákazníky.
+                        Pro naše stálé zákazníky máme připravené speciální věrnostní programy a množstevní slevy.
+                    </p>
+                </div>
+                <div class="about-image">
+                    🏆
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATISTIKY -->
+    <div class="stats-section">
+        <div class="container">
+            <h2 class="section-title">Elektro Dvořák v číslech</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Let na trhu</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15 000+</div>
+                    <div class="stat-label">Spokojených zákazníků</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5 000+</div>
+                    <div class="stat-label">Produktů v nabídce</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Partnerských značek</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ČASOVÁ OSA -->
+    <div class="timeline-section">
+        <div class="container">
+            <h2 class="section-title">Naše cesta</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Založení společnosti</h3>
+                        <p>Otevření první prodejny v Praze 6. Začínáme s malým sortimentem základního elektroinstalačního materiálu.</p>
+                    </div>
+                    <div class="timeline-year">
+                        <div class="timeline-dot">2003</div>
+                    </div>
+                    <div></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div></div>
+                    <div class="timeline-year">
+                        <div class="timeline-dot">2008</div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Rozšíření sortimentu</h3>
+                        <p>Navázání spolupráce s předními výrobci. Zaměření na LED technologie a moderní osvětlení.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Spuštění e-shopu</h3>
+                        <p>Zahájení online prodeje. Možnost objednávat 24/7 s dopravou do celé České republiky.</p>
+                    </div>
+                    <div class="timeline-year">
+                        <div class="timeline-dot">2012</div>
+                    </div>
+                    <div></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div></div>
+                    <div class="timeline-year">
+                        <div class="timeline-dot">2018</div>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Nový sklad</h3>
+                        <p>Otevření moderního skladového areálu s kapacitou pro více než 5 000 produktů.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Certifikace a ocenění</h3>
+                        <p>Získání certifikace ISO 9001. Ocenění jako spolehlivý dodavatel roku v kategorii elektroinstalace.</p>
+                    </div>
+                    <div class="timeline-year">
+                        <div class="timeline-dot">2024</div>
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAŠE HODNOTY -->
+    <div class="values-section">
+        <div class="container">
+            <h2 class="section-title">Naše hodnoty</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">✓</div>
+                    <h3>Kvalita</h3>
+                    <p>Nabízíme pouze ověřené produkty od renomovaných výrobců s certifikáty kvality.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3>Spolehlivost</h3>
+                    <p>Dodržujeme termíny, poskytujeme záruku a jsme tu pro vás i po prodeji.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💡</div>
+                    <h3>Odbornost</h3>
+                    <p>Náš tým tvoří zkušení specialisté s hlubokými znalostmi v oboru elektroinstalací.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">❤️</div>
+                    <h3>Zákaznický přístup</h3>
+                    <p>Každý zákazník je pro nás důležitý. Poskytujeme individuální přístup a poradenství.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NÁŠ TÝM -->
+    <div class="team-section">
+        <div class="container">
+            <h2 class="section-title">Náš tým</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-photo">👨</div>
+                    <div class="team-name">Jan Dvořák</div>
+                    <div class="team-role">Jednatel a zakladatel</div>
+                    <p>Více než 25 let zkušeností v oboru elektroinstalací a řízení projektů.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo">👩</div>
+                    <div class="team-name">Marie Dvořáková</div>
+                    <div class="team-role">Obchodní ředitelka</div>
+                    <p>Zodpovědná za péči o klíčové zákazníky a rozvoj obchodních vztahů.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo">👨</div>
+                    <div class="team-name">Petr Novák</div>
+                    <div class="team-role">Vedoucí technického oddělení</div>
+                    <p>Expert na LED technologie a moderní osvětlovací systémy.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo">👩</div>
+                    <div class="team-name">Jana Svobodová</div>
+                    <div class="team-role">Zákaznický servis</div>
+                    <p>Vaše první kontaktní osoba pro dotazy a objednávky.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PARTNEŘI -->
+    <div class="partners-section">
+        <div class="container">
+            <h2 class="section-title">Naši partneři</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 50px; font-size: 1.1rem;">
+                Spolupracujeme s předními světovými výrobci elektroinstalačního materiálu
+            </p>
+            <div class="partners-grid">
+                <div class="partner-logo">Philips</div>
+                <div class="partner-logo">OSRAM</div>
+                <div class="partner-logo">Legrand</div>
+                <div class="partner-logo">ABB</div>
+                <div class="partner-logo">Schneider</div>
+                <div class="partner-logo">Siemens</div>
+                <div class="partner-logo">PRYSMIAN</div>
+                <div class="partner-logo">OBO</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA SEKCE -->
+    <div style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); padding: 80px 0; text-align: center; color: var(--white);">
+        <div class="container">
+            <h2 style="margin-bottom: 20px; color: var(--white);">Přesvědčte se sami</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.95;">
+                Navštivte naši prodejnu nebo si prohlédněte náš online katalog
+            </p>
+            <div class="btn-group" style="justify-content: center;">
+                <a href="categories.html" class="btn btn-primary" style="background: var(--white); color: var(--primary-color);">
+                    Zobrazit produkty
+                </a>
+                <a href="contact.html" class="btn btn-secondary" style="border-color: var(--white); color: var(--white);">
+                    Kontaktujte nás
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-about">
+                    <h3>Elektro Dvořák</h3>
+                    <p>Váš spolehlivý partner pro elektroinstalační materiál.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">📘</a>
+                        <a href="#" class="social-icon">📷</a>
+                        <a href="#" class="social-icon">📺</a>
+                        <a href="#" class="social-icon">💼</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Rychlé odkazy</h3>
+                    <ul>
+                        <li><a href="../index.html">Domů</a></li>
+                        <li><a href="categories.html">Produkty</a></li>
+                        <li><a href="about.html">O nás</a></li>
+                        <li><a href="contact.html">Kontakt</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Zákaznický servis</h3>
+                    <ul>
+                        <li><a href="#">Doprava a platba</a></li>
+                        <li><a href="#">Reklamace</a></li>
+                        <li><a href="#">Časté dotazy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Kontakt</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span>📍</span>
+                            <span>Příkladová 123, 160 00 Praha 6</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <span>+420 234 567 890</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>✉️</span>
+                            <span>info@elektrodvorak.cz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Elektro Dvořák. Všechna práva vyhrazena.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/script.js"></script>
+</body>
+</html>

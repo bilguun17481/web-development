@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Elektro Dvořák - Váš spolehlivý partner pro elektroinstalační materiál, LED osvětlení, kabely a elektro příslušenství. Více než 20 let zkušeností.">
+    <meta name="keywords" content="elektro, elektroinstalace, LED osvětlení, kabely, zásuvky, vypínače">
+    <title>Elektro Dvořák - Elektroinstalační materiál a osvětlení</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+</head>
+<body>
+    <!-- HEADER & NAVIGACE -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">ED</div>
+                <span>Elektro Dvořák</span>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Domů</a></li>
+                    <li><a href="pages/categories.html">Produkty</a></li>
+                    <li><a href="pages/about.html">O nás</a></li>
+                    <li><a href="pages/contact.html">Kontakt</a></li>
+                </ul>
+
+                <div class="nav-icons">
+                    <span class="nav-icon" title="Vyhledávání">🔍</span>
+                    <span class="nav-icon" title="Uživatel">👤</span>
+                    <span class="nav-icon" title="Košík" onclick="window.location.href='pages/cart.html'">
+                        🛒
+                        <span class="cart-badge">0</span>
+                    </span>
+                </div>
+
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SEKCE -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Váš odborný partner pro elektroinstalace</h1>
+                    <p>Nabízíme široký sortiment kvalitního elektroinstalačního materiálu, LED osvětlení a příslušenství. Spolehlivost a profesionální přístup již více než 20 let.</p>
+                    <div class="btn-group">
+                        <a href="pages/categories.html" class="btn btn-primary">Procházet produkty</a>
+                        <a href="pages/contact.html" class="btn btn-secondary">Kontaktujte nás</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div style="font-size: 200px; text-align: center;">⚡</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VÝHODY -->
+    <section class="features section">
+        <div class="container">
+            <h2 class="section-title">Proč nakupovat u nás</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Rychlé dodání</h3>
+                    <p>Expedice objednávek do 24 hodin. Doprava zdarma nad 3 000 Kč.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✓</div>
+                    <h3>Ověřená kvalita</h3>
+                    <p>Spolupracujeme pouze s renomovanými výrobci a dodavateli.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Odborné poradenství</h3>
+                    <p>Naši specialisté vám pomohou s výběrem správného produktu.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Více než 20 let zkušeností</h3>
+                    <p>Rodinná firma s dlouholetou tradicí a spokojenými zákazníky.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KATEGORIE PRODUKTŮ -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Kategorie produktů</h2>
+            <div class="categories-grid">
+                <div class="category-card" onclick="window.location.href='pages/categories.html?cat=osvetleni'">
+                    <div class="category-icon">💡</div>
+                    <h3>LED Osvětlení</h3>
+                    <p>Žárovky, pásky, panely</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='pages/categories.html?cat=zasuvky'">
+                    <div class="category-icon">🔌</div>
+                    <h3>Zásuvky a Vypínače</h3>
+                    <p>Kompletní program</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='pages/categories.html?cat=kabely'">
+                    <div class="category-icon">🔗</div>
+                    <h3>Kabely a Vodiče</h3>
+                    <p>Všechny průřezy</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='pages/categories.html?cat=jistice'">
+                    <div class="category-icon">⚡</div>
+                    <h3>Jističe a Chrániče</h3>
+                    <p>Ochrana a bezpečnost</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='pages/categories.html?cat=instalace'">
+                    <div class="category-icon">🛠️</div>
+                    <h3>Instalační Materiál</h3>
+                    <p>Krabice, lišty, trubky</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='pages/categories.html?cat=naradi'">
+                    <div class="category-icon">🔧</div>
+                    <h3>Nářadí</h3>
+                    <p>Pro profesionály</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOPORUČENÉ PRODUKTY -->
+    <section class="section" style="background: var(--light-gray);">
+        <div class="container">
+            <h2 class="section-title">Doporučené produkty</h2>
+            <div class="products-grid">
+                <!-- Produkt 1 -->
+                <div class="product-card" data-product-id="1" data-category="osvetleni" data-manufacturer="philips">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
+                        <span class="product-badge new">Novinka</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">LED Osvětlení</div>
+                        <h3 class="product-title">LED žárovka E27 12W teplá bílá</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(127)</span>
+                        </div>
+                        <p class="product-description">Energeticky úsporná LED žárovka s dlouhou životností. Ideální náhrada za klasické 75W žárovky.</p>
+                        <div class="product-footer">
+                            <div class="product-price">149 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produkt 2 -->
+                <div class="product-card" data-product-id="2" data-category="zasuvky" data-manufacturer="legrand">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔌</div>
+                        <span class="product-badge sale">-20%</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Zásuvky</div>
+                        <h3 class="product-title">Zásuvka SCHUKO s dětskou ochranou bílá</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-count">(89)</span>
+                        </div>
+                        <p class="product-description">Moderní zásuvka s ochranou proti dotyku. Snadná montáž, elegantní design.</p>
+                        <div class="product-footer">
+                            <div class="product-price">
+                                <span class="old-price">299 Kč</span>
+                                239 Kč
+                            </div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produkt 3 -->
+                <div class="product-card" data-product-id="3" data-category="kabely" data-manufacturer="prysmian">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔗</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Kabely</div>
+                        <h3 class="product-title">Kabel CYKYLo 3x1,5 mm² (100m)</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(203)</span>
+                        </div>
+                        <p class="product-description">Instalační kabel pro pevné uložení. Vhodný pro domácí i průmyslové instalace.</p>
+                        <div class="product-footer">
+                            <div class="product-price">1 890 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produkt 4 -->
+                <div class="product-card" data-product-id="4" data-category="osvetleni" data-manufacturer="osram">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🎆</div>
+                        <span class="product-badge new">Novinka</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">LED Pásky</div>
+                        <h3 class="product-title">LED pásek RGB 5m s ovladačem</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-count">(64)</span>
+                        </div>
+                        <p class="product-description">Dekorativní LED pásek s dálkovým ovladačem. 16 milionů barev, různé efekty.</p>
+                        <div class="product-footer">
+                            <div class="product-price">799 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="pages/categories.html" class="btn btn-primary">Zobrazit všechny produkty</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEJPRODÁVANĚJŠÍ -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Nejprodávanější</h2>
+            <div class="products-grid">
+                <!-- Produkt 5 -->
+                <div class="product-card" data-product-id="5" data-category="jistice" data-manufacturer="abb">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">⚡</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Jističe</div>
+                        <h3 class="product-title">Jistič modulární 1P 16A B-charakteristika</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(312)</span>
+                        </div>
+                        <p class="product-description">Kvalitní modulární jistič pro ochranu elektrických obvodů. Snadná instalace.</p>
+                        <div class="product-footer">
+                            <div class="product-price">189 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produkt 6 -->
+                <div class="product-card" data-product-id="6" data-category="instalace" data-manufacturer="obo">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">📦</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Instalace</div>
+                        <h3 class="product-title">Krabice přístrojová KP 68/35 (100ks)</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-count">(156)</span>
+                        </div>
+                        <p class="product-description">Standardní přístrojová krabice pro montáž do zdiva. Balení 100 kusů.</p>
+                        <div class="product-footer">
+                            <div class="product-price">890 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produkt 7 -->
+                <div class="product-card" data-product-id="7" data-category="naradi" data-manufacturer="knipex">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔧</div>
+                        <span class="product-badge sale">-15%</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Nářadí</div>
+                        <h3 class="product-title">Kleště elektrikářské 180mm izolované</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(98)</span>
+                        </div>
+                        <p class="product-description">Profesionální kleště s izolací do 1000V. Ergonomická rukojeť, dlouhá životnost.</p>
+                        <div class="product-footer">
+                            <div class="product-price">
+                                <span class="old-price">599 Kč</span>
+                                509 Kč
+                            </div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Produkt 8 -->
+                <div class="product-card" data-product-id="8" data-category="osvetleni" data-manufacturer="philips">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔦</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Osvětlení</div>
+                        <h3 class="product-title">LED panel 60x60cm 40W studená bílá</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(174)</span>
+                        </div>
+                        <p class="product-description">Moderní LED panel pro závěsné stropy. Vysoká svítivost, nízká spotřeba.</p>
+                        <div class="product-footer">
+                            <div class="product-price">1 290 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- O NÁS - KRÁTKÁ SEKCE -->
+    <section class="section" style="background: var(--primary-color); color: var(--white);">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2>O společnosti Elektro Dvořák</h2>
+                <p style="font-size: 1.1rem; line-height: 1.8; margin: 20px 0;">
+                    Jsme rodinná firma s více než 20 lety zkušeností v oblasti prodeje elektroinstalačního materiálu.
+                    Naším cílem je poskytovat kvalitní produkty za férové ceny a profesionální zákaznický servis.
+                    Spolupracujeme s renomovanými výrobci a díky tomu můžeme garantovat vysokou kvalitu našich výrobků.
+                </p>
+                <a href="pages/about.html" class="btn btn-secondary mt-2">Více o nás</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-about">
+                    <h3>Elektro Dvořák</h3>
+                    <p>
+                        Váš spolehlivý partner pro elektroinstalační materiál.
+                        Nabízíme široký sortiment produktů za konkurenční ceny s profesionálním servisem.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" title="Facebook">📘</a>
+                        <a href="#" class="social-icon" title="Instagram">📷</a>
+                        <a href="#" class="social-icon" title="YouTube">📺</a>
+                        <a href="#" class="social-icon" title="LinkedIn">💼</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Rychlé odkazy</h3>
+                    <ul>
+                        <li><a href="index.html">Domů</a></li>
+                        <li><a href="pages/categories.html">Produkty</a></li>
+                        <li><a href="pages/about.html">O nás</a></li>
+                        <li><a href="pages/contact.html">Kontakt</a></li>
+                        <li><a href="#">Obchodní podmínky</a></li>
+                        <li><a href="#">Ochrana osobních údajů</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Zákaznický servis</h3>
+                    <ul>
+                        <li><a href="#">Doprava a platba</a></li>
+                        <li><a href="#">Reklamace</a></li>
+                        <li><a href="#">Časté dotazy</a></li>
+                        <li><a href="#">Nákupní rádce</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Kontakt</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span>📍</span>
+                            <span>Příkladová 123, 160 00 Praha 6</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <span>+420 234 567 890</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>✉️</span>
+                            <span>info@elektrodvorak.cz</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>🕐</span>
+                            <span>Po-Pá: 8:00 - 17:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Elektro Dvořák. Všechna práva vyhrazena.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

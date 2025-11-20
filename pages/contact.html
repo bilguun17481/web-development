@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kontaktujte nás - Elektro Dvořák">
+    <title>Kontakt - Elektro Dvořák</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .contact-page {
+            margin-top: var(--header-height);
+            padding: 40px 0;
+        }
+
+        .contact-hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--white);
+            padding: 60px 0;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .contact-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .contact-info-section h2 {
+            margin-bottom: 30px;
+        }
+
+        .contact-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 25px;
+        }
+
+        .contact-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--white);
+        }
+
+        .contact-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .contact-card-content {
+            line-height: 2;
+        }
+
+        .contact-card-content a {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .contact-form {
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+        }
+
+        .contact-form h2 {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group .required {
+            color: #dc3545;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--gray);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-control.error {
+            border-color: #dc3545;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .map-section {
+            margin: 60px 0;
+        }
+
+        .map-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            height: 450px;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .map-placeholder {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .map-placeholder h3 {
+            margin-bottom: 15px;
+        }
+
+        .opening-hours {
+            background: var(--light-gray);
+            padding: 60px 0;
+        }
+
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .day-hours {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .day-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .hours-time {
+            color: var(--text-color);
+        }
+
+        .weekend {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 992px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .contact-hero h1 {
+                font-size: 2rem;
+            }
+
+            .contact-form {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">
+                <div class="logo-icon">ED</div>
+                <span>Elektro Dvořák</span>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Domů</a></li>
+                    <li><a href="categories.html">Produkty</a></li>
+                    <li><a href="about.html">O nás</a></li>
+                    <li><a href="contact.html" class="active">Kontakt</a></li>
+                </ul>
+
+                <div class="nav-icons">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-icon" onclick="window.location.href='cart.html'">
+                        🛒
+                        <span class="cart-badge">0</span>
+                    </span>
+                </div>
+
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SEKCE -->
+    <div class="contact-hero">
+        <div class="container">
+            <h1>Kontaktujte nás</h1>
+            <p style="font-size: 1.2rem;">Rádi vám pomůžeme s výběrem produktů nebo zodpovíme vaše dotazy</p>
+        </div>
+    </div>
+
+    <!-- KONTAKTNÍ STRÁNKA -->
+    <div class="contact-page">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- KONTAKTNÍ INFORMACE -->
+                <div class="contact-info-section">
+                    <h2>Kontaktní údaje</h2>
+
+                    <div class="contact-card">
+                        <div class="contact-card-header">
+                            <div class="contact-card-icon">📍</div>
+                            <div class="contact-card-title">Adresa prodejny</div>
+                        </div>
+                        <div class="contact-card-content">
+                            <strong>Elektro Dvořák s.r.o.</strong><br>
+                            Příkladová 123<br>
+                            160 00 Praha 6<br>
+                            Česká republika
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-card-header">
+                            <div class="contact-card-icon">📞</div>
+                            <div class="contact-card-title">Telefon</div>
+                        </div>
+                        <div class="contact-card-content">
+                            <strong>Objednávky a poradenství:</strong><br>
+                            <a href="tel:+420234567890">+420 234 567 890</a><br>
+                            Po-Pá: 8:00 - 17:00<br><br>
+
+                            <strong>Technická podpora:</strong><br>
+                            <a href="tel:+420234567891">+420 234 567 891</a><br>
+                            Po-Pá: 9:00 - 16:00
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-card-header">
+                            <div class="contact-card-icon">✉️</div>
+                            <div class="contact-card-title">Email</div>
+                        </div>
+                        <div class="contact-card-content">
+                            <strong>Obecné dotazy:</strong><br>
+                            <a href="mailto:info@elektrodvorak.cz">info@elektrodvorak.cz</a><br><br>
+
+                            <strong>Objednávky:</strong><br>
+                            <a href="mailto:objednavky@elektrodvorak.cz">objednavky@elektrodvorak.cz</a><br><br>
+
+                            <strong>Reklamace:</strong><br>
+                            <a href="mailto:reklamace@elektrodvorak.cz">reklamace@elektrodvorak.cz</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-card-header">
+                            <div class="contact-card-icon">🏢</div>
+                            <div class="contact-card-title">Identifikační údaje</div>
+                        </div>
+                        <div class="contact-card-content">
+                            <strong>IČ:</strong> 12345678<br>
+                            <strong>DIČ:</strong> CZ12345678<br>
+                            <strong>Registrace:</strong> Městský soud v Praze<br>
+                            oddíl C, vložka 123456
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KONTAKTNÍ FORMULÁŘ -->
+                <div class="contact-form-section">
+                    <form class="contact-form" id="contact-form">
+                        <h2>Napište nám</h2>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Jméno a příjmení <span class="required">*</span></label>
+                                <input type="text" id="name" name="name" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Telefon</label>
+                                <input type="tel" id="phone" name="phone" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject">Předmět</label>
+                                <select id="subject" name="subject" class="form-control">
+                                    <option value="">Vyberte předmět...</option>
+                                    <option value="order">Dotaz k objednávce</option>
+                                    <option value="product">Dotaz k produktu</option>
+                                    <option value="technical">Technická podpora</option>
+                                    <option value="complaint">Reklamace</option>
+                                    <option value="other">Ostatní</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Zpráva <span class="required">*</span></label>
+                            <textarea id="message" name="message" class="form-control" required placeholder="Napište nám vaši zprávu..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="checkbox" id="gdpr" name="gdpr" required>
+                                <span>Souhlasím se zpracováním osobních údajů <span class="required">*</span></span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                            Odeslat zprávu
+                        </button>
+
+                        <p style="margin-top: 15px; color: var(--text-light); font-size: 0.9rem;">
+                            <span class="required">*</span> Povinná pole
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTEVÍRACÍ DOBA -->
+    <div class="opening-hours">
+        <div class="container">
+            <h2 class="section-title">Otevírací doba</h2>
+            <div class="hours-grid">
+                <div class="day-hours">
+                    <div class="day-name">Pondělí</div>
+                    <div class="hours-time">8:00 - 17:00</div>
+                </div>
+                <div class="day-hours">
+                    <div class="day-name">Úterý</div>
+                    <div class="hours-time">8:00 - 17:00</div>
+                </div>
+                <div class="day-hours">
+                    <div class="day-name">Středa</div>
+                    <div class="hours-time">8:00 - 17:00</div>
+                </div>
+                <div class="day-hours">
+                    <div class="day-name">Čtvrtek</div>
+                    <div class="hours-time">8:00 - 17:00</div>
+                </div>
+                <div class="day-hours">
+                    <div class="day-name">Pátek</div>
+                    <div class="hours-time">8:00 - 17:00</div>
+                </div>
+                <div class="day-hours weekend">
+                    <div class="day-name">Sobota</div>
+                    <div class="hours-time">Zavřeno</div>
+                </div>
+                <div class="day-hours weekend">
+                    <div class="day-name">Neděle</div>
+                    <div class="hours-time">Zavřeno</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAPA -->
+    <div class="map-section">
+        <div class="container">
+            <h2 class="section-title">Kde nás najdete</h2>
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🗺️</div>
+                    <h3>Mapa prodejny</h3>
+                    <p style="color: var(--text-light); max-width: 500px; margin: 15px auto;">
+                        Příkladová 123, Praha 6<br>
+                        V produkční verzi by zde byla interaktivní Google Maps nebo Mapy.cz
+                    </p>
+                    <button class="btn btn-primary" onclick="openMap()">
+                        Otevřít v mapách
+                    </button>
+                </div>
+
+                <!-- V produkci by zde byl iframe s mapou:
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=..."
+                    width="100%"
+                    height="450"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy">
+                </iframe>
+                -->
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: var(--light-gray); border-radius: var(--border-radius); text-align: center;">
+                <h3 style="margin-bottom: 15px;">Jak se k nám dostanete</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 30px;">
+                    <div>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🚗</div>
+                        <strong>Autem</strong>
+                        <p style="color: var(--text-light); margin-top: 10px;">
+                            Parkování zdarma před prodejnou
+                        </p>
+                    </div>
+                    <div>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🚇</div>
+                        <strong>MHD</strong>
+                        <p style="color: var(--text-light); margin-top: 10px;">
+                            Metro A - Dejvická (5 min chůze)
+                        </p>
+                    </div>
+                    <div>
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🚌</div>
+                        <strong>Autobusem</strong>
+                        <p style="color: var(--text-light); margin-top: 10px;">
+                            Zastávka Příkladová (linky 119, 225)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-about">
+                    <h3>Elektro Dvořák</h3>
+                    <p>Váš spolehlivý partner pro elektroinstalační materiál.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">📘</a>
+                        <a href="#" class="social-icon">📷</a>
+                        <a href="#" class="social-icon">📺</a>
+                        <a href="#" class="social-icon">💼</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Rychlé odkazy</h3>
+                    <ul>
+                        <li><a href="../index.html">Domů</a></li>
+                        <li><a href="categories.html">Produkty</a></li>
+                        <li><a href="about.html">O nás</a></li>
+                        <li><a href="contact.html">Kontakt</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Zákaznický servis</h3>
+                    <ul>
+                        <li><a href="#">Doprava a platba</a></li>
+                        <li><a href="#">Reklamace</a></li>
+                        <li><a href="#">Časté dotazy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Kontakt</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span>📍</span>
+                            <span>Příkladová 123, 160 00 Praha 6</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <span>+420 234 567 890</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>✉️</span>
+                            <span>info@elektrodvorak.cz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Elektro Dvořák. Všechna práva vyhrazena.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/script.js"></script>
+    <script>
+        function openMap() {
+            // V produkci by to otevřelo skutečnou mapu
+            window.open('https://maps.google.com/?q=Praha+6', '_blank');
+        }
+    </script>
+</body>
+</html>

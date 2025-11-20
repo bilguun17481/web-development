@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LED žárovka E27 12W teplá bílá - Elektro Dvořák">
+    <title>LED žárovka E27 12W - Elektro Dvořák</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .product-detail {
+            margin-top: var(--header-height);
+            padding: 40px 0;
+        }
+
+        .product-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .product-gallery-wrapper {
+            position: sticky;
+            top: calc(var(--header-height) + 20px);
+        }
+
+        .main-image-container {
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 20px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-product-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .gallery-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .gallery-thumbnail {
+            aspect-ratio: 1;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            overflow: hidden;
+        }
+
+        .gallery-thumbnail:hover,
+        .gallery-thumbnail.active {
+            border-color: var(--primary-color);
+        }
+
+        .product-detail-info h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .product-sku {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .product-availability {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .product-availability.out-of-stock {
+            color: #dc3545;
+        }
+
+        .price-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+        }
+
+        .current-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .price-info {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .quantity-selector label {
+            font-weight: 600;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            border: 2px solid var(--gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background: var(--light-gray);
+        }
+
+        .quantity-input {
+            width: 60px;
+            height: 40px;
+            border: none;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            border-left: 1px solid var(--gray);
+            border-right: 1px solid var(--gray);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn-add-to-cart-large {
+            flex: 1;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+        }
+
+        .btn-wishlist {
+            padding: 16px 20px;
+            background: var(--white);
+            border: 2px solid var(--gray);
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-wishlist:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .product-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .product-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .product-features li::before {
+            content: '✓';
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .tabs {
+            margin-top: 60px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .tab-button {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .specs-table tr {
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .specs-table td {
+            padding: 15px 10px;
+        }
+
+        .specs-table td:first-child {
+            font-weight: 600;
+            width: 40%;
+        }
+
+        .review-item {
+            padding: 25px;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-author {
+            font-weight: 600;
+        }
+
+        .review-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .related-products {
+            margin-top: 60px;
+            padding: 60px 0;
+            background: var(--light-gray);
+        }
+
+        @media (max-width: 992px) {
+            .product-detail-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .product-gallery-wrapper {
+                position: relative;
+                top: 0;
+            }
+
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">
+                <div class="logo-icon">ED</div>
+                <span>Elektro Dvořák</span>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Domů</a></li>
+                    <li><a href="categories.html" class="active">Produkty</a></li>
+                    <li><a href="about.html">O nás</a></li>
+                    <li><a href="contact.html">Kontakt</a></li>
+                </ul>
+
+                <div class="nav-icons">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-icon" onclick="window.location.href='cart.html'">
+                        🛒
+                        <span class="cart-badge">0</span>
+                    </span>
+                </div>
+
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BREADCRUMBS -->
+    <div class="product-detail">
+        <div class="container">
+            <div style="color: var(--text-light); margin-bottom: 20px;">
+                <a href="../index.html" style="color: var(--text-light);">Domů</a> /
+                <a href="categories.html" style="color: var(--text-light);">Produkty</a> /
+                <a href="categories.html?cat=osvetleni" style="color: var(--text-light);">LED Osvětlení</a> /
+                <span style="color: var(--text-color);">LED žárovka E27 12W</span>
+            </div>
+
+            <!-- DETAIL PRODUKTU -->
+            <div class="product-detail-grid">
+                <!-- GALERIE -->
+                <div class="product-gallery-wrapper">
+                    <div class="main-image-container">
+                        <div class="main-product-image" style="font-size: 200px;">💡</div>
+                    </div>
+                    <div class="gallery-thumbnails">
+                        <div class="gallery-thumbnail active">💡</div>
+                        <div class="gallery-thumbnail">💡</div>
+                        <div class="gallery-thumbnail">💡</div>
+                        <div class="gallery-thumbnail">💡</div>
+                    </div>
+                </div>
+
+                <!-- INFORMACE -->
+                <div class="product-detail-info">
+                    <div class="product-category">LED OSVĚTLENÍ</div>
+                    <h1>LED žárovka E27 12W teplá bílá</h1>
+
+                    <div class="product-meta">
+                        <div class="product-rating">
+                            <span class="stars" style="color: #ffc107; font-size: 1.2rem;">★★★★★</span>
+                            <span class="rating-count">(127 hodnocení)</span>
+                        </div>
+                        <div class="product-sku">Kód: LED-E27-12W-WW</div>
+                        <div class="product-availability">
+                            <span style="font-size: 1.2rem;">✓</span>
+                            <span>Skladem (234 ks)</span>
+                        </div>
+                    </div>
+
+                    <div class="price-section">
+                        <div class="current-price">149 Kč</div>
+                        <div class="price-info">Cena včetně DPH | Cena bez DPH: 123 Kč</div>
+                    </div>
+
+                    <p style="font-size: 1.1rem; line-height: 1.8; margin: 20px 0;">
+                        Vysoce kvalitní LED žárovka s paticí E27 a příkonem 12W nahrazuje klasické žárovky 75W.
+                        Díky dlouhé životnosti až 25 000 hodin a nízké spotřebě energie ušetříte až 85% nákladů na osvětlení.
+                        Ideální pro domácnosti, kanceláře i komerční prostory.
+                    </p>
+
+                    <ul class="product-features">
+                        <li>Příkon pouze 12W při výkonu jako 75W žárovka</li>
+                        <li>Životnost až 25 000 hodin</li>
+                        <li>Teplá bílá barva světla (2700K)</li>
+                        <li>Úspora energie až 85%</li>
+                        <li>Okamžitý start bez čekání</li>
+                        <li>Ekologicky šetrná - neobsahuje rtuť</li>
+                    </ul>
+
+                    <div class="quantity-selector">
+                        <label>Množství:</label>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="decreaseQuantity()">−</button>
+                            <input type="number" class="quantity-input" id="quantity" value="1" min="1">
+                            <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-add-to-cart-large">
+                            Přidat do košíku
+                        </button>
+                        <button class="btn-wishlist" title="Přidat do seznamu přání">
+                            ❤️
+                        </button>
+                    </div>
+
+                    <div style="padding: 20px; background: var(--light-gray); border-radius: var(--border-radius);">
+                        <h4 style="margin-bottom: 15px;">🚚 Doprava a dodání</h4>
+                        <ul style="list-style: none; line-height: 2;">
+                            <li>✓ Doprava zdarma nad 3 000 Kč</li>
+                            <li>✓ Osobní odběr zdarma</li>
+                            <li>✓ Expedice do 24 hodin</li>
+                            <li>✓ 14 dní na vrácení zboží</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABY -->
+            <div class="tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('description')">Popis</button>
+                    <button class="tab-button" onclick="switchTab('specs')">Technické parametry</button>
+                    <button class="tab-button" onclick="switchTab('reviews')">Hodnocení (127)</button>
+                </div>
+
+                <div class="tab-content active" id="description">
+                    <h3>Podrobný popis produktu</h3>
+                    <p style="line-height: 1.8; margin: 20px 0;">
+                        LED žárovka s paticí E27 a příkonem 12W je moderní náhradou za klasické žárovky.
+                        Díky pokročilé LED technologii poskytuje výkon srovnatelný s 75W žárovkou při spotřebě pouze 12W.
+                        To znamená úsporu až 85% energie a výrazné snížení nákladů na osvětlení.
+                    </p>
+                    <p style="line-height: 1.8; margin: 20px 0;">
+                        Žárovka vyzařuje příjemné teplé bílé světlo s teplotou 2700K, které vytváří útulnou atmosféru
+                        v obytných prostorách. Světelný tok 1055 lumenů zajišťuje dostatečné osvětlení pro místnosti
+                        střední velikosti.
+                    </p>
+                    <p style="line-height: 1.8; margin: 20px 0;">
+                        Dlouhá životnost až 25 000 hodin znamená, že žárovku nebudete muset měnit po mnoho let.
+                        LED technologie navíc umožňuje okamžitý start na plný výkon bez čekání na rozsvícení.
+                        Žárovka neobsahuje rtuť ani jiné škodlivé látky, je tedy šetrná k životnímu prostředí.
+                    </p>
+                </div>
+
+                <div class="tab-content" id="specs">
+                    <h3>Technické specifikace</h3>
+                    <table class="specs-table">
+                        <tr>
+                            <td>Typ patice</td>
+                            <td>E27 (velký závit)</td>
+                        </tr>
+                        <tr>
+                            <td>Příkon</td>
+                            <td>12W</td>
+                        </tr>
+                        <tr>
+                            <td>Ekvivalent</td>
+                            <td>75W (klasická žárovka)</td>
+                        </tr>
+                        <tr>
+                            <td>Světelný tok</td>
+                            <td>1055 lm</td>
+                        </tr>
+                        <tr>
+                            <td>Barva světla</td>
+                            <td>Teplá bílá (2700K)</td>
+                        </tr>
+                        <tr>
+                            <td>Úhel svitu</td>
+                            <td>270°</td>
+                        </tr>
+                        <tr>
+                            <td>Životnost</td>
+                            <td>25 000 hodin</td>
+                        </tr>
+                        <tr>
+                            <td>Energetická třída</td>
+                            <td>A+</td>
+                        </tr>
+                        <tr>
+                            <td>Stmívatelnost</td>
+                            <td>Ne</td>
+                        </tr>
+                        <tr>
+                            <td>Napětí</td>
+                            <td>220-240V AC</td>
+                        </tr>
+                        <tr>
+                            <td>Rozměry</td>
+                            <td>60 × 110 mm</td>
+                        </tr>
+                        <tr>
+                            <td>Záruka</td>
+                            <td>3 roky</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="tab-content" id="reviews">
+                    <h3 style="margin-bottom: 30px;">Hodnocení zákazníků</h3>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div>
+                                <div class="review-author">Petr N.</div>
+                                <div class="stars" style="color: #ffc107;">★★★★★</div>
+                            </div>
+                            <div class="review-date">15. listopadu 2024</div>
+                        </div>
+                        <p>
+                            Výborná žárovka, svítí opravdu hezky a jasně. Spotřeba je minimální,
+                            což vidím na účtech za elektřinu. Za mě jednoznačně doporučuji!
+                        </p>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div>
+                                <div class="review-author">Jana K.</div>
+                                <div class="stars" style="color: #ffc107;">★★★★★</div>
+                            </div>
+                            <div class="review-date">10. listopadu 2024</div>
+                        </div>
+                        <p>
+                            Koupila jsem jich hned 10 kusů na celý byt. Příjemné teplé světlo,
+                            rychlá dodávka. Kvalita odpovídá ceně.
+                        </p>
+                    </div>
+
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div>
+                                <div class="review-author">Martin Š.</div>
+                                <div class="stars" style="color: #ffc107;">★★★★☆</div>
+                            </div>
+                            <div class="review-date">5. listopadu 2024</div>
+                        </div>
+                        <p>
+                            Solidní žárovka za dobrou cenu. Jediné mínus je, že není stmívatelná,
+                            ale to byla má chyba při výběru. Jinak spokojenost.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOUVISEJÍCÍ PRODUKTY -->
+    <section class="related-products">
+        <div class="container">
+            <h2 class="section-title">Související produkty</h2>
+            <div class="products-grid">
+                <div class="product-card" data-product-id="9">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">LED Osvětlení</div>
+                        <h3 class="product-title">LED žárovka E27 15W studená bílá</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-count">(89)</span>
+                        </div>
+                        <p class="product-description">Výkonnější varianta se studeným bílým světlem.</p>
+                        <div class="product-footer">
+                            <div class="product-price">169 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-product-id="10">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">LED Osvětlení</div>
+                        <h3 class="product-title">LED žárovka E14 8W teplá bílá</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(156)</span>
+                        </div>
+                        <p class="product-description">Menší provedení s paticí E14 (malý závit).</p>
+                        <div class="product-footer">
+                            <div class="product-price">129 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-product-id="11">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">LED Osvětlení</div>
+                        <h3 class="product-title">LED žárovka GU10 6W</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="rating-count">(67)</span>
+                        </div>
+                        <p class="product-description">Bodovka s paticí GU10 pro halogenová svítidla.</p>
+                        <div class="product-footer">
+                            <div class="product-price">99 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-product-id="12">
+                    <div class="product-image">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔌</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Osvětlení</div>
+                        <h3 class="product-title">Objímka keramická E27</h3>
+                        <div class="product-rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-count">(234)</span>
+                        </div>
+                        <p class="product-description">Kvalitní keramická objímka pro E27 žárovky.</p>
+                        <div class="product-footer">
+                            <div class="product-price">39 Kč</div>
+                            <button class="btn-add-cart">Do košíku</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-about">
+                    <h3>Elektro Dvořák</h3>
+                    <p>Váš spolehlivý partner pro elektroinstalační materiál.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">📘</a>
+                        <a href="#" class="social-icon">📷</a>
+                        <a href="#" class="social-icon">📺</a>
+                        <a href="#" class="social-icon">💼</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Rychlé odkazy</h3>
+                    <ul>
+                        <li><a href="../index.html">Domů</a></li>
+                        <li><a href="categories.html">Produkty</a></li>
+                        <li><a href="about.html">O nás</a></li>
+                        <li><a href="contact.html">Kontakt</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Zákaznický servis</h3>
+                    <ul>
+                        <li><a href="#">Doprava a platba</a></li>
+                        <li><a href="#">Reklamace</a></li>
+                        <li><a href="#">Časté dotazy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Kontakt</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span>📍</span>
+                            <span>Příkladová 123, 160 00 Praha 6</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <span>+420 234 567 890</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>✉️</span>
+                            <span>info@elektrodvorak.cz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Elektro Dvořák. Všechna práva vyhrazena.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/script.js"></script>
+    <script>
+        function switchTab(tabName) {
+            // Skrýt všechny taby
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Zobrazit vybraný tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function increaseQuantity() {
+            const input = document.getElementById('quantity');
+            input.value = parseInt(input.value) + 1;
+        }
+
+        function decreaseQuantity() {
+            const input = document.getElementById('quantity');
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+    </script>
+</body>
+</html>
