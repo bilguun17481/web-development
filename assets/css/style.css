@@ -29,7 +29,7 @@
     /* Rozměry */
     --header-height: 80px;
     --max-width: 1200px;
-    --border-radius: 8px;
+    --border-radius: 0px;
 
     /* Přechody */
     --transition: all 0.3s ease;
@@ -135,16 +135,20 @@ a:hover {
 }
 
 .logo {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--primary-color);
     display: flex;
     align-items: center;
     transition: var(--transition);
 }
 
-.logo:hover {
-    color: var(--primary-dark);
+.logo-img {
+    height: 60px;
+    width: auto;
+    display: block;
+    transition: var(--transition);
+}
+
+.logo:hover .logo-img {
+    opacity: 0.85;
 }
 
 .nav {
@@ -725,8 +729,8 @@ a:hover {
         padding: 0 15px;
     }
 
-    .logo {
-        font-size: 1.4rem;
+    .logo-img {
+        height: 50px;
     }
 
     .products-grid {

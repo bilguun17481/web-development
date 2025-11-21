@@ -1,0 +1,22 @@
+<svg width="280" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pozadí -->
+  <rect width="280" height="100" fill="#FF8C00" rx="0"/>
+
+  <!-- Bílé pole pro text -->
+  <path d="M 80 10 L 270 10 L 250 90 L 100 90 Z" fill="white"/>
+
+  <!-- Text -->
+  <text x="175" y="60" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#2c3e50" text-anchor="middle">DVOŘÁK</text>
+
+  <text x="20" y="95" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="white">založeno 1990</text>
+
+  <!-- Jednoduchý bobr silueta (placeholder) -->
+  <g transform="translate(15, 20)">
+    <circle cx="25" cy="25" r="20" fill="#8B4513"/>
+    <circle cx="20" cy="20" r="3" fill="white"/>
+    <circle cx="30" cy="20" r="3" fill="white"/>
+    <rect x="22" y="28" width="6" height="8" fill="white"/>
+    <circle cx="25" cy="45" r="15" fill="#8B4513"/>
+    <ellipse cx="25" cy="55" rx="8" ry="12" fill="#8B4513"/>
+  </g>
+</svg>
