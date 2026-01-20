@@ -34,7 +34,7 @@
     --shadow-outline: 0 0 0 3px rgba(65,105,225,0.2);
 
     /* Rozměry */
-    --header-height: 80px;
+    --header-height: 130px;
     --max-width: 1200px;
     --border-radius: 8px;            /* Zaoblené rohy */
 
@@ -146,14 +146,21 @@ a:hover {
 .logo {
     display: flex;
     align-items: center;
+    gap: 20px;
     transition: var(--transition);
 }
 
 .logo-img {
-    height: 60px;
+    height: 90px;
     width: auto;
     display: block;
     transition: var(--transition);
+}
+
+.badge-img {
+    height: 90px;
+    width: auto;
+    display: block;
 }
 
 .logo:hover .logo-img {
@@ -759,12 +766,21 @@ a:hover {
 }
 
 @media (max-width: 576px) {
+    :root {
+        --header-height: 100px;
+    }
+
     .container {
         padding: 0 15px;
     }
 
-    .logo-img {
-        height: 50px;
+    .logo {
+        gap: 10px;
+    }
+
+    .logo-img,
+    .badge-img {
+        height: 60px;
     }
 
     .products-grid {
