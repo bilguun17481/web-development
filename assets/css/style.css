@@ -137,14 +137,21 @@ a:hover {
 .logo {
     display: flex;
     align-items: center;
+    gap: 20px;
     transition: var(--transition);
 }
 
 .logo-img {
-    height: 95px;
+    height: 90px;
     width: auto;
     display: block;
     transition: var(--transition);
+}
+
+.badge-img {
+    height: 90px;
+    width: auto;
+    display: block;
 }
 
 .logo:hover .logo-img {
@@ -733,8 +740,13 @@ a:hover {
         padding: 0 15px;
     }
 
-    .logo-img {
-        height: 70px;
+    .logo {
+        gap: 10px;
+    }
+
+    .logo-img,
+    .badge-img {
+        height: 60px;
     }
 
     .products-grid {
