@@ -6,12 +6,13 @@
    ZÁKLADNÍ NASTAVENÍ
    ============================================ */
 :root {
-    /* Hlavní barvy */
-    --primary-color: #1e5fa8;
-    --primary-dark: #164779;
-    --primary-light: #3b7bc4;
-    --secondary-color: #f8f9fa;
-    --accent-color: #ff6b35;
+    /* Hlavní barvy - z aktuálního webu */
+    --primary-color: #4169E1;        /* Modrá z navigace */
+    --primary-dark: #2952CC;         /* Tmavší modrá */
+    --primary-light: #5B9BD5;        /* Světlejší modrá */
+    --secondary-color: #f8f9fa;      /* Světlé pozadí */
+    --accent-color: #FF8C00;         /* Oranžová z loga a tlačítek */
+    --accent-dark: #E67E00;          /* Tmavší oranžová */
 
     /* Neutrální barvy */
     --white: #ffffff;
@@ -21,15 +22,21 @@
     --text-color: #2c3e50;
     --text-light: #7f8c8d;
 
-    /* Stíny */
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-    --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+    /* Tmavé obrysy pro moderní vzhled */
+    --border-dark: #2c3e50;          /* Tmavý obrys */
+    --border-darker: #1a1a1a;        /* Velmi tmavý obrys */
+    --border-width: 2px;             /* Šířka obrysu */
+
+    /* Stíny s tmavšími tóny */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.25);
+    --shadow-outline: 0 0 0 3px rgba(65,105,225,0.2);
 
     /* Rozměry */
     --header-height: 80px;
     --max-width: 1200px;
-    --border-radius: 0px;
+    --border-radius: 8px;            /* Zaoblené rohy */
 
     /* Přechody */
     --transition: all 0.3s ease;
@@ -105,9 +112,10 @@ a:hover {
     display: block;
     width: 60px;
     height: 4px;
-    background: var(--primary-color);
+    background: var(--accent-color);
     margin: 15px auto 0;
     border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(255, 140, 0, 0.3);
 }
 
 /* ============================================
@@ -116,6 +124,7 @@ a:hover {
 .header {
     background: var(--white);
     box-shadow: var(--shadow-md);
+    border-bottom: 3px solid var(--border-dark);
     position: fixed;
     top: 0;
     left: 0;
@@ -217,6 +226,7 @@ a:hover {
     justify-content: center;
     font-size: 0.7rem;
     font-weight: bold;
+    border: 1px solid var(--accent-dark);
 }
 
 .mobile-menu-toggle {
@@ -297,7 +307,7 @@ a:hover {
     font-weight: 600;
     text-align: center;
     cursor: pointer;
-    border: none;
+    border: var(--border-width) solid transparent;
     transition: var(--transition);
     font-size: 1rem;
 }
@@ -305,10 +315,12 @@ a:hover {
 .btn-primary {
     background: var(--primary-color);
     color: var(--white);
+    border-color: var(--primary-dark);
 }
 
 .btn-primary:hover {
     background: var(--primary-dark);
+    border-color: var(--border-dark);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -327,11 +339,14 @@ a:hover {
 .btn-accent {
     background: var(--accent-color);
     color: var(--white);
+    border-color: var(--accent-dark);
 }
 
 .btn-accent:hover {
-    background: #e55a2a;
+    background: var(--accent-dark);
+    border-color: var(--border-dark);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-group {
@@ -357,6 +372,7 @@ a:hover {
     background: var(--white);
     padding: 30px;
     border-radius: var(--border-radius);
+    border: var(--border-width) solid var(--border-dark);
     text-align: center;
     transition: var(--transition);
     box-shadow: var(--shadow-sm);
@@ -365,12 +381,14 @@ a:hover {
 .feature-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
 }
 
 .feature-icon {
     width: 70px;
     height: 70px;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    border: 3px solid var(--primary-dark);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -378,6 +396,7 @@ a:hover {
     margin: 0 auto 20px;
     font-size: 2rem;
     color: var(--white);
+    box-shadow: var(--shadow-sm);
 }
 
 .feature-card h3 {
@@ -407,11 +426,12 @@ a:hover {
     transition: var(--transition);
     box-shadow: var(--shadow-sm);
     cursor: pointer;
-    border: 2px solid transparent;
+    border: var(--border-width) solid var(--border-dark);
 }
 
 .category-card:hover {
-    border-color: var(--primary-color);
+    border-color: var(--accent-color);
+    background: rgba(255, 140, 0, 0.05);
     transform: translateY(-5px);
     box-shadow: var(--shadow-md);
 }
@@ -444,6 +464,7 @@ a:hover {
 .product-card {
     background: var(--white);
     border-radius: var(--border-radius);
+    border: var(--border-width) solid var(--border-dark);
     overflow: hidden;
     transition: var(--transition);
     box-shadow: var(--shadow-sm);
@@ -454,6 +475,7 @@ a:hover {
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
+    border-color: var(--accent-color);
 }
 
 .product-image {
@@ -486,16 +508,20 @@ a:hover {
     color: var(--white);
     padding: 5px 12px;
     border-radius: 20px;
+    border: 2px solid var(--border-darker);
     font-size: 0.85rem;
     font-weight: 600;
+    box-shadow: var(--shadow-sm);
 }
 
 .product-badge.new {
     background: #28a745;
+    border-color: #1e7e34;
 }
 
 .product-badge.sale {
     background: var(--accent-color);
+    border-color: var(--accent-dark);
 }
 
 .product-info {
@@ -563,18 +589,21 @@ a:hover {
 }
 
 .btn-add-cart {
-    background: var(--primary-color);
+    background: var(--accent-color);
     color: var(--white);
     padding: 10px 20px;
     border-radius: var(--border-radius);
     cursor: pointer;
-    border: none;
+    border: var(--border-width) solid var(--accent-dark);
     font-weight: 600;
     transition: var(--transition);
 }
 
 .btn-add-cart:hover {
-    background: var(--primary-dark);
+    background: var(--accent-dark);
+    border-color: var(--border-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
 /* ============================================
@@ -584,6 +613,7 @@ a:hover {
     background: var(--text-color);
     color: var(--white);
     padding: 60px 0 20px;
+    border-top: 4px solid var(--accent-color);
 }
 
 .footer-content {
@@ -642,6 +672,7 @@ a:hover {
     width: 40px;
     height: 40px;
     background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -650,7 +681,9 @@ a:hover {
 }
 
 .social-icon:hover {
-    background: var(--primary-color);
+    background: var(--accent-color);
+    border-color: var(--accent-dark);
+    transform: translateY(-2px);
 }
 
 .footer-bottom {
