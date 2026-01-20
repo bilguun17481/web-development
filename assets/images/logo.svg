@@ -1,22 +1,77 @@
-<svg width="280" height="100" xmlns="http://www.w3.org/2000/svg">
-  <!-- Pozadí -->
-  <rect width="280" height="100" fill="#FF8C00" rx="0"/>
+<svg width="320" height="120" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120">
+  <defs>
+    <style>
+      .logo-text { font-family: Arial, 'Helvetica Neue', sans-serif; font-weight: bold; }
+      .year-text { font-family: Arial, sans-serif; font-weight: normal; }
+    </style>
+  </defs>
+
+  <!-- Hlavní oranžový tvar vpravo -->
+  <ellipse cx="200" cy="60" rx="110" ry="55" fill="#FF8C00" stroke="#000" stroke-width="3"/>
 
   <!-- Bílé pole pro text -->
-  <path d="M 80 10 L 270 10 L 250 90 L 100 90 Z" fill="white"/>
+  <path d="M 130 20 L 280 20 L 280 85 L 130 85 Z" fill="white" stroke="#000" stroke-width="2" rx="15"/>
 
-  <!-- Text -->
-  <text x="175" y="60" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#2c3e50" text-anchor="middle">DVOŘÁK</text>
+  <!-- Text DVOŘÁK -->
+  <text x="205" y="62" class="logo-text" font-size="36" fill="#2c3e50" text-anchor="middle">DVOŘÁK</text>
 
-  <text x="20" y="95" font-family="Arial, sans-serif" font-size="12" font-weight="normal" fill="white">založeno 1990</text>
+  <!-- Text založeno 1990 -->
+  <text x="200" y="105" class="year-text" font-size="14" fill="#000" text-anchor="middle">založeno 1990</text>
 
-  <!-- Jednoduchý bobr silueta (placeholder) -->
-  <g transform="translate(15, 20)">
-    <circle cx="25" cy="25" r="20" fill="#8B4513"/>
-    <circle cx="20" cy="20" r="3" fill="white"/>
-    <circle cx="30" cy="20" r="3" fill="white"/>
-    <rect x="22" y="28" width="6" height="8" fill="white"/>
-    <circle cx="25" cy="45" r="15" fill="#8B4513"/>
-    <ellipse cx="25" cy="55" rx="8" ry="12" fill="#8B4513"/>
+  <!-- Bobr - tělo -->
+  <ellipse cx="45" cy="75" rx="20" ry="25" fill="#FF8C00" stroke="#000" stroke-width="2"/>
+
+  <!-- Bobr - hlava -->
+  <ellipse cx="42" cy="45" rx="22" ry="20" fill="#FF8C00" stroke="#000" stroke-width="2"/>
+
+  <!-- Bobr - uši levé -->
+  <ellipse cx="30" cy="30" rx="8" ry="12" fill="#FF8C00" stroke="#000" stroke-width="2"/>
+  <ellipse cx="32" cy="32" rx="4" ry="6" fill="#FFA500"/>
+
+  <!-- Bobr - uši pravé -->
+  <ellipse cx="54" cy="30" rx="8" ry="12" fill="#FF8C00" stroke="#000" stroke-width="2"/>
+  <ellipse cx="52" cy="32" rx="4" ry="6" fill="#FFA500"/>
+
+  <!-- Bobr - oči -->
+  <circle cx="35" cy="42" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="35" cy="42" r="2" fill="#000"/>
+  <circle cx="49" cy="42" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="49" cy="42" r="2" fill="#000"/>
+
+  <!-- Bobr - nos -->
+  <ellipse cx="42" cy="52" rx="3" ry="2" fill="#000"/>
+
+  <!-- Bobr - zuby -->
+  <rect x="37" y="54" width="5" height="8" fill="#fff" stroke="#000" stroke-width="1"/>
+  <rect x="42" y="54" width="5" height="8" fill="#fff" stroke="#000" stroke-width="1"/>
+
+  <!-- Bobr - úsměv -->
+  <path d="M 34 54 Q 42 57 50 54" fill="none" stroke="#000" stroke-width="1.5"/>
+
+  <!-- Bobr - kufřík/taška -->
+  <rect x="30" y="62" width="18" height="15" fill="#D2691E" stroke="#000" stroke-width="2" rx="2"/>
+  <rect x="32" y="64" width="14" height="11" fill="#CD853F"/>
+  <line x1="39" y1="62" x2="39" y2="77" stroke="#000" stroke-width="1"/>
+
+  <!-- Bobr - levá ruka (drží tašku) -->
+  <ellipse cx="30" cy="70" rx="6" ry="8" fill="#FF8C00" stroke="#000" stroke-width="1.5"/>
+
+  <!-- Bobr - pravá ruka (mává) -->
+  <g transform="rotate(-30 65 50)">
+    <ellipse cx="65" cy="50" rx="5" ry="12" fill="#FF8C00" stroke="#000" stroke-width="1.5"/>
+    <!-- Prsty -->
+    <line x1="65" y1="40" x2="63" y2="35" stroke="#FF8C00" stroke-width="2" stroke-linecap="round"/>
+    <line x1="65" y1="40" x2="67" y2="34" stroke="#FF8C00" stroke-width="2" stroke-linecap="round"/>
+    <line x1="65" y1="40" x2="70" y2="36" stroke="#FF8C00" stroke-width="2" stroke-linecap="round"/>
   </g>
+
+  <!-- Bobr - ocas -->
+  <ellipse cx="25" cy="95" rx="15" ry="8" fill="#8B4513" stroke="#000" stroke-width="2"/>
+  <line x1="15" y1="95" x2="35" y2="95" stroke="#000" stroke-width="1"/>
+  <line x1="20" y1="91" x2="30" y2="91" stroke="#000" stroke-width="1"/>
+  <line x1="20" y1="99" x2="30" y2="99" stroke="#000" stroke-width="1"/>
+
+  <!-- Bobr - nohy -->
+  <ellipse cx="38" cy="98" rx="6" ry="8" fill="#FF8C00" stroke="#000" stroke-width="1.5"/>
+  <ellipse cx="52" cy="98" rx="6" ry="8" fill="#FF8C00" stroke="#000" stroke-width="1.5"/>
 </svg>
