@@ -27,7 +27,7 @@
     --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
 
     /* Rozměry */
-    --header-height: 110px;
+    --header-height: 130px;
     --max-width: 1200px;
     --border-radius: 0px;
 
@@ -141,7 +141,7 @@ a:hover {
 }
 
 .logo-img {
-    height: 80px;
+    height: 95px;
     width: auto;
     display: block;
     transition: var(--transition);
@@ -726,7 +726,7 @@ a:hover {
 
 @media (max-width: 576px) {
     :root {
-        --header-height: 90px;
+        --header-height: 100px;
     }
 
     .container {
@@ -734,7 +734,7 @@ a:hover {
     }
 
     .logo-img {
-        height: 65px;
+        height: 70px;
     }
 
     .products-grid {
