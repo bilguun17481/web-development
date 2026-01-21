@@ -116,6 +116,9 @@ class AnimationController {
             return;
         }
 
+        // Save state before applying animation
+        window.editor.saveState(`Applied animation: ${this.currentAnimation.type}`);
+
         // Remove existing animation classes
         selectedElement.classList.remove('fade-in', 'slide-in-left', 'slide-in-right', 'slide-in-up', 'slide-in-down', 'zoom-in', 'bounce');
 

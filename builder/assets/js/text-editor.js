@@ -102,6 +102,8 @@ class TextEditor {
         const newContent = this.editingElement.textContent.trim();
 
         if (newContent !== this.originalContent) {
+            // Save state before changing text
+            window.editor.saveState(`Edited text: "${this.originalContent}" → "${newContent}"`);
             window.editor.addToHistory(`Edited text: "${this.originalContent}" → "${newContent}"`);
             window.editor.showToast('Text updated!');
         }

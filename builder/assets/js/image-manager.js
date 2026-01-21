@@ -127,6 +127,9 @@ class ImageManager {
             return;
         }
 
+        // Save state before changing image
+        window.editor.saveState(`Changed image to: ${imageData.name}`);
+
         selectedElement.src = imageData.data;
         selectedElement.alt = imageData.name;
 

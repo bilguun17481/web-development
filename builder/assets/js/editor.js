@@ -9,6 +9,8 @@ class EditorController {
         this.history = [];
         this.historyIndex = -1;
         this.maxHistory = 50;
+        this.undoStack = [];
+        this.redoStack = [];
 
         this.init();
     }
@@ -19,7 +21,38 @@ class EditorController {
         this.setupViewportControls();
         this.setupIframe();
         this.setupKeyboardShortcuts();
+        this.setupUndoRedoButtons();
         this.loadAssets();
+    }
+
+    setupUndoRedoButtons() {
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+
+        if (undoBtn) {
+            undoBtn.addEventListener('click', () => this.undo());
+        }
+
+        if (redoBtn) {
+            redoBtn.addEventListener('click', () => this.redo());
+        }
+
+        this.updateUndoRedoButtons();
+    }
+
+    updateUndoRedoButtons() {
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+
+        if (undoBtn) {
+            undoBtn.disabled = this.undoStack.length === 0;
+            undoBtn.style.opacity = this.undoStack.length === 0 ? '0.5' : '1';
+        }
+
+        if (redoBtn) {
+            redoBtn.disabled = this.redoStack.length === 0;
+            redoBtn.style.opacity = this.redoStack.length === 0 ? '0.5' : '1';
+        }
     }
 
     setupSidebarTabs() {
@@ -100,6 +133,13 @@ class EditorController {
     initializeIframeInteractions() {
         const iframe = document.getElementById('editorFrame');
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+        // Save initial state if this is the first initialization
+        if (this.undoStack.length === 0) {
+            setTimeout(() => {
+                this.saveState('Initial page load');
+            }, 500);
+        }
 
         // Add hover and click effects to all editable elements
         const editableElements = iframeDoc.querySelectorAll('h1, h2, h3, h4, h5, h6, p, a, button, img, .product-card, .feature-card, .category-card');
@@ -229,6 +269,9 @@ class EditorController {
         if (!applyBtn) return;
 
         applyBtn.addEventListener('click', () => {
+            // Save state before making changes
+            this.saveState('Updated element properties');
+
             // Text content
             const textContent = document.getElementById('propTextContent');
             if (textContent) {
@@ -301,14 +344,99 @@ class EditorController {
         });
     }
 
+    saveState(action) {
+        const iframe = document.getElementById('editorFrame');
+        if (!iframe) return;
+
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!iframeDoc || !iframeDoc.body) return;
+
+        // Save current state
+        const state = {
+            html: iframeDoc.body.innerHTML,
+            action: action,
+            timestamp: new Date().toISOString()
+        };
+
+        this.undoStack.push(state);
+
+        // Clear redo stack when new action is performed
+        this.redoStack = [];
+
+        // Limit stack size
+        if (this.undoStack.length > this.maxHistory) {
+            this.undoStack.shift();
+        }
+
+        this.updateUndoRedoButtons();
+    }
+
     undo() {
-        // TODO: Implement undo functionality
-        this.showToast('Undo: Coming soon!');
+        if (this.undoStack.length === 0) {
+            this.showToast('Nothing to undo');
+            return;
+        }
+
+        const iframe = document.getElementById('editorFrame');
+        if (!iframe) return;
+
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!iframeDoc || !iframeDoc.body) return;
+
+        // Save current state to redo stack
+        const currentState = {
+            html: iframeDoc.body.innerHTML,
+            action: 'Current state',
+            timestamp: new Date().toISOString()
+        };
+        this.redoStack.push(currentState);
+
+        // Pop and restore previous state
+        const previousState = this.undoStack.pop();
+        iframeDoc.body.innerHTML = previousState.html;
+
+        // Re-initialize interactions
+        setTimeout(() => {
+            this.initializeIframeInteractions();
+        }, 100);
+
+        this.updateUndoRedoButtons();
+        this.showToast(`Undid: ${previousState.action}`);
+        this.addToHistory(`Undid: ${previousState.action}`);
     }
 
     redo() {
-        // TODO: Implement redo functionality
-        this.showToast('Redo: Coming soon!');
+        if (this.redoStack.length === 0) {
+            this.showToast('Nothing to redo');
+            return;
+        }
+
+        const iframe = document.getElementById('editorFrame');
+        if (!iframe) return;
+
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!iframeDoc || !iframeDoc.body) return;
+
+        // Save current state to undo stack
+        const currentState = {
+            html: iframeDoc.body.innerHTML,
+            action: 'Current state',
+            timestamp: new Date().toISOString()
+        };
+        this.undoStack.push(currentState);
+
+        // Pop and restore next state
+        const nextState = this.redoStack.pop();
+        iframeDoc.body.innerHTML = nextState.html;
+
+        // Re-initialize interactions
+        setTimeout(() => {
+            this.initializeIframeInteractions();
+        }, 100);
+
+        this.updateUndoRedoButtons();
+        this.showToast('Redone action');
+        this.addToHistory('Redone action');
     }
 
     deleteSelectedElement() {
@@ -320,6 +448,9 @@ class EditorController {
         }
 
         if (confirm('Are you sure you want to delete this element?')) {
+            // Save state before deleting
+            this.saveState(`Deleted element: ${this.selectedElement.tagName.toLowerCase()}`);
+
             const elementType = this.selectedElement.tagName.toLowerCase();
             this.selectedElement.remove();
             this.selectedElement = null;
