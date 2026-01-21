@@ -37,6 +37,9 @@
             <button class="toolbar-btn" id="previewBtn">
                 <span>👁</span> Preview
             </button>
+            <button class="toolbar-btn" id="exportProductsBtn">
+                <span>🛍</span> Export Products
+            </button>
             <button class="toolbar-btn btn-primary" id="exportBtn">
                 <span>💾</span> Export Site
             </button>
@@ -56,6 +59,9 @@
                 </button>
                 <button class="sidebar-tab" data-panel="pages">
                     <span>📄</span> Pages
+                </button>
+                <button class="sidebar-tab" data-panel="products">
+                    <span>🛍</span> Products
                 </button>
                 <button class="sidebar-tab" data-panel="assets">
                     <span>🖼</span> Assets
@@ -139,6 +145,11 @@
                         <span>📧</span> Contact
                     </div>
                 </div>
+            </div>
+
+            <!-- Products Panel -->
+            <div class="sidebar-panel" id="productsPanel">
+                <!-- Product manager will be loaded here -->
             </div>
 
             <!-- Assets Panel -->
@@ -288,6 +299,7 @@
     <script src="assets/js/text-editor.js"></script>
     <script src="assets/js/image-manager.js"></script>
     <script src="assets/js/animation-controls.js"></script>
+    <script src="assets/js/product-manager.js"></script>
     <script src="assets/js/exporter.js"></script>
 </body>
 </html>
