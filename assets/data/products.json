@@ -1,0 +1,49 @@
+{
+  "products": [
+    {
+      "id": "kat17144",
+      "name": "Pařák, kotel na brambory nerezový 65 l",
+      "category": "kotle-kamna-krby",
+      "categoryName": "Kotle, kamna, krby",
+      "price": 11190,
+      "oldPrice": null,
+      "currency": "Kč",
+      "priceWithoutVat": 9248,
+      "inStock": true,
+      "stockQuantity": 3,
+      "stockLocations": ["G.Jeníkov", "Čáslav elektro", "Chotěboř"],
+      "sku": "KAT17144",
+      "brand": "Rejholec",
+      "shortDescription": "Pařák, kotel na brambory - 65 litrů, vhodný pro ohřev vody, hodně používán na zabijačkách. Nerezová nádoba, spodek plech. Český výrobce.",
+      "description": "Pařák, kotel na brambory - 65 litrů, vhodný pro ohřev vody, hodně používán na zabijačkách. Nerezová nádoba, spodek plech. Český výrobce.\n\nNáhradní díly, které lze objednat samostatně:\n- Varná nádoba 65 l\n- Poklice\n- Mezikruží\n- Pařáček děrovaný\n\nNáhradní díly objednávejte na tel.: +420 603 235 182.",
+      "specifications": {
+        "Objem kotle": "0,065 m³ (65 l)",
+        "Výška": "900 mm",
+        "Šířka": "640 mm",
+        "Průměr kouřového hrdla": "125 mm",
+        "Vnitřní průměr": "420 mm",
+        "Hmotnost": "cca 35 kg",
+        "Jmenovitý tepelný výkon": "cca 5500 W",
+        "Provozní tah": "15 Pa",
+        "Doporučené palivo": "hnědé uhlí ořech 1, DŘEVO",
+        "Průměrná spotřeba paliva": "3–4 kg/h",
+        "Materiál nádoby": "Nerez",
+        "Materiál spodku": "Plech",
+        "Výrobce": "Český výrobce"
+      },
+      "images": [
+        "/assets/images/products/kat17144-1.jpg",
+        "/assets/images/products/kat17144-2.jpg",
+        "/assets/images/products/kat17144-3.jpg",
+        "/assets/images/products/kat17144-4.jpg"
+      ],
+      "badges": [],
+      "rating": 5,
+      "reviewCount": 0,
+      "viewCount": 14422,
+      "tags": ["kotel", "pařák", "nerez", "vaření", "guláš", "brambory", "zabijačka", "ohřev vody"],
+      "freeShipping": true,
+      "freeShippingFrom": 2000
+    }
+  ]
+}
