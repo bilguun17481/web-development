@@ -1,0 +1,30 @@
+{
+  "products": [
+    {
+      "id": "pro17144",
+      "name": "Pařák - Kotel na brambory nerezový 65 L",
+      "category": "kuchynske-spotrebice",
+      "categoryName": "Kuchyňské spotřebiče",
+      "price": 0,
+      "oldPrice": null,
+      "currency": "Kč",
+      "inStock": true,
+      "stockQuantity": 0,
+      "sku": "PRO17144",
+      "brand": "",
+      "shortDescription": "",
+      "description": "",
+      "specifications": {
+        "objem": "65 L",
+        "material": "Nerez"
+      },
+      "images": [
+        "/assets/images/products/placeholder.jpg"
+      ],
+      "badges": [],
+      "rating": 0,
+      "reviewCount": 0,
+      "tags": ["kotel", "nerez", "vareni"]
+    }
+  ]
+}
