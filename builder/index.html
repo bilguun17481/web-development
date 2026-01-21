@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Design Builder - Login</title>
+    <link rel="stylesheet" href="assets/css/builder.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-section">
+                <h1>🎨 Web Design Builder</h1>
+                <p>Visual editor for your Elektro Dvořák website</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role">
+                        <option value="admin">Admin (Full Access)</option>
+                        <option value="editor">Editor (Edit Only)</option>
+                        <option value="viewer">Viewer (View Only)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary">Login to Builder</button>
+
+                <div class="error-message" id="errorMessage"></div>
+            </form>
+
+            <div class="demo-credentials">
+                <h3>Demo Credentials</h3>
+                <p><strong>Admin:</strong> admin / admin123</p>
+                <p><strong>Editor:</strong> editor / editor123</p>
+                <p><strong>Viewer:</strong> viewer / viewer123</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/auth.js"></script>
+</body>
+</html>

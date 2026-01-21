@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Design Builder - Editor</title>
+    <link rel="stylesheet" href="assets/css/editor.css">
+</head>
+<body>
+    <!-- Top Toolbar -->
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <h2>🎨 Web Design Builder</h2>
+            <span class="user-info" id="userInfo"></span>
+        </div>
+
+        <div class="toolbar-center">
+            <button class="toolbar-btn" id="undoBtn" title="Undo (Ctrl+Z)">
+                <span>↶</span> Undo
+            </button>
+            <button class="toolbar-btn" id="redoBtn" title="Redo (Ctrl+Y)">
+                <span>↷</span> Redo
+            </button>
+            <div class="divider"></div>
+            <button class="toolbar-btn" id="desktopView" title="Desktop View">
+                <span>🖥</span> Desktop
+            </button>
+            <button class="toolbar-btn" id="tabletView" title="Tablet View">
+                <span>📱</span> Tablet
+            </button>
+            <button class="toolbar-btn" id="mobileView" title="Mobile View">
+                <span>📱</span> Mobile
+            </button>
+        </div>
+
+        <div class="toolbar-right">
+            <button class="toolbar-btn" id="previewBtn">
+                <span>👁</span> Preview
+            </button>
+            <button class="toolbar-btn btn-primary" id="exportBtn">
+                <span>💾</span> Export Site
+            </button>
+            <button class="toolbar-btn" id="logoutBtn">
+                <span>🚪</span> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Editor Layout -->
+    <div class="editor-layout">
+        <!-- Left Sidebar - Tools Panel -->
+        <div class="sidebar sidebar-left">
+            <div class="sidebar-tabs">
+                <button class="sidebar-tab active" data-panel="elements">
+                    <span>📦</span> Elements
+                </button>
+                <button class="sidebar-tab" data-panel="pages">
+                    <span>📄</span> Pages
+                </button>
+                <button class="sidebar-tab" data-panel="assets">
+                    <span>🖼</span> Assets
+                </button>
+            </div>
+
+            <!-- Elements Panel -->
+            <div class="sidebar-panel active" id="elementsPanel">
+                <h3>Add Elements</h3>
+                <div class="element-categories">
+                    <div class="element-category">
+                        <h4>Layout</h4>
+                        <div class="element-list">
+                            <div class="element-item" draggable="true" data-type="section">
+                                <span>📐</span> Section
+                            </div>
+                            <div class="element-item" draggable="true" data-type="container">
+                                <span>📦</span> Container
+                            </div>
+                            <div class="element-item" draggable="true" data-type="grid">
+                                <span>▦</span> Grid
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="element-category">
+                        <h4>Content</h4>
+                        <div class="element-list">
+                            <div class="element-item" draggable="true" data-type="heading">
+                                <span>H</span> Heading
+                            </div>
+                            <div class="element-item" draggable="true" data-type="text">
+                                <span>T</span> Text
+                            </div>
+                            <div class="element-item" draggable="true" data-type="image">
+                                <span>🖼</span> Image
+                            </div>
+                            <div class="element-item" draggable="true" data-type="button">
+                                <span>🔘</span> Button
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="element-category">
+                        <h4>Components</h4>
+                        <div class="element-list">
+                            <div class="element-item" draggable="true" data-type="product-card">
+                                <span>🛍</span> Product Card
+                            </div>
+                            <div class="element-item" draggable="true" data-type="feature-card">
+                                <span>⭐</span> Feature Card
+                            </div>
+                            <div class="element-item" draggable="true" data-type="category-card">
+                                <span>📂</span> Category Card
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pages Panel -->
+            <div class="sidebar-panel" id="pagesPanel">
+                <h3>Pages</h3>
+                <div class="page-list">
+                    <div class="page-item active" data-page="index.html">
+                        <span>🏠</span> Homepage
+                    </div>
+                    <div class="page-item" data-page="pages/about.html">
+                        <span>ℹ</span> About
+                    </div>
+                    <div class="page-item" data-page="pages/categories.html">
+                        <span>📋</span> Categories
+                    </div>
+                    <div class="page-item" data-page="pages/product.html">
+                        <span>📦</span> Product
+                    </div>
+                    <div class="page-item" data-page="pages/cart.html">
+                        <span>🛒</span> Cart
+                    </div>
+                    <div class="page-item" data-page="pages/contact.html">
+                        <span>📧</span> Contact
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assets Panel -->
+            <div class="sidebar-panel" id="assetsPanel">
+                <h3>Image Assets</h3>
+                <div class="asset-upload">
+                    <button class="btn-upload" id="uploadImageBtn">
+                        <span>⬆</span> Upload Images
+                    </button>
+                    <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
+                </div>
+                <div class="asset-grid" id="assetGrid">
+                    <!-- Assets will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Center - Canvas Area -->
+        <div class="canvas-area">
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <iframe id="editorFrame" src="../index.html"></iframe>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Properties Panel -->
+        <div class="sidebar sidebar-right">
+            <div class="sidebar-tabs">
+                <button class="sidebar-tab active" data-panel="properties">
+                    <span>⚙</span> Properties
+                </button>
+                <button class="sidebar-tab" data-panel="animations">
+                    <span>✨</span> Animations
+                </button>
+                <button class="sidebar-tab" data-panel="history">
+                    <span>🕐</span> History
+                </button>
+            </div>
+
+            <!-- Properties Panel -->
+            <div class="sidebar-panel active" id="propertiesPanel">
+                <h3>Element Properties</h3>
+                <div id="propertiesContent">
+                    <p class="no-selection">Select an element to edit its properties</p>
+                </div>
+            </div>
+
+            <!-- Animations Panel -->
+            <div class="sidebar-panel" id="animationsPanel">
+                <h3>Animations</h3>
+                <div class="animation-controls">
+                    <div class="form-group">
+                        <label>Animation Type</label>
+                        <select id="animationType">
+                            <option value="none">None</option>
+                            <option value="fade-in">Fade In</option>
+                            <option value="slide-in-left">Slide In Left</option>
+                            <option value="slide-in-right">Slide In Right</option>
+                            <option value="slide-in-up">Slide In Up</option>
+                            <option value="slide-in-down">Slide In Down</option>
+                            <option value="zoom-in">Zoom In</option>
+                            <option value="bounce">Bounce</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Duration (ms)</label>
+                        <input type="range" id="animationDuration" min="100" max="3000" value="600" step="100">
+                        <span id="durationValue">600ms</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Delay (ms)</label>
+                        <input type="range" id="animationDelay" min="0" max="2000" value="0" step="100">
+                        <span id="delayValue">0ms</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Easing</label>
+                        <select id="animationEasing">
+                            <option value="ease">Ease</option>
+                            <option value="ease-in">Ease In</option>
+                            <option value="ease-out">Ease Out</option>
+                            <option value="ease-in-out">Ease In Out</option>
+                            <option value="linear">Linear</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-primary" id="applyAnimationBtn">Apply Animation</button>
+                    <button class="btn-secondary" id="previewAnimationBtn">Preview</button>
+                </div>
+
+                <div class="animation-preview">
+                    <h4>Preview</h4>
+                    <div class="preview-box" id="animationPreview">
+                        <div class="preview-element">Sample Element</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Panel -->
+            <div class="sidebar-panel" id="historyPanel">
+                <h3>Change History</h3>
+                <div class="history-list" id="historyList">
+                    <!-- History items will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export Website</h2>
+                <button class="modal-close" id="closeExportModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Your website is ready to export. Click the button below to download all files as a ZIP archive.</p>
+                <div class="export-options">
+                    <label>
+                        <input type="checkbox" id="includeImages" checked>
+                        Include all images
+                    </label>
+                    <label>
+                        <input type="checkbox" id="includeAssets" checked>
+                        Include CSS and JavaScript
+                    </label>
+                    <label>
+                        <input type="checkbox" id="minifyCode">
+                        Minify code (smaller file size)
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelExport">Cancel</button>
+                <button class="btn-primary" id="confirmExport">
+                    <span>💾</span> Download ZIP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/editor.js"></script>
+    <script src="assets/js/drag-drop.js"></script>
+    <script src="assets/js/text-editor.js"></script>
+    <script src="assets/js/image-manager.js"></script>
+    <script src="assets/js/animation-controls.js"></script>
+    <script src="assets/js/exporter.js"></script>
+</body>
+</html>
