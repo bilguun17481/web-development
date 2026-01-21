@@ -16,6 +16,9 @@ class ProductManager {
         await this.loadProducts();
         this.setupProductPanel();
         this.setupProductForm();
+        this.setupCategoryManagement();
+        this.setupManufacturerManagement();
+        this.setupImageUpload();
         this.setupSearch();
         this.setupExportButton();
     }
@@ -91,21 +94,31 @@ class ProductManager {
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="productCategory">Kategorie *</label>
-                                    <select id="productCategory" required>
-                                        <option value="">Vyberte kategorii</option>
-                                        ${this.categories.map(cat => `
-                                            <option value="${cat.id}">${cat.name}</option>
-                                        `).join('')}
-                                    </select>
+                                    <div style="display: flex; gap: 8px;">
+                                        <select id="productCategory" required style="flex: 1;">
+                                            <option value="">Vyberte kategorii</option>
+                                            ${this.categories.map(cat => `
+                                                <option value="${cat.id}">${cat.name}</option>
+                                            `).join('')}
+                                        </select>
+                                        <button type="button" class="btn-icon" id="addCategoryBtn" title="Přidat kategorii">
+                                            ➕
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="productManufacturer">Výrobce *</label>
-                                    <select id="productManufacturer" required>
-                                        <option value="">Vyberte výrobce</option>
-                                        ${this.manufacturers.map(man => `
-                                            <option value="${man.id}">${man.name}</option>
-                                        `).join('')}
-                                    </select>
+                                    <div style="display: flex; gap: 8px;">
+                                        <select id="productManufacturer" required style="flex: 1;">
+                                            <option value="">Vyberte výrobce</option>
+                                            ${this.manufacturers.map(man => `
+                                                <option value="${man.id}">${man.name}</option>
+                                            `).join('')}
+                                        </select>
+                                        <button type="button" class="btn-icon" id="addManufacturerBtn" title="Přidat výrobce">
+                                            ➕
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -122,8 +135,17 @@ class ProductManager {
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="productImage">Obrázek (emoji nebo URL)</label>
-                                    <input type="text" id="productImage" placeholder="💡 nebo https://...">
+                                    <label for="productImage">Obrázek (emoji, URL, nebo nahrát)</label>
+                                    <div style="display: flex; gap: 8px; align-items: flex-end;">
+                                        <input type="text" id="productImage" placeholder="💡 nebo https://..." style="flex: 1;">
+                                        <button type="button" class="btn-upload-small" id="uploadProductImageBtn" title="Nahrát obrázek">
+                                            📤 Nahrát
+                                        </button>
+                                    </div>
+                                    <input type="file" id="productImageUpload" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" style="display: none;">
+                                    <div id="imagePreview" style="margin-top: 8px; display: none;">
+                                        <img id="previewImg" style="max-width: 100px; max-height: 100px; border-radius: 4px; border: 1px solid #e0e0e0;">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="productBadge">Odznak</label>
@@ -228,6 +250,189 @@ class ProductManager {
         });
 
         saveBtn?.addEventListener('click', () => this.saveProduct());
+    }
+
+    setupCategoryManagement() {
+        // Wait for modal to be in DOM
+        setTimeout(() => {
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            if (addCategoryBtn) {
+                addCategoryBtn.addEventListener('click', () => this.addNewCategory());
+            }
+        }, 500);
+    }
+
+    setupManufacturerManagement() {
+        setTimeout(() => {
+            const addManufacturerBtn = document.getElementById('addManufacturerBtn');
+            if (addManufacturerBtn) {
+                addManufacturerBtn.addEventListener('click', () => this.addNewManufacturer());
+            }
+        }, 500);
+    }
+
+    setupImageUpload() {
+        setTimeout(() => {
+            const uploadBtn = document.getElementById('uploadProductImageBtn');
+            const fileInput = document.getElementById('productImageUpload');
+
+            if (uploadBtn && fileInput) {
+                uploadBtn.addEventListener('click', () => {
+                    fileInput.click();
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        this.handleProductImageUpload(file);
+                    }
+                });
+            }
+        }, 500);
+    }
+
+    handleProductImageUpload(file) {
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            window.editor.showToast('Pouze JPG, PNG, GIF nebo WebP soubory');
+            return;
+        }
+
+        // Validate file size (max 2MB)
+        const maxSize = 2 * 1024 * 1024;
+        if (file.size > maxSize) {
+            window.editor.showToast('Obrázek musí být menší než 2MB');
+            return;
+        }
+
+        // Read file as data URL
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const dataUrl = e.target.result;
+
+            // Set the data URL in the input
+            document.getElementById('productImage').value = dataUrl;
+
+            // Show preview
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+
+            if (preview && previewImg) {
+                previewImg.src = dataUrl;
+                preview.style.display = 'block';
+            }
+
+            window.editor.showToast('Obrázek nahrán!');
+        };
+
+        reader.onerror = () => {
+            window.editor.showToast('Chyba při nahrávání obrázku');
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    addNewCategory() {
+        const categoryName = prompt('Zadejte název kategorie:');
+        if (!categoryName || categoryName.trim() === '') return;
+
+        const categoryId = categoryName.toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '');
+
+        // Check if already exists
+        if (this.categories.find(c => c.id === categoryId)) {
+            window.editor.showToast('Kategorie již existuje');
+            return;
+        }
+
+        const categoryIcon = prompt('Zadejte emoji ikonu (např. 💡):', '📦');
+
+        const newCategory = {
+            id: categoryId,
+            name: categoryName.trim(),
+            icon: categoryIcon || '📦'
+        };
+
+        this.categories.push(newCategory);
+
+        // Refresh the form
+        this.setupProductPanel();
+        this.setupProductForm();
+        this.setupCategoryManagement();
+        this.setupManufacturerManagement();
+        this.setupImageUpload();
+
+        // Reopen modal if it was open
+        if (this.currentEditId !== null) {
+            this.showProductForm(this.currentEditId);
+        } else {
+            this.showProductForm();
+        }
+
+        // Select the new category
+        setTimeout(() => {
+            const select = document.getElementById('productCategory');
+            if (select) {
+                select.value = categoryId;
+            }
+        }, 100);
+
+        window.editor.showToast(`Kategorie "${categoryName}" přidána!`);
+        this.updateProductsJSON();
+    }
+
+    addNewManufacturer() {
+        const manufacturerName = prompt('Zadejte název výrobce:');
+        if (!manufacturerName || manufacturerName.trim() === '') return;
+
+        const manufacturerId = manufacturerName.toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '');
+
+        // Check if already exists
+        if (this.manufacturers.find(m => m.id === manufacturerId)) {
+            window.editor.showToast('Výrobce již existuje');
+            return;
+        }
+
+        const newManufacturer = {
+            id: manufacturerId,
+            name: manufacturerName.trim()
+        };
+
+        this.manufacturers.push(newManufacturer);
+
+        // Refresh the form
+        this.setupProductPanel();
+        this.setupProductForm();
+        this.setupCategoryManagement();
+        this.setupManufacturerManagement();
+        this.setupImageUpload();
+
+        // Reopen modal if it was open
+        if (this.currentEditId !== null) {
+            this.showProductForm(this.currentEditId);
+        } else {
+            this.showProductForm();
+        }
+
+        // Select the new manufacturer
+        setTimeout(() => {
+            const select = document.getElementById('productManufacturer');
+            if (select) {
+                select.value = manufacturerId;
+            }
+        }, 100);
+
+        window.editor.showToast(`Výrobce "${manufacturerName}" přidán!`);
+        this.updateProductsJSON();
     }
 
     setupSearch() {
