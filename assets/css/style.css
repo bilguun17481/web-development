@@ -576,6 +576,25 @@ a:hover {
     flex-grow: 1;
 }
 
+.product-stock {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.product-stock.in-stock {
+    color: #28a745;
+    background: #d4edda;
+}
+
+.product-stock.out-of-stock {
+    color: #dc3545;
+    background: #f8d7da;
+}
+
 .product-footer {
     display: flex;
     justify-content: space-between;

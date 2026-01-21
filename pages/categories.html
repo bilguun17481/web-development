@@ -310,6 +310,10 @@
                             <input type="radio" name="category" id="cat-naradi" value="naradi">
                             <label for="cat-naradi">Nářadí</label>
                         </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-kotle" value="kotle-kamna-krby">
+                            <label for="cat-kotle">Kotle, kamna, krby</label>
+                        </div>
                     </div>
 
                     <!-- CENA -->
@@ -703,6 +707,7 @@
     </footer>
 
     <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/products.js"></script>
     <script>
         function changeView(view) {
             const container = document.getElementById('products-container');
@@ -720,6 +725,52 @@
                 container.classList.remove('grid-view');
                 container.classList.add('list-view');
                 products.forEach(p => p.classList.add('list-view'));
+            }
+        }
+
+        // Wire up filters once ProductManager is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for productManager to be initialized
+            setTimeout(() => {
+                if (window.productManager) {
+                    // Category filter
+                    document.querySelectorAll('input[name="category"]').forEach(radio => {
+                        radio.addEventListener('change', (e) => {
+                            window.productManager.filterByCategory(e.target.value);
+                            updateProductCount();
+                        });
+                    });
+
+                    // Search
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput) {
+                        searchInput.addEventListener('input', (e) => {
+                            window.productManager.search(e.target.value);
+                            updateProductCount();
+                        });
+                    }
+
+                    // Sort
+                    const sortSelect = document.getElementById('sort-products');
+                    if (sortSelect) {
+                        sortSelect.addEventListener('change', (e) => {
+                            window.productManager.sortProducts(e.target.value);
+                        });
+                    }
+
+                    // Update product count initially
+                    updateProductCount();
+                }
+            }, 500);
+        });
+
+        function updateProductCount() {
+            if (window.productManager) {
+                const count = window.productManager.filteredProducts.length;
+                const countEl = document.getElementById('product-count');
+                if (countEl) {
+                    countEl.textContent = count;
+                }
             }
         }
     </script>

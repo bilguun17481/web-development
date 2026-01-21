@@ -16,7 +16,11 @@ class ProductManager {
 
     async loadProducts() {
         try {
-            const response = await fetch('/assets/data/products.json');
+            // Detect if we're in pages/ subdirectory or root
+            const isInPagesDir = window.location.pathname.includes('/pages/');
+            const jsonPath = isInPagesDir ? '../assets/data/products.json' : 'assets/data/products.json';
+
+            const response = await fetch(jsonPath);
             const data = await response.json();
             this.products = data.products;
             this.filteredProducts = [...this.products];
@@ -47,19 +51,24 @@ class ProductManager {
         const stockHTML = this.getStockHTML(product);
         const rating = this.getRatingHTML(product);
 
+        // Detect if we're in pages/ subdirectory or root
+        const isInPagesDir = window.location.pathname.includes('/pages/');
+        const productLink = isInPagesDir ? `product.html?id=${product.id}` : `pages/product.html?id=${product.id}`;
+        const imagePath = product.images[0].startsWith('/') ? (isInPagesDir ? '..' + product.images[0] : product.images[0].substring(1)) : product.images[0];
+
         return `
             <div class="product-card"
                  data-product-id="${product.id}"
                  data-category="${product.category}"
                  data-manufacturer="${product.brand}">
                 <div class="product-image">
-                    <img src="${product.images[0]}" alt="${product.name}" loading="lazy">
+                    <img src="${imagePath}" alt="${product.name}" loading="lazy">
                     ${badge}
                 </div>
                 <div class="product-info">
                     <div class="product-category">${product.categoryName}</div>
                     <h3 class="product-title">
-                        <a href="pages/product.html?id=${product.id}">${product.name}</a>
+                        <a href="${productLink}">${product.name}</a>
                     </h3>
                     ${rating}
                     <p class="product-description">${product.shortDescription || product.description.substring(0, 100) + '...'}</p>
