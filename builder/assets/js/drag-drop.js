@@ -208,6 +208,9 @@ class DragDropController {
                 return;
         }
 
+        // Save state before adding element
+        window.editor.saveState(`Added ${type} element`);
+
         // Add the new element to the container
         container.appendChild(newElement);
 
