@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "id": "1",
+      "id": 1,
       "title": "LED žárovka E27 12W teplá bílá",
       "category": "osvetleni",
       "categoryName": "LED Osvětlení",
@@ -18,7 +18,7 @@
       "inStock": true
     },
     {
-      "id": "2",
+      "id": 2,
       "title": "Zásuvka SCHUKO s dětskou ochranou bílá",
       "category": "zasuvky",
       "categoryName": "Zásuvky",
@@ -35,7 +35,7 @@
       "inStock": true
     },
     {
-      "id": "3",
+      "id": 3,
       "title": "Kabel CYKYLo 3x1,5 mm² (100m)",
       "category": "kabely",
       "categoryName": "Kabely",
@@ -52,7 +52,7 @@
       "inStock": true
     },
     {
-      "id": "4",
+      "id": 4,
       "title": "LED pásek RGB 5m s ovladačem",
       "category": "osvetleni",
       "categoryName": "LED Pásky",
@@ -69,7 +69,7 @@
       "inStock": true
     },
     {
-      "id": "5",
+      "id": 5,
       "title": "Jistič modulární 1P 16A B-charakteristika",
       "category": "jistice",
       "categoryName": "Jističe",
@@ -86,7 +86,7 @@
       "inStock": true
     },
     {
-      "id": "6",
+      "id": 6,
       "title": "Krabice přístrojová KP 68/35 (100ks)",
       "category": "instalace",
       "categoryName": "Instalace",
@@ -103,7 +103,7 @@
       "inStock": true
     },
     {
-      "id": "7",
+      "id": 7,
       "title": "Kleště elektrikářské 180mm izolované",
       "category": "naradi",
       "categoryName": "Nářadí",
@@ -120,7 +120,7 @@
       "inStock": true
     },
     {
-      "id": "8",
+      "id": 8,
       "title": "LED panel 60x60cm 40W studená bílá",
       "category": "osvetleni",
       "categoryName": "Osvětlení",
