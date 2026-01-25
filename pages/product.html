@@ -665,6 +665,19 @@
                     return;
                 }
 
+                // Generate images array if not present (for products with imageType/imageCount)
+                if (!product.images) {
+                    product.images = [];
+                    if (product.imageType === 'file' && product.imageCount) {
+                        for (let i = 1; i <= product.imageCount; i++) {
+                            product.images.push(`assets/images/products/${product.image}-${i}.jpg`);
+                        }
+                    } else if (product.image) {
+                        // Single image fallback
+                        product.images.push(product.image.startsWith('http') ? product.image : `assets/images/products/${product.image}.jpg`);
+                    }
+                }
+
                 // Update page title and meta
                 document.title = `${product.name} - Elektro Dvořák`;
                 document.querySelector('meta[name="description"]').setAttribute('content', product.shortDescription || product.description);
