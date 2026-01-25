@@ -722,11 +722,12 @@
                 `;
 
                 // Update price
-                document.querySelector('.price-section').innerHTML = `
-                    ${product.oldPrice ? `<div class="old-price">${product.oldPrice.toLocaleString('cs-CZ')} ${product.currency}</div>` : ''}
-                    <div class="current-price">${product.price.toLocaleString('cs-CZ')} ${product.currency}</div>
-                    <div class="price-info">Cena včetně DPH | Cena bez DPH: ${product.priceWithoutVat.toLocaleString('cs-CZ')} ${product.currency}</div>
-                `;
+const priceWithoutVat = product.priceWithoutVat || Math.round(product.price / 1.21);
+document.querySelector('.price-section').innerHTML = `
+    ${product.oldPrice ? `<div class="old-price">${product.oldPrice.toLocaleString('cs-CZ')} ${product.currency}</div>` : ''}
+    <div class="current-price">${product.price.toLocaleString('cs-CZ')} ${product.currency}</div>
+    <div class="price-info">Cena včetně DPH | Cena bez DPH: ${priceWithoutVat.toLocaleString('cs-CZ')} ${product.currency}</div>
+`;
 
                 // Update description
                 const descriptionP = document.querySelector('.product-detail-info > p');
