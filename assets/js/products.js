@@ -48,31 +48,37 @@ class ProductManager {
     createProductCard(product) {
         const badge = this.getBadgeHTML(product);
         const priceHTML = this.getPriceHTML(product);
-        const stockHTML = this.getStockHTML(product);
         const rating = this.getRatingHTML(product);
 
         // Detect if we're in pages/ subdirectory or root
         const isInPagesDir = window.location.pathname.includes('/pages/');
         const productLink = isInPagesDir ? `product.html?id=${product.id}` : `pages/product.html?id=${product.id}`;
-        const imagePath = product.images[0].startsWith('/') ? (isInPagesDir ? '..' + product.images[0] : product.images[0].substring(1)) : product.images[0];
+        
+        // Handle image based on imageType
+        let imageHTML = '';
+        if (product.imageType === 'emoji') {
+            imageHTML = `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">${product.image}</div>`;
+        } else if (product.imageType === 'file') {
+            const imagePath = isInPagesDir ? `../assets/images/products/${product.image}-1.jpg` : `assets/images/products/${product.image}-1.jpg`;
+            imageHTML = `<img src="${imagePath}" alt="${product.title}" loading="lazy">`;
+        }
 
         return `
             <div class="product-card"
                  data-product-id="${product.id}"
                  data-category="${product.category}"
-                 data-manufacturer="${product.brand}">
+                 data-manufacturer="${product.manufacturer}">
                 <div class="product-image">
-                    <img src="${imagePath}" alt="${product.name}" loading="lazy">
+                    ${imageHTML}
                     ${badge}
                 </div>
                 <div class="product-info">
                     <div class="product-category">${product.categoryName}</div>
                     <h3 class="product-title">
-                        <a href="${productLink}">${product.name}</a>
+                        <a href="${productLink}">${product.title}</a>
                     </h3>
                     ${rating}
-                    <p class="product-description">${product.shortDescription || product.description.substring(0, 100) + '...'}</p>
-                    ${stockHTML}
+                    <p class="product-description">${product.description.substring(0, 100)}...</p>
                     <div class="product-footer">
                         ${priceHTML}
                         ${product.inStock ? '<button class="btn-add-cart">Do košíku</button>' : '<button class="btn-add-cart" disabled>Vyprodáno</button>'}
@@ -83,31 +89,20 @@ class ProductManager {
     }
 
     getBadgeHTML(product) {
-        if (!product.badges || product.badges.length === 0) return '';
-
-        const badgeClass = product.badges[0] === 'new' ? 'new' : 'sale';
-        const badgeText = product.badges[0] === 'new' ? 'Novinka' : product.badges[0];
-
-        return `<span class="product-badge ${badgeClass}">${badgeText}</span>`;
+        if (!product.badge) return '';
+        return `<span class="product-badge ${product.badge}">${product.badgeText}</span>`;
     }
 
     getPriceHTML(product) {
         if (product.oldPrice) {
             return `
                 <div class="product-price">
-                    <span class="old-price">${product.oldPrice.toLocaleString('cs-CZ')} ${product.currency}</span>
-                    ${product.price.toLocaleString('cs-CZ')} ${product.currency}
+                    <span class="old-price">${product.oldPrice.toLocaleString('cs-CZ')} Kč</span>
+                    ${product.price.toLocaleString('cs-CZ')} Kč
                 </div>
             `;
         }
-        return `<div class="product-price">${product.price.toLocaleString('cs-CZ')} ${product.currency}</div>`;
-    }
-
-    getStockHTML(product) {
-        if (product.inStock) {
-            return '<div class="product-stock in-stock">✓ Skladem</div>';
-        }
-        return '<div class="product-stock out-of-stock">✗ Vyprodáno</div>';
+        return `<div class="product-price">${product.price.toLocaleString('cs-CZ')} Kč</div>`;
     }
 
     getRatingHTML(product) {
@@ -117,7 +112,7 @@ class ProductManager {
         return `
             <div class="product-rating">
                 <span class="stars">${stars}</span>
-                <span class="rating-count">(${product.reviewCount})</span>
+                <span class="rating-count">(${product.ratingCount})</span>
             </div>
         `;
     }
@@ -128,9 +123,9 @@ class ProductManager {
                 const productCard = e.target.closest('.product-card');
                 if (productCard && window.cart) {
                     const productId = productCard.dataset.productId;
-                    const product = this.products.find(p => p.id === productId);
+                    const product = this.products.find(p => p.id == productId);
                     if (product) {
-                        window.cart.addToCart(product);
+                        window.cart.addToCart(productCard);
                     }
                 }
             });
@@ -153,11 +148,11 @@ class ProductManager {
         this.renderProducts();
     }
 
-    filterByBrand(brand) {
-        if (brand === 'all') {
+    filterByManufacturer(manufacturer) {
+        if (manufacturer === 'all') {
             this.filteredProducts = [...this.products];
         } else {
-            this.filteredProducts = this.products.filter(p => p.brand === brand);
+            this.filteredProducts = this.products.filter(p => p.manufacturer === manufacturer);
         }
         this.renderProducts();
     }
@@ -165,9 +160,9 @@ class ProductManager {
     search(query) {
         const searchTerm = query.toLowerCase();
         this.filteredProducts = this.products.filter(p =>
-            p.name.toLowerCase().includes(searchTerm) ||
+            p.title.toLowerCase().includes(searchTerm) ||
             p.description.toLowerCase().includes(searchTerm) ||
-            p.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+            p.categoryName.toLowerCase().includes(searchTerm)
         );
         this.renderProducts();
     }
@@ -181,10 +176,10 @@ class ProductManager {
                 this.filteredProducts.sort((a, b) => b.price - a.price);
                 break;
             case 'name-asc':
-                this.filteredProducts.sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+                this.filteredProducts.sort((a, b) => a.title.localeCompare(b.title, 'cs'));
                 break;
             case 'name-desc':
-                this.filteredProducts.sort((a, b) => b.name.localeCompare(a.name, 'cs'));
+                this.filteredProducts.sort((a, b) => b.title.localeCompare(a.title, 'cs'));
                 break;
             case 'newest':
             default:
@@ -195,7 +190,7 @@ class ProductManager {
     }
 
     getProductById(id) {
-        return this.products.find(p => p.id === id);
+        return this.products.find(p => p.id == id);
     }
 }
 
