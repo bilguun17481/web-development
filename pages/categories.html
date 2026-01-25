@@ -46,7 +46,8 @@
             gap: 10px;
         }
 
-        .filter-option input[type="checkbox"] {
+        .filter-option input[type="checkbox"],
+        .filter-option input[type="radio"] {
             width: 18px;
             height: 18px;
             cursor: pointer;
@@ -349,6 +350,10 @@
                             <input type="checkbox" id="man-schneider" data-manufacturer="schneider">
                             <label for="man-schneider">Schneider Electric</label>
                         </div>
+                        <div class="filter-option">
+                            <input type="checkbox" id="man-elektrodvorak" data-manufacturer="elektrodvorak">
+                            <label for="man-elektrodvorak">Elektro Dvořák</label>
+                        </div>
                     </div>
 
                     <!-- DOSTUPNOST -->
@@ -374,7 +379,7 @@
                     <!-- HEADER -->
                     <div class="products-header">
                         <div class="products-count">
-                            Zobrazeno <strong id="product-count">12</strong> produktů
+                            Zobrazeno <strong id="product-count">0</strong> produktů
                         </div>
                         <div class="products-controls">
                             <div class="view-toggle">
@@ -391,250 +396,13 @@
                         </div>
                     </div>
 
-                    <!-- GRID PRODUKTŮ -->
+                    <!-- GRID PRODUKTŮ - Dynamicky načteno -->
                     <div class="products-grid-list grid-view" id="products-container">
-                        <!-- Produkty z index.html -->
-                        <div class="product-card" data-product-id="1" data-category="osvetleni" data-manufacturer="philips">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
-                                <span class="product-badge new">Novinka</span>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">LED Osvětlení</div>
-                                <h3 class="product-title">LED žárovka E27 12W teplá bílá</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★★</span>
-                                    <span class="rating-count">(127)</span>
-                                </div>
-                                <p class="product-description">Energeticky úsporná LED žárovka s dlouhou životností.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">149 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="2" data-category="zasuvky" data-manufacturer="legrand">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔌</div>
-                                <span class="product-badge sale">-20%</span>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Zásuvky</div>
-                                <h3 class="product-title">Zásuvka SCHUKO s dětskou ochranou bílá</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★☆</span>
-                                    <span class="rating-count">(89)</span>
-                                </div>
-                                <p class="product-description">Moderní zásuvka s ochranou proti dotyku.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">
-                                        <span class="old-price">299 Kč</span>
-                                        239 Kč
-                                    </div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="3" data-category="kabely" data-manufacturer="prysmian">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔗</div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Kabely</div>
-                                <h3 class="product-title">Kabel CYKYLo 3x1,5 mm² (100m)</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★★</span>
-                                    <span class="rating-count">(203)</span>
-                                </div>
-                                <p class="product-description">Instalační kabel pro pevné uložení.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">1 890 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="4" data-category="osvetleni" data-manufacturer="osram">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🎆</div>
-                                <span class="product-badge new">Novinka</span>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">LED Pásky</div>
-                                <h3 class="product-title">LED pásek RGB 5m s ovladačem</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★☆</span>
-                                    <span class="rating-count">(64)</span>
-                                </div>
-                                <p class="product-description">Dekorativní LED pásek s dálkovým ovladačem.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">799 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="5" data-category="jistice" data-manufacturer="abb">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">⚡</div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Jističe</div>
-                                <h3 class="product-title">Jistič modulární 1P 16A B-charakteristika</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★★</span>
-                                    <span class="rating-count">(312)</span>
-                                </div>
-                                <p class="product-description">Kvalitní modulární jistič pro ochranu elektrických obvodů.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">189 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="6" data-category="instalace" data-manufacturer="obo">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">📦</div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Instalace</div>
-                                <h3 class="product-title">Krabice přístrojová KP 68/35 (100ks)</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★☆</span>
-                                    <span class="rating-count">(156)</span>
-                                </div>
-                                <p class="product-description">Standardní přístrojová krabice pro montáž do zdiva.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">890 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="7" data-category="naradi" data-manufacturer="knipex">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔧</div>
-                                <span class="product-badge sale">-15%</span>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Nářadí</div>
-                                <h3 class="product-title">Kleště elektrikářské 180mm izolované</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★★</span>
-                                    <span class="rating-count">(98)</span>
-                                </div>
-                                <p class="product-description">Profesionální kleště s izolací do 1000V.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">
-                                        <span class="old-price">599 Kč</span>
-                                        509 Kč
-                                    </div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="8" data-category="osvetleni" data-manufacturer="philips">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔦</div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Osvětlení</div>
-                                <h3 class="product-title">LED panel 60x60cm 40W studená bílá</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★★</span>
-                                    <span class="rating-count">(174)</span>
-                                </div>
-                                <p class="product-description">Moderní LED panel pro závěsné stropy.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">1 290 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="13" data-category="zasuvky" data-manufacturer="schneider">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Vypínače</div>
-                                <h3 class="product-title">Vypínač střídavý bílý</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★★</span>
-                                    <span class="rating-count">(256)</span>
-                                </div>
-                                <p class="product-description">Základní vypínač pro domácí instalace.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">79 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="14" data-category="kabely" data-manufacturer="prysmian">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔗</div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Kabely</div>
-                                <h3 class="product-title">Kabel CYKYLo 3x2,5 mm² (100m)</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★★</span>
-                                    <span class="rating-count">(189)</span>
-                                </div>
-                                <p class="product-description">Silnější instalační kabel pro vyšší zatížení.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">2 490 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="15" data-category="jistice" data-manufacturer="abb">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">⚡</div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Jističe</div>
-                                <h3 class="product-title">Jistič modulární 3P 25A C-charakteristika</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★☆</span>
-                                    <span class="rating-count">(145)</span>
-                                </div>
-                                <p class="product-description">Třífázový jistič pro průmyslové aplikace.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">459 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product-card" data-product-id="16" data-category="instalace" data-manufacturer="obo">
-                            <div class="product-image">
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">📏</div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-category">Instalace</div>
-                                <h3 class="product-title">Lišta elektroinstalační 40x25mm (2m)</h3>
-                                <div class="product-rating">
-                                    <span class="stars">★★★★☆</span>
-                                    <span class="rating-count">(78)</span>
-                                </div>
-                                <p class="product-description">Plastová lišta pro ukrytí kabelů.</p>
-                                <div class="product-footer">
-                                    <div class="product-price">65 Kč</div>
-                                    <button class="btn-add-cart">Do košíku</button>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Products will be loaded dynamically -->
                     </div>
 
                     <!-- STRÁNKOVÁNÍ -->
-                    <div class="pagination">
+                    <div class="pagination" style="display: none;">
                         <button class="page-btn">«</button>
                         <button class="page-btn active">1</button>
                         <button class="page-btn">2</button>
@@ -756,6 +524,22 @@
                         sortSelect.addEventListener('change', (e) => {
                             window.productManager.sortProducts(e.target.value);
                         });
+                    }
+
+                    // Price filters
+                    const priceMin = document.getElementById('price-min');
+                    const priceMax = document.getElementById('price-max');
+                    
+                    if (priceMin && priceMax) {
+                        const applyPriceFilter = () => {
+                            const min = parseInt(priceMin.value) || 0;
+                            const max = parseInt(priceMax.value) || Infinity;
+                            window.productManager.filterByPrice(min, max);
+                            updateProductCount();
+                        };
+                        
+                        priceMin.addEventListener('change', applyPriceFilter);
+                        priceMax.addEventListener('change', applyPriceFilter);
                     }
 
                     // Update product count initially
