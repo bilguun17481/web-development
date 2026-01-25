@@ -135,6 +135,22 @@
       "ratingCount": 174,
       "description": "Moderní LED panel pro závěsné stropy. Vysoká svítivost, nízká spotřeba.",
       "inStock": true
+    {
+  "id": "kat17143",
+  "title": "Pařák, kotel na brambory nerezový 80 l",
+  "category": "kotle-kamna-krby",
+  "categoryName": "Kotle, kamna, krby",
+  "manufacturer": "elektrodvorak",
+  "price": 11390,
+  "oldPrice": null,
+  "image": "parak1",
+  "imageType": "file",
+  "badge": "sale",
+  "badgeText": "SUPER CENA",
+  "rating": 5,
+  "ratingCount": 19078,
+  "description": "Pařák, kotel na brambory - 80 litrů, vhodný pro ohřev vody, hodně používán na zabijačkách. Nerezová nádoba, plechový spodek. Český výrobce. Výška: 995 mm, Šířka: 640 mm, Průměr kouřového hrdla: 125 mm, Vnitřní průměr: 420 mm, Hmotnost: cca 35 kg, Objem kotle: 80l, Jmenovitý tepelný výkon: cca 5500W.",
+  "inStock": true
     }
   ],
   "categories": [
