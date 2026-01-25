@@ -678,6 +678,16 @@
                     }
                 }
 
+                // Normalize product fields (handle builder format vs expected format)
+                product.name = product.name || product.title;
+                product.reviewCount = product.reviewCount || product.ratingCount || 0;
+                product.sku = product.sku || product.id;
+                product.stockQuantity = product.stockQuantity || (product.inStock ? 10 : 0);
+                product.currency = product.currency || 'Kč';
+                product.priceWithoutVat = product.priceWithoutVat || Math.round(product.price / 1.21);
+                product.specifications = product.specifications || {};
+                product.shortDescription = product.shortDescription || (product.description ? product.description.substring(0, 200) + '...' : '');
+
                 // Update page title and meta
                 document.title = `${product.name} - Elektro Dvořák`;
                 document.querySelector('meta[name="description"]').setAttribute('content', product.shortDescription || product.description);
