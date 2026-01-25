@@ -252,6 +252,11 @@ function serveStatic(req, res) {
         return;
     }
 
+    // Check if path is a directory, serve index.html
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+        filePath = path.join(filePath, 'index.html');
+    }
+
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
