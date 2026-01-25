@@ -18,7 +18,7 @@ class ProductManager {
         try {
             // Detect if we're in pages/ subdirectory or root
             const isInPagesDir = window.location.pathname.includes('/pages/');
-            const jsonPath = isInPagesDir ? '../assets/data/products.json' : 'assets/data/products.json';
+            const jsonPath = isInPagesDir ? '../data/products.json' : 'data/products.json';
 
             const response = await fetch(jsonPath);
             const data = await response.json();
