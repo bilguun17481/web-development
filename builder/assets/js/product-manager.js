@@ -8,7 +8,7 @@ class ProductManager {
         this.categories = [];
         this.manufacturers = [];
         this.currentEditId = null;
-        this.currentImageData = null; // Store uploaded image data
+        this.currentImageData = []; // Store uploaded images data (array)
         this.apiBase = 'http://localhost:3000/api';
         this.init();
     }
@@ -149,17 +149,17 @@ class ProductManager {
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="productImage">Obrázek (emoji, URL, nebo nahrát)</label>
+                                    <label for="productImage">Obrázky (emoji, nebo nahrát více fotek)</label>
                                     <div style="display: flex; gap: 8px; align-items: flex-end;">
-                                        <input type="text" id="productImage" placeholder="💡 nebo https://..." style="flex: 1;">
-                                        <button type="button" class="btn-upload-small" id="uploadProductImageBtn" title="Nahrát obrázek">
+                                        <input type="text" id="productImage" placeholder="💡 nebo nahrát fotky..." style="flex: 1;">
+                                        <button type="button" class="btn-upload-small" id="uploadProductImageBtn" title="Nahrát obrázky">
                                             📤 Nahrát
                                         </button>
                                     </div>
-                                    <input type="file" id="productImageUpload" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" style="display: none;">
-                                    <div id="imagePreview" style="margin-top: 8px; display: none;">
-                                        <img id="previewImg" style="max-width: 100px; max-height: 100px; border-radius: 4px; border: 1px solid #e0e0e0;">
+                                    <input type="file" id="productImageUpload" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" multiple style="display: none;">
+                                    <div id="imagePreview" style="margin-top: 8px; display: none; flex-wrap: wrap; gap: 8px;">
                                     </div>
+                                    <small style="color: #666; display: block; margin-top: 4px;">Můžete vybrat více obrázků najednou</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="productBadge">Odznak</label>
@@ -296,60 +296,76 @@ class ProductManager {
                 });
 
                 fileInput.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                        this.handleProductImageUpload(file);
+                    const files = Array.from(e.target.files);
+                    if (files.length > 0) {
+                        this.handleProductImageUpload(files);
                     }
                 });
             }
         }, 500);
     }
 
-    handleProductImageUpload(file) {
-        // Validate file type
+    handleProductImageUpload(files) {
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-            window.editor.showToast('Pouze JPG, PNG, GIF nebo WebP soubory');
-            return;
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        // Reset current images
+        this.currentImageData = [];
+
+        const preview = document.getElementById('imagePreview');
+        if (preview) {
+            preview.innerHTML = '';
+            preview.style.display = 'flex';
         }
 
-        // Validate file size (max 5MB)
-        const maxSize = 5 * 1024 * 1024;
-        if (file.size > maxSize) {
-            window.editor.showToast('Obrázek musí být menší než 5MB');
-            return;
-        }
+        let loadedCount = 0;
 
-        // Read file as data URL
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            const dataUrl = e.target.result;
-
-            // Store the image data for sending to server
-            this.currentImageData = dataUrl;
-
-            // Show preview
-            const preview = document.getElementById('imagePreview');
-            const previewImg = document.getElementById('previewImg');
-
-            if (preview && previewImg) {
-                previewImg.src = dataUrl;
-                preview.style.display = 'block';
+        files.forEach((file, index) => {
+            // Validate file type
+            if (!validTypes.includes(file.type)) {
+                window.editor.showToast(`Soubor ${file.name}: Pouze JPG, PNG, GIF nebo WebP`);
+                return;
             }
 
-            // Clear the text input since we're using uploaded file
-            document.getElementById('productImage').value = '';
-            document.getElementById('productImage').placeholder = 'Obrázek nahrán';
+            // Validate file size
+            if (file.size > maxSize) {
+                window.editor.showToast(`Soubor ${file.name}: Max 5MB`);
+                return;
+            }
 
-            window.editor.showToast('Obrázek nahrán!');
-        };
+            const reader = new FileReader();
 
-        reader.onerror = () => {
-            window.editor.showToast('Chyba při nahrávání obrázku');
-        };
+            reader.onload = (e) => {
+                const dataUrl = e.target.result;
+                this.currentImageData.push(dataUrl);
 
-        reader.readAsDataURL(file);
+                // Show preview thumbnail
+                if (preview) {
+                    const thumb = document.createElement('div');
+                    thumb.style.cssText = 'position: relative; display: inline-block;';
+                    thumb.innerHTML = `
+                        <img src="${dataUrl}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #e0e0e0;">
+                        <span style="position: absolute; top: -5px; right: -5px; background: #333; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px;">${this.currentImageData.length}</span>
+                    `;
+                    preview.appendChild(thumb);
+                }
+
+                loadedCount++;
+                if (loadedCount === files.length) {
+                    window.editor.showToast(`${this.currentImageData.length} obrázků nahráno!`);
+                }
+            };
+
+            reader.onerror = () => {
+                window.editor.showToast(`Chyba při nahrávání: ${file.name}`);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Clear the text input
+        document.getElementById('productImage').value = '';
+        document.getElementById('productImage').placeholder = `Vybráno ${files.length} obrázků`;
     }
 
     async addNewCategory() {
@@ -513,11 +529,14 @@ class ProductManager {
         const form = document.getElementById('productForm');
 
         this.currentEditId = productId;
-        this.currentImageData = null; // Reset image data
+        this.currentImageData = []; // Reset image data array
 
         // Reset image preview
         const preview = document.getElementById('imagePreview');
-        if (preview) preview.style.display = 'none';
+        if (preview) {
+            preview.innerHTML = '';
+            preview.style.display = 'none';
+        }
 
         if (productId) {
             // Edit mode
@@ -612,8 +631,8 @@ class ProductManager {
             manufacturer: document.getElementById('productManufacturer').value,
             price: parseInt(document.getElementById('productPrice').value),
             oldPrice: parseInt(document.getElementById('productOldPrice').value) || null,
-            image: this.currentImageData ? productId : image, // Use productId as image name if uploaded
-            imageType: this.currentImageData ? 'file' : imageType,
+            image: this.currentImageData.length > 0 ? productId : image, // Use productId as image name if uploaded
+            imageType: this.currentImageData.length > 0 ? 'file' : imageType,
             badge: badge || null,
             badgeText: badgeText,
             rating: parseInt(document.getElementById('productRating').value),
@@ -633,7 +652,7 @@ class ProductManager {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     product: productData,
-                    imageData: this.currentImageData // Send image data if uploaded
+                    imageData: this.currentImageData // Send array of image data
                 })
             });
 
@@ -658,7 +677,7 @@ class ProductManager {
 
             this.renderProductList();
             this.hideProductForm();
-            this.currentImageData = null;
+            this.currentImageData = [];
 
         } catch (error) {
             console.error('Error saving product:', error);

@@ -111,9 +111,21 @@ async function handleAPI(req, res) {
             const body = await parseBody(req);
             const data = loadProducts();
 
-            // Handle image upload
-            if (body.imageData && body.imageData.startsWith('data:image')) {
-                body.product.image = saveImage(body.imageData, body.product.id);
+            // Handle multiple image uploads
+            if (body.imageData && Array.isArray(body.imageData) && body.imageData.length > 0) {
+                body.imageData.forEach((imgData, index) => {
+                    if (imgData && imgData.startsWith('data:image')) {
+                        saveImage(imgData, body.product.id, index + 1);
+                    }
+                });
+                body.product.image = body.product.id;
+                body.product.imageType = 'file';
+                body.product.imageCount = body.imageData.length;
+                console.log(`    Saved ${body.imageData.length} images for ${body.product.id}`);
+            } else if (body.imageData && typeof body.imageData === 'string' && body.imageData.startsWith('data:image')) {
+                // Handle single image (backwards compatibility)
+                saveImage(body.imageData, body.product.id);
+                body.product.image = body.product.id;
                 body.product.imageType = 'file';
             }
 
@@ -147,9 +159,20 @@ async function handleAPI(req, res) {
                 return;
             }
 
-            // Handle image upload
-            if (body.imageData && body.imageData.startsWith('data:image')) {
-                body.product.image = saveImage(body.imageData, body.product.id);
+            // Handle multiple image uploads
+            if (body.imageData && Array.isArray(body.imageData) && body.imageData.length > 0) {
+                body.imageData.forEach((imgData, idx) => {
+                    if (imgData && imgData.startsWith('data:image')) {
+                        saveImage(imgData, body.product.id, idx + 1);
+                    }
+                });
+                body.product.image = body.product.id;
+                body.product.imageType = 'file';
+                body.product.imageCount = body.imageData.length;
+                console.log(`    Updated ${body.imageData.length} images for ${body.product.id}`);
+            } else if (body.imageData && typeof body.imageData === 'string' && body.imageData.startsWith('data:image')) {
+                saveImage(body.imageData, body.product.id);
+                body.product.image = body.product.id;
                 body.product.imageType = 'file';
             }
 
