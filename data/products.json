@@ -16,25 +16,135 @@
       "ratingCount": 19078,
       "description": "Pařák, kotel na brambory - 80 litrů, vhodný pro ohřev vody, hodně používán na zabijačkách. Nerezová nádoba, plechový spodek. Český výrobce. Výška: 995 mm, Šířka: 640 mm, Průměr kouřového hrdla: 125 mm, Vnitřní průměr: 420 mm, Hmotnost: cca 35 kg, Objem kotle: 80l, Jmenovitý tepelný výkon: cca 5500W.",
       "inStock": true
+    },
+    {
+      "id": "kat5544",
+      "title": "Pařák, kotel na brambory 80l smaltovaný",
+      "category": "kotle-kamna-krby",
+      "categoryName": "Kotle, kamna, krby",
+      "manufacturer": "rejholec",
+      "price": 9149,
+      "oldPrice": null,
+      "image": "kat5544",
+      "imageType": "file",
+      "badge": "new",
+      "badgeText": "Novinka",
+      "rating": 5,
+      "ratingCount": 0,
+      "description": "Popis produktu Pařák, kotel na brambory 80l smaltovaný\nPařák, kotel na brambory - smaltovaný 80 litrů, vhodný pro ohřev vody, hodně používán na zabijačkách. Od českého výrobce.\n\nTechnické údaje:\n\nVýška: 995 mm\nŠířka: 640 mm\nPrůměr kouřového hrdla: 125 mm\nVnitřní průměr: 420 mm\nHmotnost: cca 35 kg\nObjem kotle: 0,080 m3 (80l)\nJmenovitý tepelný výkon: cca 5500W\nProvozní tah: 10 Pa\nDoporučené palivo: hnědé uhlí ořech 1, dřevo\nPrůměrná spotřeba paliva: 3–4kg\nNáhradní díly, které lze zakoupit samostatně:\n\nVarný kotel (bez poklice), tj. vložka pařáku 80 l\nObal kotle (bez v.nádoby)\nPružinový uzávěr\nRošt topeniště\nTěsnění\nPoklice smaltovaná\nSibral\nPařáček děrovaný\nDno vnějšího pláště\nNáhradní díly objednávejte na tel.: +420 603 235 182.",
+      "inStock": true,
+      "imageCount": 2
+    },
+    {
+      "id": "kat5545",
+      "title": "Pařák, kotel na brambory smaltovaný 65 l",
+      "category": "kotle-kamna-krby",
+      "categoryName": "Kotle, kamna, krby",
+      "manufacturer": "elektrodvorak",
+      "price": 8799,
+      "oldPrice": null,
+      "image": "kat5545",
+      "imageType": "file",
+      "badge": "new",
+      "badgeText": "Novinka",
+      "rating": 5,
+      "ratingCount": 0,
+      "description": "Popis produktu Pařák, kotel na brambory smaltovaný 65 l\nPařák, kotel na brambory - smaltovaný 65 litrů, vhodný pro ohřev vody, hodně používán na zabijačkách. Český výrobce. Zabijačkový kotel na ohřev vody, výklopný.\n\nTechnické údaje:\n\nVýška: 900 mm\nŠířka: 640 mm\nPrůměr kouřového hrdla: 125 mm\nVnitřní průměr: 420 mm\nHmotnost: cca 35 kg\nObjem kotle: 0,065 m3 (65l)\nJmenovitý tepelný výkon: cca 5500 W\nProvozní tah: 15 Pa\nDoporučené palivo: hnědé uhlí ořech 1,DŘEVO\nPrůměrná spotřeba paliva: 3–4 kg.h-1\nNáhradní díly, které lze zakoupit samostatně:\n\nVarný kotel (bez poklice), tj. vložka pařáku 65 l\nObal kotle (bez v.nádoby)\nPružinový uzávěr\nRošt topeniště\nTěsnění\nPoklice smaltovaná\nSibral\nPařáček děrovaný\nDno vnějšího pláště\nNáhradní díly objednávejte na tel.: +420 603 235 182.",
+      "inStock": true,
+      "imageCount": 2
+    },
+    {
+      "id": "17144",
+      "title": "Pařák, kotel na brambory nerezový 65 l",
+      "category": "kotle-kamna-krby",
+      "categoryName": "Kotle, kamna, krby",
+      "manufacturer": "rejholec",
+      "price": 11190,
+      "oldPrice": null,
+      "image": "17144",
+      "imageType": "file",
+      "badge": null,
+      "badgeText": null,
+      "rating": 5,
+      "ratingCount": 0,
+      "description": "Popis produktu Pařák, kotel na brambory nerezový 65 l\nPařák, kotel na brambory - 65 litrů, vhodný pro ohřev vody, hodně používán na zabijačkách. Nerezová nádoba, spodek plech.\nČeský výrobce.\n\nTechnické údaje:\n\nVýška: 900 mm\nŠířka: 640 mm\nPrůměr kouřového hrdla: 125 mm\nVnitřní průměr: 420 mm\nHmotnost: cca 35 kg\nObjem kotle: 0,065 m3 (65l)\nJmenovitý tepelný výkon: cca 5500 W\nProvozní tah: 15 Pa\nDoporučené palivo: hnědé uhlí ořech 1,DŘEVO\nPrůměrná spotřeba paliva: 3–4kg.h-1\nNáhradní díly, které lze objednat samostatně:\n\nVarná nádoba 65 l\nPoklice\nMezikruží\nPařáček děrovaný\nNáhradní díly objednávejte na tel.: +420 603 235 182.",
+      "inStock": true,
+      "imageCount": 7
     }
   ],
   "categories": [
-    { "id": "osvetleni", "name": "LED Osvětlení", "icon": "💡" },
-    { "id": "zasuvky", "name": "Zásuvky & Vypínače", "icon": "🔌" },
-    { "id": "kabely", "name": "Kabely & Vodiče", "icon": "🔗" },
-    { "id": "jistice", "name": "Jističe & Chrániče", "icon": "⚡" },
-    { "id": "instalace", "name": "Instalační materiál", "icon": "📦" },
-    { "id": "naradi", "name": "Nářadí", "icon": "🔧" },
-    { "id": "kotle-kamna-krby", "name": "Kotle, kamna, krby", "icon": "🔥" }
+    {
+      "id": "osvetleni",
+      "name": "LED Osvětlení",
+      "icon": "💡"
+    },
+    {
+      "id": "zasuvky",
+      "name": "Zásuvky & Vypínače",
+      "icon": "🔌"
+    },
+    {
+      "id": "kabely",
+      "name": "Kabely & Vodiče",
+      "icon": "🔗"
+    },
+    {
+      "id": "jistice",
+      "name": "Jističe & Chrániče",
+      "icon": "⚡"
+    },
+    {
+      "id": "instalace",
+      "name": "Instalační materiál",
+      "icon": "📦"
+    },
+    {
+      "id": "naradi",
+      "name": "Nářadí",
+      "icon": "🔧"
+    },
+    {
+      "id": "kotle-kamna-krby",
+      "name": "Kotle, kamna, krby",
+      "icon": "🔥"
+    }
   ],
   "manufacturers": [
-    { "id": "philips", "name": "Philips" },
-    { "id": "legrand", "name": "Legrand" },
-    { "id": "prysmian", "name": "Prysmian" },
-    { "id": "osram", "name": "Osram" },
-    { "id": "abb", "name": "ABB" },
-    { "id": "obo", "name": "OBO Bettermann" },
-    { "id": "knipex", "name": "Knipex" },
-    { "id": "elektrodvorak", "name": "Elektro Dvořák" }
+    {
+      "id": "philips",
+      "name": "Philips"
+    },
+    {
+      "id": "legrand",
+      "name": "Legrand"
+    },
+    {
+      "id": "prysmian",
+      "name": "Prysmian"
+    },
+    {
+      "id": "osram",
+      "name": "Osram"
+    },
+    {
+      "id": "abb",
+      "name": "ABB"
+    },
+    {
+      "id": "obo",
+      "name": "OBO Bettermann"
+    },
+    {
+      "id": "knipex",
+      "name": "Knipex"
+    },
+    {
+      "id": "elektrodvorak",
+      "name": "Elektro Dvořák"
+    },
+    {
+      "id": "rejholec",
+      "name": "Rejholec"
+    }
   ]
 }
