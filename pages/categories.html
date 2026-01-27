@@ -3,12 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Kompletní nabídka elektroinstalačního materiálu - Elektro Dvořák">
-    <title>Produkty - Elektro Dvořák</title>
+    <meta name="description" content="Kompletni nabidka elektroinstalacniho materialu - Elektro Dvorak">
+    <title>Produkty - Elektro Dvorak</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
+        /* ========================================
+           REVZILLA-STYLE PRODUCT CARDS CSS
+           ======================================== */
+
+        :root {
+            --card-width: 280px;
+            --card-height: 450px;
+            --image-size: 260px;
+            --card-padding: 16px;
+            --card-gap: 16px;
+            --badge-width: 40px;
+            --badge-height: 20px;
+            --badge-offset: 8px;
+            --subheader-height: 56px;
+        }
+
+        /* ========================================
+           SUB-HEADER NAVIGATION BAR
+           ======================================== */
+
+        .sub-header {
+            position: fixed;
+            top: var(--header-height, 70px);
+            left: 0;
+            right: 0;
+            height: var(--subheader-height);
+            background: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 999;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .sub-header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .hamburger-btn {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 3px 0;
+            background: none;
+            border: none;
+        }
+
+        .hamburger-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #333;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .sub-header-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            margin: 0 8px;
+            color: #999;
+        }
+
+        .sub-header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sub-header-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .sub-header-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: #333;
+            stroke-width: 2;
+        }
+
+        .sub-header-icon .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #e31837;
+            color: #fff;
+            font-size: 10px;
+            font-weight: bold;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ========================================
+           SLIDE-OUT NAVIGATION PANEL
+           ======================================== */
+
+        .slide-nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .slide-nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slide-nav {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: #fff;
+            z-index: 1001;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .slide-nav.active {
+            left: 0;
+        }
+
+        .slide-nav-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slide-nav-header h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .slide-nav-close {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .slide-nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .slide-nav-links li {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .slide-nav-links a {
+            display: block;
+            padding: 16px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.2s ease;
+        }
+
+        .slide-nav-links a:hover {
+            background: #f5f5f5;
+        }
+
+        .slide-nav-links a svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            vertical-align: middle;
+            stroke: #666;
+        }
+
+        /* ========================================
+           CATEGORIES PAGE LAYOUT
+           ======================================== */
+
         .categories-page {
-            margin-top: var(--header-height);
+            margin-top: calc(var(--header-height, 70px) + var(--subheader-height));
             padding: 40px 0;
         }
 
@@ -20,23 +259,23 @@
 
         .sidebar {
             position: sticky;
-            top: calc(var(--header-height) + 20px);
+            top: calc(var(--header-height, 70px) + var(--subheader-height) + 20px);
             height: fit-content;
         }
 
         .filter-section {
-            background: var(--white);
-            border-radius: var(--border-radius);
+            background: var(--white, #fff);
+            border-radius: var(--border-radius, 8px);
             padding: 25px;
             margin-bottom: 20px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
         }
 
         .filter-section h3 {
             font-size: 1.1rem;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid var(--gray);
+            border-bottom: 2px solid var(--gray, #e5e5e5);
         }
 
         .filter-option {
@@ -67,7 +306,7 @@
         .price-input {
             width: 100%;
             padding: 8px;
-            border: 1px solid var(--gray);
+            border: 1px solid var(--gray, #e5e5e5);
             border-radius: 4px;
             font-size: 0.9rem;
         }
@@ -87,13 +326,13 @@
             align-items: center;
             margin-bottom: 30px;
             padding: 20px;
-            background: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
+            background: var(--white, #fff);
+            border-radius: var(--border-radius, 8px);
+            box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
         }
 
         .products-count {
-            color: var(--text-light);
+            color: var(--text-light, #666);
         }
 
         .products-controls {
@@ -109,63 +348,257 @@
 
         .view-btn {
             padding: 8px 12px;
-            border: 1px solid var(--gray);
-            background: var(--white);
+            border: 1px solid var(--gray, #e5e5e5);
+            background: var(--white, #fff);
             cursor: pointer;
             border-radius: 4px;
-            transition: var(--transition);
+            transition: var(--transition, 0.3s ease);
         }
 
         .view-btn.active {
-            background: var(--primary-color);
-            color: var(--white);
-            border-color: var(--primary-color);
+            background: var(--primary-color, #0066cc);
+            color: var(--white, #fff);
+            border-color: var(--primary-color, #0066cc);
         }
 
         .sort-select {
             padding: 10px 15px;
-            border: 1px solid var(--gray);
-            border-radius: var(--border-radius);
+            border: 1px solid var(--gray, #e5e5e5);
+            border-radius: var(--border-radius, 8px);
             cursor: pointer;
             font-size: 0.9rem;
         }
 
+        /* ========================================
+           REVZILLA-STYLE PRODUCT GRID
+           ======================================== */
+
         .products-grid-list {
             display: grid;
-            gap: 30px;
+            gap: var(--card-gap);
         }
 
         .products-grid-list.grid-view {
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, var(--card-width));
+            justify-content: start;
         }
 
         .products-grid-list.list-view {
             grid-template-columns: 1fr;
         }
 
-        .product-card.list-view {
-            flex-direction: row;
-            max-width: none;
+        /* ========================================
+           REVZILLA-STYLE PRODUCT CARD
+           ======================================== */
+
+        .product-card {
+            width: var(--card-width);
+            height: var(--card-height);
+            background: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: box-shadow 0.2s ease;
+            border: 1px solid #e5e5e5;
         }
 
-        .product-card.list-view .product-image {
+        .product-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Product Image Container */
+        .product-image-container {
+            width: 100%;
+            height: var(--image-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            position: relative;
+            background: #fff;
+        }
+
+        .product-image-container img {
+            max-width: var(--image-size);
+            max-height: var(--image-size);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Product Badge */
+        .product-badge {
+            position: absolute;
+            top: var(--badge-offset);
+            left: var(--badge-offset);
+            min-width: var(--badge-width);
+            height: var(--badge-height);
+            padding: 0 8px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            z-index: 2;
+        }
+
+        .product-badge.new {
+            background: #0066cc;
+            color: #fff;
+        }
+
+        .product-badge.sale {
+            background: #e31837;
+            color: #fff;
+        }
+
+        .product-badge.closeout {
+            background: #ff6b00;
+            color: #fff;
+        }
+
+        .product-badge.bestseller {
+            background: #28a745;
+            color: #fff;
+        }
+
+        /* Product Info Section */
+        .product-info {
+            padding: var(--card-padding);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        /* Product Title - Clamped to 2 lines */
+        .product-title {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.3;
+            color: #333;
+            margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: calc(16px * 1.3 * 2); /* 2 lines */
+        }
+
+        .product-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .product-title a:hover {
+            text-decoration: underline;
+        }
+
+        /* Product Price */
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+            margin: 0;
+        }
+
+        .product-price .original-price {
+            font-size: 14px;
+            color: #999;
+            text-decoration: line-through;
+            font-weight: normal;
+            margin-left: 8px;
+        }
+
+        .product-price .sale-price {
+            color: #e31837;
+        }
+
+        /* Secondary Text (Rewards/Shipping) */
+        .product-secondary-text {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+
+        .product-secondary-text.rewards {
+            color: #28a745;
+        }
+
+        .product-secondary-text.shipping {
+            color: #0066cc;
+        }
+
+        /* Product Rating */
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: auto;
+        }
+
+        .product-rating .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .product-rating .star {
+            width: 14px;
+            height: 14px;
+            color: #ffc107;
+        }
+
+        .product-rating .star.empty {
+            color: #ddd;
+        }
+
+        .product-rating .review-count {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* List View Styles */
+        .product-card.list-view {
+            flex-direction: row;
+            width: 100%;
+            height: auto;
+            min-height: 200px;
+        }
+
+        .product-card.list-view .product-image-container {
+            width: 200px;
+            height: 200px;
             flex-shrink: 0;
-            width: 250px;
-            padding-top: 0;
-            height: 250px;
+        }
+
+        .product-card.list-view .product-image-container img {
+            max-width: 180px;
+            max-height: 180px;
         }
 
         .product-card.list-view .product-info {
-            flex-direction: row;
-            justify-content: space-between;
+            flex: 1;
+            justify-content: center;
         }
 
+        .product-card.list-view .product-title {
+            height: auto;
+            -webkit-line-clamp: 3;
+        }
+
+        /* No Products Message */
         .no-products {
             text-align: center;
             padding: 60px 20px;
-            color: var(--text-light);
+            color: var(--text-light, #666);
         }
 
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -176,22 +609,26 @@
 
         .page-btn {
             padding: 10px 15px;
-            border: 1px solid var(--gray);
-            background: var(--white);
+            border: 1px solid var(--gray, #e5e5e5);
+            background: var(--white, #fff);
             cursor: pointer;
             border-radius: 4px;
-            transition: var(--transition);
+            transition: var(--transition, 0.3s ease);
         }
 
         .page-btn.active {
-            background: var(--primary-color);
-            color: var(--white);
-            border-color: var(--primary-color);
+            background: var(--primary-color, #0066cc);
+            color: var(--white, #fff);
+            border-color: var(--primary-color, #0066cc);
         }
 
         .page-btn:hover:not(.active) {
-            background: var(--light-gray);
+            background: var(--light-gray, #f5f5f5);
         }
+
+        /* ========================================
+           RESPONSIVE BREAKPOINTS
+           ======================================== */
 
         @media (max-width: 992px) {
             .categories-layout {
@@ -212,21 +649,105 @@
                 width: 100%;
                 justify-content: space-between;
             }
+
+            .products-grid-list.grid-view {
+                grid-template-columns: repeat(auto-fill, var(--card-width));
+                justify-content: center;
+            }
         }
 
+        /* Tablet: 2 cards per row, 200px width */
         @media (max-width: 768px) {
+            :root {
+                --card-width: 200px;
+                --card-height: 380px;
+                --image-size: 180px;
+            }
+
             .products-grid-list.grid-view {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                grid-template-columns: repeat(2, var(--card-width));
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .product-title {
+                font-size: 14px;
+                height: calc(14px * 1.3 * 2);
+            }
+
+            .product-price {
+                font-size: 16px;
+            }
+
+            .product-secondary-text {
+                font-size: 12px;
             }
 
             .product-card.list-view {
                 flex-direction: column;
+                width: var(--card-width);
+                height: var(--card-height);
             }
 
-            .product-card.list-view .product-image {
+            .product-card.list-view .product-image-container {
                 width: 100%;
-                padding-top: 100%;
-                height: 0;
+                height: var(--image-size);
+            }
+
+            .sub-header-center {
+                display: none;
+            }
+
+            .breadcrumb {
+                font-size: 12px;
+            }
+        }
+
+        /* Mobile: 1 card per row, 100% width */
+        @media (max-width: 480px) {
+            :root {
+                --card-width: 100%;
+                --card-height: auto;
+                --image-size: auto;
+            }
+
+            .products-grid-list.grid-view {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card {
+                width: 100%;
+                height: auto;
+            }
+
+            .product-image-container {
+                width: 100%;
+                height: auto;
+                padding: 20px;
+            }
+
+            .product-image-container img {
+                max-width: 100%;
+                max-height: 250px;
+                width: auto;
+                height: auto;
+            }
+
+            .product-title {
+                height: auto;
+                -webkit-line-clamp: 3;
+            }
+
+            .product-info {
+                padding: 16px;
+            }
+
+            .categories-page {
+                padding: 20px 0;
+            }
+
+            .filter-section {
+                padding: 15px;
             }
         }
     </style>
@@ -236,25 +757,25 @@
     <header class="header">
         <div class="header-container">
             <a href="../index.html" class="logo">
-                <img src="../assets/images/logo.png" alt="Elektro Dvořák" class="logo-img">
+                <img src="../assets/images/logo.png" alt="Elektro Dvorak" class="logo-img">
             </a>
             <a href="https://obchody.heureka.cz/elektrodvorak-cz/recenze/" target="_blank" rel="noopener noreferrer" class="heureka-badge">
-                <img src="../assets/images/7469-12.png" alt="Ověřeno zákazníky" class="badge-img">
+                <img src="../assets/images/7469-12.png" alt="Overeno zakazniky" class="badge-img">
             </a>
 
             <nav class="nav">
                 <ul class="nav-links">
-                    <li><a href="../index.html">Domů</a></li>
+                    <li><a href="../index.html">Domu</a></li>
                     <li><a href="categories.html" class="active">Produkty</a></li>
-                    <li><a href="about.html">O nás</a></li>
+                    <li><a href="about.html">O nas</a></li>
                     <li><a href="contact.html">Kontakt</a></li>
                 </ul>
 
                 <div class="nav-icons">
-                    <span class="nav-icon">🔍</span>
-                    <span class="nav-icon">👤</span>
+                    <span class="nav-icon">&#128269;</span>
+                    <span class="nav-icon">&#128100;</span>
                     <span class="nav-icon" onclick="window.location.href='cart.html'">
-                        🛒
+                        &#128722;
                         <span class="cart-badge">0</span>
                     </span>
                 </div>
@@ -268,50 +789,144 @@
         </div>
     </header>
 
-    <!-- KATEGORICKÁ STRÁNKA -->
+    <!-- SUB-HEADER NAVIGATION BAR -->
+    <div class="sub-header">
+        <div class="sub-header-left">
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <div class="sub-header-center">
+            <div class="breadcrumb">
+                <a href="../index.html">Domu</a>
+                <span>/</span>
+                <strong>Produkty</strong>
+            </div>
+        </div>
+        <div class="sub-header-right">
+            <a href="contact.html" class="sub-header-icon" title="Zakaznicky servis">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+            </a>
+            <a href="cart.html" class="sub-header-icon" title="Kosik">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"/>
+                    <circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="cart-count" id="sub-header-cart-count">0</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- SLIDE-OUT NAVIGATION OVERLAY -->
+    <div class="slide-nav-overlay" id="slide-nav-overlay"></div>
+
+    <!-- SLIDE-OUT NAVIGATION PANEL -->
+    <nav class="slide-nav" id="slide-nav">
+        <div class="slide-nav-header">
+            <h3>Menu</h3>
+            <button class="slide-nav-close" id="slide-nav-close" aria-label="Zavrit menu">&times;</button>
+        </div>
+        <ul class="slide-nav-links">
+            <li>
+                <a href="contact.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    Zakaznicky servis
+                </a>
+            </li>
+            <li>
+                <a href="about.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Napoveda
+                </a>
+            </li>
+            <li>
+                <a href="contact.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    Kontakt
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="1 4 1 10 7 10"/>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                    </svg>
+                    Vraceni zbozi
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    Obchodni podminky
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- KATEGORICKA STRANKA -->
     <div class="categories-page">
         <div class="container">
-            <h1 style="margin-bottom: 30px;">Všechny produkty</h1>
+            <h1 style="margin-bottom: 30px;">Vsechny produkty</h1>
 
             <div class="categories-layout">
                 <!-- SIDEBAR S FILTRY -->
                 <aside class="sidebar">
-                    <!-- VYHLEDÁVÁNÍ -->
+                    <!-- VYHLEDAVANI -->
                     <div class="filter-section">
-                        <h3>🔍 Vyhledávání</h3>
+                        <h3>&#128269; Vyhledavani</h3>
                         <input type="text" id="search-input" class="price-input" placeholder="Hledat produkty...">
                     </div>
 
                     <!-- KATEGORIE -->
                     <div class="filter-section">
-                        <h3>📁 Kategorie</h3>
+                        <h3>&#128193; Kategorie</h3>
                         <div class="filter-option">
                             <input type="radio" name="category" id="cat-all" value="all" checked>
-                            <label for="cat-all">Všechny kategorie</label>
+                            <label for="cat-all">Vsechny kategorie</label>
                         </div>
                         <div class="filter-option">
                             <input type="radio" name="category" id="cat-osvetleni" value="osvetleni">
-                            <label for="cat-osvetleni">LED Osvětlení</label>
+                            <label for="cat-osvetleni">LED Osvetleni</label>
                         </div>
                         <div class="filter-option">
                             <input type="radio" name="category" id="cat-zasuvky" value="zasuvky">
-                            <label for="cat-zasuvky">Zásuvky & Vypínače</label>
+                            <label for="cat-zasuvky">Zasuvky & Vypinace</label>
                         </div>
                         <div class="filter-option">
                             <input type="radio" name="category" id="cat-kabely" value="kabely">
-                            <label for="cat-kabely">Kabely & Vodiče</label>
+                            <label for="cat-kabely">Kabely & Vodice</label>
                         </div>
                         <div class="filter-option">
                             <input type="radio" name="category" id="cat-jistice" value="jistice">
-                            <label for="cat-jistice">Jističe & Chrániče</label>
+                            <label for="cat-jistice">Jistice & Chranice</label>
                         </div>
                         <div class="filter-option">
                             <input type="radio" name="category" id="cat-instalace" value="instalace">
-                            <label for="cat-instalace">Instalační materiál</label>
+                            <label for="cat-instalace">Instalacni material</label>
                         </div>
                         <div class="filter-option">
                             <input type="radio" name="category" id="cat-naradi" value="naradi">
-                            <label for="cat-naradi">Nářadí</label>
+                            <label for="cat-naradi">Naradi</label>
                         </div>
                         <div class="filter-option">
                             <input type="radio" name="category" id="cat-kotle" value="kotle-kamna-krby">
@@ -321,17 +936,17 @@
 
                     <!-- CENA -->
                     <div class="filter-section">
-                        <h3>💰 Cena</h3>
+                        <h3>&#128176; Cena</h3>
                         <div class="price-range">
-                            <input type="number" id="price-min" class="price-input" placeholder="Od (Kč)">
+                            <input type="number" id="price-min" class="price-input" placeholder="Od (Kc)">
                             <span>-</span>
-                            <input type="number" id="price-max" class="price-input" placeholder="Do (Kč)">
+                            <input type="number" id="price-max" class="price-input" placeholder="Do (Kc)">
                         </div>
                     </div>
 
-                    <!-- VÝROBCE -->
+                    <!-- VYROBCE -->
                     <div class="filter-section">
-                        <h3>🏭 Výrobce</h3>
+                        <h3>&#127981; Vyrobce</h3>
                         <div class="filter-option">
                             <input type="checkbox" id="man-philips" data-manufacturer="philips">
                             <label for="man-philips">Philips</label>
@@ -354,13 +969,13 @@
                         </div>
                         <div class="filter-option">
                             <input type="checkbox" id="man-elektrodvorak" data-manufacturer="elektrodvorak">
-                            <label for="man-elektrodvorak">Elektro Dvořák</label>
+                            <label for="man-elektrodvorak">Elektro Dvorak</label>
                         </div>
                     </div>
 
                     <!-- DOSTUPNOST -->
                     <div class="filter-section">
-                        <h3>📦 Dostupnost</h3>
+                        <h3>&#128230; Dostupnost</h3>
                         <div class="filter-option">
                             <input type="checkbox" id="in-stock">
                             <label for="in-stock">Skladem</label>
@@ -381,36 +996,36 @@
                     <!-- HEADER -->
                     <div class="products-header">
                         <div class="products-count">
-                            Zobrazeno <strong id="product-count">0</strong> produktů
+                            Zobrazeno <strong id="product-count">0</strong> produktu
                         </div>
                         <div class="products-controls">
                             <div class="view-toggle">
-                                <button class="view-btn active" onclick="changeView('grid')" title="Mřížka">⊞</button>
-                                <button class="view-btn" onclick="changeView('list')" title="Seznam">☰</button>
+                                <button class="view-btn active" onclick="changeView('grid')" title="Mrizka">&#8862;</button>
+                                <button class="view-btn" onclick="changeView('list')" title="Seznam">&#9776;</button>
                             </div>
                             <select class="sort-select" id="sort-products">
-                                <option value="newest">Nejnovější</option>
-                                <option value="name-asc">Název A-Z</option>
-                                <option value="name-desc">Název Z-A</option>
-                                <option value="price-asc">Cena vzestupně</option>
-                                <option value="price-desc">Cena sestupně</option>
+                                <option value="newest">Nejnovejsi</option>
+                                <option value="name-asc">Nazev A-Z</option>
+                                <option value="name-desc">Nazev Z-A</option>
+                                <option value="price-asc">Cena vzestupne</option>
+                                <option value="price-desc">Cena sestupne</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- GRID PRODUKTŮ - Dynamicky načteno -->
+                    <!-- GRID PRODUKTU - Dynamicky nacteno -->
                     <div class="products-grid-list grid-view" id="products-container">
                         <!-- Products will be loaded dynamically -->
                     </div>
 
-                    <!-- STRÁNKOVÁNÍ -->
+                    <!-- STRANKOVANI -->
                     <div class="pagination" style="display: none;">
-                        <button class="page-btn">«</button>
+                        <button class="page-btn">&laquo;</button>
                         <button class="page-btn active">1</button>
                         <button class="page-btn">2</button>
                         <button class="page-btn">3</button>
                         <button class="page-btn">4</button>
-                        <button class="page-btn">»</button>
+                        <button class="page-btn">&raquo;</button>
                     </div>
                 </div>
             </div>
@@ -422,32 +1037,32 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section footer-about">
-                    <h3>Elektro Dvořák</h3>
-                    <p>Váš spolehlivý partner pro elektroinstalační materiál.</p>
+                    <h3>Elektro Dvorak</h3>
+                    <p>Vas spolehliv partner pro elektroinstalacni material.</p>
                     <div class="social-links">
-                        <a href="#" class="social-icon">📘</a>
-                        <a href="#" class="social-icon">📷</a>
-                        <a href="#" class="social-icon">📺</a>
-                        <a href="#" class="social-icon">💼</a>
+                        <a href="#" class="social-icon">&#128216;</a>
+                        <a href="#" class="social-icon">&#128247;</a>
+                        <a href="#" class="social-icon">&#128250;</a>
+                        <a href="#" class="social-icon">&#128188;</a>
                     </div>
                 </div>
 
                 <div class="footer-section">
-                    <h3>Rychlé odkazy</h3>
+                    <h3>Rychle odkazy</h3>
                     <ul>
-                        <li><a href="../index.html">Domů</a></li>
+                        <li><a href="../index.html">Domu</a></li>
                         <li><a href="categories.html">Produkty</a></li>
-                        <li><a href="about.html">O nás</a></li>
+                        <li><a href="about.html">O nas</a></li>
                         <li><a href="contact.html">Kontakt</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h3>Zákaznický servis</h3>
+                    <h3>Zakaznicky servis</h3>
                     <ul>
                         <li><a href="#">Doprava a platba</a></li>
                         <li><a href="#">Reklamace</a></li>
-                        <li><a href="#">Časté dotazy</a></li>
+                        <li><a href="#">Caste dotazy</a></li>
                     </ul>
                 </div>
 
@@ -455,15 +1070,15 @@
                     <h3>Kontakt</h3>
                     <div class="contact-info">
                         <div class="contact-item">
-                            <span>📍</span>
-                            <span>Příkladová 123, 160 00 Praha 6</span>
+                            <span>&#128205;</span>
+                            <span>Prikladova 123, 160 00 Praha 6</span>
                         </div>
                         <div class="contact-item">
-                            <span>📞</span>
+                            <span>&#128222;</span>
                             <span>+420 234 567 890</span>
                         </div>
                         <div class="contact-item">
-                            <span>✉️</span>
+                            <span>&#9993;</span>
                             <span>info@elektrodvorak.cz</span>
                         </div>
                     </div>
@@ -471,7 +1086,7 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2024 Elektro Dvořák. Všechna práva vyhrazena.</p>
+                <p>&copy; 2024 Elektro Dvorak. Vsechna prava vyhrazena.</p>
             </div>
         </div>
     </footer>
@@ -479,6 +1094,51 @@
     <script src="../assets/js/script.js"></script>
     <script src="../assets/js/products.js"></script>
     <script>
+        // ========================================
+        // SLIDE-OUT HAMBURGER NAVIGATION
+        // ========================================
+
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const slideNav = document.getElementById('slide-nav');
+        const slideNavOverlay = document.getElementById('slide-nav-overlay');
+        const slideNavClose = document.getElementById('slide-nav-close');
+
+        function openSlideNav() {
+            hamburgerBtn.classList.add('active');
+            slideNav.classList.add('active');
+            slideNavOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSlideNav() {
+            hamburgerBtn.classList.remove('active');
+            slideNav.classList.remove('active');
+            slideNavOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburgerBtn.addEventListener('click', function() {
+            if (slideNav.classList.contains('active')) {
+                closeSlideNav();
+            } else {
+                openSlideNav();
+            }
+        });
+
+        slideNavOverlay.addEventListener('click', closeSlideNav);
+        slideNavClose.addEventListener('click', closeSlideNav);
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && slideNav.classList.contains('active')) {
+                closeSlideNav();
+            }
+        });
+
+        // ========================================
+        // VIEW TOGGLE (GRID/LIST)
+        // ========================================
+
         function changeView(view) {
             const container = document.getElementById('products-container');
             const buttons = document.querySelectorAll('.view-btn');
@@ -498,7 +1158,97 @@
             }
         }
 
-        // Wire up filters once ProductManager is loaded
+        // ========================================
+        // PRODUCT CARD RENDERING (RevZilla Style)
+        // ========================================
+
+        function renderRevZillaProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.setAttribute('data-category', product.category || '');
+            card.setAttribute('data-price', product.price || 0);
+
+            // Determine badge
+            let badgeHtml = '';
+            if (product.badge) {
+                const badgeClass = product.badge.toLowerCase().replace(/\s+/g, '-');
+                badgeHtml = `<span class="product-badge ${badgeClass}">${product.badge}</span>`;
+            } else if (product.isNew) {
+                badgeHtml = '<span class="product-badge new">Novinka</span>';
+            } else if (product.onSale) {
+                badgeHtml = '<span class="product-badge sale">Akce</span>';
+            }
+
+            // Price display
+            let priceHtml = '';
+            if (product.originalPrice && product.originalPrice > product.price) {
+                priceHtml = `
+                    <span class="sale-price">${product.price.toLocaleString('cs-CZ')} Kc</span>
+                    <span class="original-price">${product.originalPrice.toLocaleString('cs-CZ')} Kc</span>
+                `;
+            } else {
+                priceHtml = `${product.price.toLocaleString('cs-CZ')} Kc`;
+            }
+
+            // Rating stars
+            let starsHtml = '';
+            const rating = product.rating || 0;
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHtml += '<span class="star">&#9733;</span>';
+                } else {
+                    starsHtml += '<span class="star empty">&#9733;</span>';
+                }
+            }
+
+            const reviewCount = product.reviewCount || 0;
+
+            card.innerHTML = `
+                <div class="product-image-container">
+                    ${badgeHtml}
+                    <a href="product.html?id=${product.id}">
+                        <img src="${product.image || '../assets/images/placeholder.png'}" alt="${product.name}" loading="lazy">
+                    </a>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">
+                        <a href="product.html?id=${product.id}">${product.name}</a>
+                    </h3>
+                    <p class="product-price">${priceHtml}</p>
+                    ${product.rewards ? `<p class="product-secondary-text rewards">${product.rewards}</p>` : ''}
+                    ${product.shipping ? `<p class="product-secondary-text shipping">${product.shipping}</p>` : ''}
+                    <div class="product-rating">
+                        <div class="stars">${starsHtml}</div>
+                        <span class="review-count">(${reviewCount})</span>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Override default product rendering if ProductManager exists
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (window.productManager && window.productManager.renderProduct) {
+                    // Store original render function
+                    const originalRender = window.productManager.renderProduct.bind(window.productManager);
+
+                    // Override with RevZilla style
+                    window.productManager.renderProduct = function(product) {
+                        return renderRevZillaProductCard(product);
+                    };
+
+                    // Re-render products with new style
+                    window.productManager.displayProducts();
+                }
+            }, 100);
+        });
+
+        // ========================================
+        // FILTER WIRING
+        // ========================================
+
         document.addEventListener('DOMContentLoaded', () => {
             // Wait for productManager to be initialized
             setTimeout(() => {
@@ -531,7 +1281,7 @@
                     // Price filters
                     const priceMin = document.getElementById('price-min');
                     const priceMax = document.getElementById('price-max');
-                    
+
                     if (priceMin && priceMax) {
                         const applyPriceFilter = () => {
                             const min = parseInt(priceMin.value) || 0;
@@ -539,7 +1289,7 @@
                             window.productManager.filterByPrice(min, max);
                             updateProductCount();
                         };
-                        
+
                         priceMin.addEventListener('change', applyPriceFilter);
                         priceMax.addEventListener('change', applyPriceFilter);
                     }
@@ -559,6 +1309,18 @@
                 }
             }
         }
+
+        // Sync cart count in sub-header
+        function updateSubHeaderCartCount() {
+            const cartCountEl = document.getElementById('sub-header-cart-count');
+            const mainCartBadge = document.querySelector('.cart-badge');
+            if (cartCountEl && mainCartBadge) {
+                cartCountEl.textContent = mainCartBadge.textContent;
+            }
+        }
+
+        // Update cart count periodically
+        setInterval(updateSubHeaderCartCount, 1000);
     </script>
 </body>
 </html>
