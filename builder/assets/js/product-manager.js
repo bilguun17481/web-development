@@ -9,6 +9,7 @@ class ProductManager {
         this.manufacturers = [];
         this.currentEditId = null;
         this.nextId = 9;
+        this.viewMode = 'cards'; // 'cards' or 'list'
         this.init();
     }
 
@@ -61,9 +62,14 @@ class ProductManager {
             <div class="products-manager">
                 <div class="products-header">
                     <h3>🛍 Produkty (${this.products.length})</h3>
-                    <button class="btn-primary" id="addProductBtn">
-                        <span>+</span> Přidat produkt
-                    </button>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-icon" id="toggleViewBtn" title="Přepnout zobrazení">
+                            📋
+                        </button>
+                        <button class="btn-primary" id="addProductBtn">
+                            <span>+</span> Přidat produkt
+                        </button>
+                    </div>
                 </div>
 
                 <div class="products-search">
