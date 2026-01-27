@@ -48,7 +48,7 @@ class SectionEditor {
         `);
 
         editableSections.forEach(section => {
-            this.makeSecti onEditable(section);
+            this.makeSectionEditable(section);
         });
     }
 
