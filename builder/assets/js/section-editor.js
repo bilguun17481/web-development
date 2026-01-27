@@ -10,27 +10,51 @@ class SectionEditor {
     }
 
     init() {
-        setTimeout(() => {
+        // Wait for iframe to be available and fully loaded
+        const iframe = document.getElementById('editorFrame');
+        if (!iframe) {
+            console.warn('SectionEditor: iframe not found, waiting...');
+            setTimeout(() => this.init(), 500);
+            return;
+        }
+
+        // Check if iframe is already loaded
+        if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+            console.log('SectionEditor: iframe already loaded, setting up immediately');
             this.setupSectionEditing();
             this.createQuickToolbar();
-        }, 1500);
-
-        // Reinitialize when page changes
-        const iframe = document.getElementById('editorFrame');
-        if (iframe) {
+        } else {
+            console.log('SectionEditor: waiting for iframe load event');
             iframe.addEventListener('load', () => {
+                console.log('SectionEditor: iframe loaded, setting up section editing');
                 setTimeout(() => {
                     this.setupSectionEditing();
-                }, 1000);
+                    this.createQuickToolbar();
+                }, 500);
             });
         }
+
+        // Reinitialize when page changes
+        iframe.addEventListener('load', () => {
+            console.log('SectionEditor: page changed, reinitializing');
+            setTimeout(() => {
+                this.setupSectionEditing();
+            }, 500);
+        });
     }
 
     setupSectionEditing() {
         const iframe = document.getElementById('editorFrame');
-        if (!iframe) return;
+        if (!iframe) {
+            console.error('SectionEditor: iframe not found');
+            return;
+        }
 
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!iframeDoc || !iframeDoc.body) {
+            console.error('SectionEditor: iframe document not ready');
+            return;
+        }
 
         // Find all major sections to make editable
         const editableSections = iframeDoc.querySelectorAll(`
@@ -46,6 +70,8 @@ class SectionEditor {
             footer,
             section
         `);
+
+        console.log(`SectionEditor: Found ${editableSections.length} editable sections`);
 
         editableSections.forEach(section => {
             this.makeSectionEditable(section);
@@ -470,12 +496,10 @@ class SectionEditor {
 // Initialize section editor
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            window.sectionEditor = new SectionEditor();
-        }, 1500);
+        console.log('SectionEditor: DOM loaded, initializing');
+        window.sectionEditor = new SectionEditor();
     });
 } else {
-    setTimeout(() => {
-        window.sectionEditor = new SectionEditor();
-    }, 1500);
+    console.log('SectionEditor: DOM already loaded, initializing immediately');
+    window.sectionEditor = new SectionEditor();
 }
