@@ -10,6 +10,8 @@ class ProductManager {
         this.currentEditId = null;
         this.nextId = 9;
         this.viewMode = 'cards'; // 'cards' or 'list'
+        this.currentImageData = []; // Store uploaded images data (array)
+        this.apiBase = 'http://localhost:3000/api';
         this.init();
     }
 
