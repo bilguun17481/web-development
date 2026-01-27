@@ -34,7 +34,7 @@
     --shadow-outline: 0 0 0 3px rgba(65,105,225,0.2);
 
     /* Rozměry */
-    --header-height: 130px;
+    --header-height: 150px;
     --max-width: 1200px;
     --border-radius: 8px;            /* Zaoblené rohy */
 
@@ -151,14 +151,14 @@ a:hover {
 }
 
 .logo-img {
-    height: 90px;
+    height: 110px;
     width: auto;
     display: block;
     transition: var(--transition);
 }
 
 .badge-img {
-    height: 90px;
+    height: 110px;
     width: auto;
     display: block;
 }
@@ -314,7 +314,7 @@ a:hover {
     font-weight: 600;
     text-align: center;
     cursor: pointer;
-    border: var(--border-width) solid transparent;
+    border: 2px solid transparent;
     transition: var(--transition);
     font-size: 1rem;
 }
@@ -322,13 +322,13 @@ a:hover {
 .btn-primary {
     background: var(--primary-color);
     color: var(--white);
-    border-color: var(--primary-dark);
+    border: 2px solid var(--primary-color);
 }
 
 .btn-primary:hover {
     background: var(--white);
     color: var(--primary-color);
-    border-color: var(--primary-color);
+    border: 2px solid var(--primary-color);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -576,6 +576,25 @@ a:hover {
     flex-grow: 1;
 }
 
+.product-stock {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.product-stock.in-stock {
+    color: #28a745;
+    background: #d4edda;
+}
+
+.product-stock.out-of-stock {
+    color: #dc3545;
+    background: #f8d7da;
+}
+
 .product-footer {
     display: flex;
     justify-content: space-between;
@@ -728,7 +747,12 @@ a:hover {
 
 @media (max-width: 768px) {
     :root {
-        --header-height: 70px;
+        --header-height: 120px;
+    }
+
+    .logo-img,
+    .badge-img {
+        height: 85px;
     }
 
     .section {
@@ -767,7 +791,7 @@ a:hover {
 
 @media (max-width: 576px) {
     :root {
-        --header-height: 100px;
+        --header-height: 110px;
     }
 
     .container {
@@ -780,7 +804,7 @@ a:hover {
 
     .logo-img,
     .badge-img {
-        height: 60px;
+        height: 75px;
     }
 
     .products-grid {

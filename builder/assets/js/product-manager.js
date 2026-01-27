@@ -37,22 +37,35 @@ class ProductManager {
 
     async loadProducts() {
         try {
-            const response = await fetch('../data/products.json');
+            // Try to load from API server first
+            const response = await fetch(`${this.apiBase}/products`);
+            if (!response.ok) throw new Error('API not available');
+
             const data = await response.json();
 
             this.products = data.products || [];
             this.categories = data.categories || [];
             this.manufacturers = data.manufacturers || [];
 
-            // Set next ID based on existing products
-            if (this.products.length > 0) {
-                this.nextId = Math.max(...this.products.map(p => p.id)) + 1;
-            }
-
             this.renderProductList();
+            console.log('Loaded products from API server');
         } catch (error) {
-            console.error('Error loading products:', error);
-            window.editor.showToast('Error loading products');
+            // Fallback to static JSON file
+            try {
+                const response = await fetch('../data/products.json');
+                const data = await response.json();
+
+                this.products = data.products || [];
+                this.categories = data.categories || [];
+                this.manufacturers = data.manufacturers || [];
+
+                this.renderProductList();
+                console.log('Loaded products from static JSON (API server not running)');
+                window.editor?.showToast('Server not running - changes won\'t be saved');
+            } catch (e) {
+                console.error('Error loading products:', e);
+                window.editor?.showToast('Error loading products');
+            }
         }
     }
 
@@ -143,17 +156,17 @@ class ProductManager {
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="productImage">Obrázek (emoji, URL, nebo nahrát)</label>
+                                    <label for="productImage">Obrázky (emoji, nebo nahrát více fotek)</label>
                                     <div style="display: flex; gap: 8px; align-items: flex-end;">
-                                        <input type="text" id="productImage" placeholder="💡 nebo https://..." style="flex: 1;">
-                                        <button type="button" class="btn-upload-small" id="uploadProductImageBtn" title="Nahrát obrázek">
+                                        <input type="text" id="productImage" placeholder="💡 nebo nahrát fotky..." style="flex: 1;">
+                                        <button type="button" class="btn-upload-small" id="uploadProductImageBtn" title="Nahrát obrázky">
                                             📤 Nahrát
                                         </button>
                                     </div>
-                                    <input type="file" id="productImageUpload" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" style="display: none;">
-                                    <div id="imagePreview" style="margin-top: 8px; display: none;">
-                                        <img id="previewImg" style="max-width: 100px; max-height: 100px; border-radius: 4px; border: 1px solid #e0e0e0;">
+                                    <input type="file" id="productImageUpload" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" multiple style="display: none;">
+                                    <div id="imagePreview" style="margin-top: 8px; display: none; flex-wrap: wrap; gap: 8px;">
                                     </div>
+                                    <small style="color: #666; display: block; margin-top: 4px;">Můžete vybrat více obrázků najednou</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="productBadge">Odznak</label>
@@ -290,59 +303,79 @@ class ProductManager {
                 });
 
                 fileInput.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                        this.handleProductImageUpload(file);
+                    const files = Array.from(e.target.files);
+                    if (files.length > 0) {
+                        this.handleProductImageUpload(files);
                     }
                 });
             }
         }, 500);
     }
 
-    handleProductImageUpload(file) {
-        // Validate file type
+    handleProductImageUpload(files) {
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-            window.editor.showToast('Pouze JPG, PNG, GIF nebo WebP soubory');
-            return;
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        // Reset current images
+        this.currentImageData = [];
+
+        const preview = document.getElementById('imagePreview');
+        if (preview) {
+            preview.innerHTML = '';
+            preview.style.display = 'flex';
         }
 
-        // Validate file size (max 2MB)
-        const maxSize = 2 * 1024 * 1024;
-        if (file.size > maxSize) {
-            window.editor.showToast('Obrázek musí být menší než 2MB');
-            return;
-        }
+        let loadedCount = 0;
 
-        // Read file as data URL
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            const dataUrl = e.target.result;
-
-            // Set the data URL in the input
-            document.getElementById('productImage').value = dataUrl;
-
-            // Show preview
-            const preview = document.getElementById('imagePreview');
-            const previewImg = document.getElementById('previewImg');
-
-            if (preview && previewImg) {
-                previewImg.src = dataUrl;
-                preview.style.display = 'block';
+        files.forEach((file, index) => {
+            // Validate file type
+            if (!validTypes.includes(file.type)) {
+                window.editor.showToast(`Soubor ${file.name}: Pouze JPG, PNG, GIF nebo WebP`);
+                return;
             }
 
-            window.editor.showToast('Obrázek nahrán!');
-        };
+            // Validate file size
+            if (file.size > maxSize) {
+                window.editor.showToast(`Soubor ${file.name}: Max 5MB`);
+                return;
+            }
 
-        reader.onerror = () => {
-            window.editor.showToast('Chyba při nahrávání obrázku');
-        };
+            const reader = new FileReader();
 
-        reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const dataUrl = e.target.result;
+                this.currentImageData.push(dataUrl);
+
+                // Show preview thumbnail
+                if (preview) {
+                    const thumb = document.createElement('div');
+                    thumb.style.cssText = 'position: relative; display: inline-block;';
+                    thumb.innerHTML = `
+                        <img src="${dataUrl}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #e0e0e0;">
+                        <span style="position: absolute; top: -5px; right: -5px; background: #333; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px;">${this.currentImageData.length}</span>
+                    `;
+                    preview.appendChild(thumb);
+                }
+
+                loadedCount++;
+                if (loadedCount === files.length) {
+                    window.editor.showToast(`${this.currentImageData.length} obrázků nahráno!`);
+                }
+            };
+
+            reader.onerror = () => {
+                window.editor.showToast(`Chyba při nahrávání: ${file.name}`);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Clear the text input
+        document.getElementById('productImage').value = '';
+        document.getElementById('productImage').placeholder = `Vybráno ${files.length} obrázků`;
     }
 
-    addNewCategory() {
+    async addNewCategory() {
         const categoryName = prompt('Zadejte název kategorie:');
         if (!categoryName || categoryName.trim() === '') return;
 
@@ -366,35 +399,47 @@ class ProductManager {
             icon: categoryIcon || '📦'
         };
 
-        this.categories.push(newCategory);
+        try {
+            const response = await fetch(`${this.apiBase}/categories`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category: newCategory })
+            });
 
-        // Refresh the form
-        this.setupProductPanel();
-        this.setupProductForm();
-        this.setupCategoryManagement();
-        this.setupManufacturerManagement();
-        this.setupImageUpload();
+            if (!response.ok) throw new Error('Server error');
 
-        // Reopen modal if it was open
-        if (this.currentEditId !== null) {
-            this.showProductForm(this.currentEditId);
-        } else {
-            this.showProductForm();
-        }
+            this.categories.push(newCategory);
 
-        // Select the new category
-        setTimeout(() => {
-            const select = document.getElementById('productCategory');
-            if (select) {
-                select.value = categoryId;
+            // Refresh the form
+            this.setupProductPanel();
+            this.setupProductForm();
+            this.setupCategoryManagement();
+            this.setupManufacturerManagement();
+            this.setupImageUpload();
+
+            // Reopen modal if it was open
+            if (this.currentEditId !== null) {
+                this.showProductForm(this.currentEditId);
+            } else {
+                this.showProductForm();
             }
-        }, 100);
 
-        window.editor.showToast(`Kategorie "${categoryName}" přidána!`);
-        this.updateProductsJSON();
+            // Select the new category
+            setTimeout(() => {
+                const select = document.getElementById('productCategory');
+                if (select) {
+                    select.value = categoryId;
+                }
+            }, 100);
+
+            window.editor.showToast(`Kategorie "${categoryName}" přidána!`);
+        } catch (error) {
+            console.error('Error adding category:', error);
+            window.editor.showToast('Chyba: Server neběží');
+        }
     }
 
-    addNewManufacturer() {
+    async addNewManufacturer() {
         const manufacturerName = prompt('Zadejte název výrobce:');
         if (!manufacturerName || manufacturerName.trim() === '') return;
 
@@ -415,32 +460,44 @@ class ProductManager {
             name: manufacturerName.trim()
         };
 
-        this.manufacturers.push(newManufacturer);
+        try {
+            const response = await fetch(`${this.apiBase}/manufacturers`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ manufacturer: newManufacturer })
+            });
 
-        // Refresh the form
-        this.setupProductPanel();
-        this.setupProductForm();
-        this.setupCategoryManagement();
-        this.setupManufacturerManagement();
-        this.setupImageUpload();
+            if (!response.ok) throw new Error('Server error');
 
-        // Reopen modal if it was open
-        if (this.currentEditId !== null) {
-            this.showProductForm(this.currentEditId);
-        } else {
-            this.showProductForm();
-        }
+            this.manufacturers.push(newManufacturer);
 
-        // Select the new manufacturer
-        setTimeout(() => {
-            const select = document.getElementById('productManufacturer');
-            if (select) {
-                select.value = manufacturerId;
+            // Refresh the form
+            this.setupProductPanel();
+            this.setupProductForm();
+            this.setupCategoryManagement();
+            this.setupManufacturerManagement();
+            this.setupImageUpload();
+
+            // Reopen modal if it was open
+            if (this.currentEditId !== null) {
+                this.showProductForm(this.currentEditId);
+            } else {
+                this.showProductForm();
             }
-        }, 100);
 
-        window.editor.showToast(`Výrobce "${manufacturerName}" přidán!`);
-        this.updateProductsJSON();
+            // Select the new manufacturer
+            setTimeout(() => {
+                const select = document.getElementById('productManufacturer');
+                if (select) {
+                    select.value = manufacturerId;
+                }
+            }, 100);
+
+            window.editor.showToast(`Výrobce "${manufacturerName}" přidán!`);
+        } catch (error) {
+            console.error('Error adding manufacturer:', error);
+            window.editor.showToast('Chyba: Server neběží');
+        }
     }
 
     setupSearch() {
@@ -479,6 +536,14 @@ class ProductManager {
         const form = document.getElementById('productForm');
 
         this.currentEditId = productId;
+        this.currentImageData = []; // Reset image data array
+
+        // Reset image preview
+        const preview = document.getElementById('imagePreview');
+        if (preview) {
+            preview.innerHTML = '';
+            preview.style.display = 'none';
+        }
 
         if (productId) {
             // Edit mode
@@ -494,6 +559,7 @@ class ProductManager {
             document.getElementById('productInStock').checked = true;
             document.getElementById('productRating').value = 5;
             document.getElementById('productRatingCount').value = 0;
+            document.getElementById('productImage').placeholder = 'Nahrát obrázek nebo zadat emoji';
         }
 
         modal.classList.add('show');
@@ -519,11 +585,28 @@ class ProductManager {
         document.getElementById('productInStock').checked = product.inStock;
     }
 
-    saveProduct() {
+    async saveProduct() {
         const form = document.getElementById('productForm');
         if (!form.checkValidity()) {
             form.reportValidity();
             return;
+        }
+
+        // Get product ID - prompt for kat# if new product
+        let productId = this.currentEditId;
+        if (!productId) {
+            productId = prompt('Zadejte ID produktu (např. kat17144):');
+            if (!productId || productId.trim() === '') {
+                window.editor.showToast('ID produktu je povinné');
+                return;
+            }
+            productId = productId.trim();
+
+            // Check if ID already exists
+            if (this.products.find(p => p.id === productId)) {
+                window.editor.showToast('Produkt s tímto ID již existuje');
+                return;
+            }
         }
 
         // Save state for undo
@@ -533,21 +616,30 @@ class ProductManager {
         const category = this.categories.find(c => c.id === categoryId);
 
         const badge = document.getElementById('productBadge').value;
-        const badgeText = badge === 'new' ? 'Novinka' : badge === 'sale' ? '-20%' : null;
+        let badgeText = null;
+        if (badge === 'new') badgeText = 'Novinka';
+        else if (badge === 'sale') {
+            badgeText = prompt('Zadejte text slevy (např. -20%, SUPER CENA):', '-20%') || '-20%';
+        }
 
         const image = document.getElementById('productImage').value;
-        const imageType = /^[\p{Emoji}]+$/u.test(image) ? 'emoji' : 'url';
+        let imageType = 'file'; // Default to file when using uploaded image
+
+        // Check if it's an emoji
+        if (image && /^[\p{Emoji}]+$/u.test(image)) {
+            imageType = 'emoji';
+        }
 
         const productData = {
-            id: this.currentEditId || this.nextId++,
+            id: productId,
             title: document.getElementById('productTitle').value,
             category: categoryId,
             categoryName: category?.name || '',
             manufacturer: document.getElementById('productManufacturer').value,
             price: parseInt(document.getElementById('productPrice').value),
             oldPrice: parseInt(document.getElementById('productOldPrice').value) || null,
-            image: image,
-            imageType: imageType,
+            image: this.currentImageData.length > 0 ? productId : image, // Use productId as image name if uploaded
+            imageType: this.currentImageData.length > 0 ? 'file' : imageType,
             badge: badge || null,
             badgeText: badgeText,
             rating: parseInt(document.getElementById('productRating').value),
@@ -556,31 +648,55 @@ class ProductManager {
             inStock: document.getElementById('productInStock').checked
         };
 
-        if (this.currentEditId) {
-            // Update existing product
-            const index = this.products.findIndex(p => p.id === this.currentEditId);
-            if (index !== -1) {
-                this.products[index] = productData;
+        try {
+            const isUpdate = !!this.currentEditId;
+            const url = isUpdate
+                ? `${this.apiBase}/products/${productId}`
+                : `${this.apiBase}/products`;
+
+            const response = await fetch(url, {
+                method: isUpdate ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    product: productData,
+                    imageData: this.currentImageData // Send array of image data
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Server error');
+            }
+
+            const result = await response.json();
+
+            if (isUpdate) {
+                const index = this.products.findIndex(p => p.id === this.currentEditId);
+                if (index !== -1) {
+                    this.products[index] = productData;
+                }
                 window.editor.addToHistory(`Updated product: ${productData.title}`);
                 window.editor.showToast('Produkt aktualizován!');
+            } else {
+                this.products.push(productData);
+                window.editor.addToHistory(`Added product: ${productData.title}`);
+                window.editor.showToast('Produkt přidán a obrázek uložen!');
             }
-        } else {
-            // Add new product
-            this.products.push(productData);
-            window.editor.addToHistory(`Added product: ${productData.title}`);
-            window.editor.showToast('Produkt přidán!');
-        }
 
-        this.renderProductList();
-        this.hideProductForm();
-        this.updateProductsJSON();
+            this.renderProductList();
+            this.hideProductForm();
+            this.currentImageData = [];
+
+        } catch (error) {
+            console.error('Error saving product:', error);
+            window.editor.showToast('Chyba: Server neběží. Spusťte "node server.js"');
+        }
     }
 
     editProduct(id) {
         this.showProductForm(id);
     }
 
-    deleteProduct(id) {
+    async deleteProduct(id) {
         if (!window.AuthSystem.hasPermission('delete')) {
             window.editor.showToast('Nemáte oprávnění mazat produkty');
             return;
@@ -591,15 +707,27 @@ class ProductManager {
 
         if (!confirm(`Opravdu smazat "${product.title}"?`)) return;
 
-        // Save state for undo
-        window.editor.saveState(`Deleted product: ${product.title}`);
+        try {
+            const response = await fetch(`${this.apiBase}/products/${id}`, {
+                method: 'DELETE'
+            });
 
-        this.products = this.products.filter(p => p.id !== id);
-        this.renderProductList();
+            if (!response.ok) {
+                throw new Error('Server error');
+            }
 
-        window.editor.addToHistory(`Deleted product: ${product.title}`);
-        window.editor.showToast('Produkt smazán');
-        this.updateProductsJSON();
+            // Save state for undo
+            window.editor.saveState(`Deleted product: ${product.title}`);
+
+            this.products = this.products.filter(p => p.id !== id);
+            this.renderProductList();
+
+            window.editor.addToHistory(`Deleted product: ${product.title}`);
+            window.editor.showToast('Produkt smazán');
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            window.editor.showToast('Chyba: Server neběží. Spusťte "node server.js"');
+        }
     }
 
     updateProductsJSON() {

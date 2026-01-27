@@ -321,6 +321,8 @@
         <div class="header-container">
             <a href="../index.html" class="logo">
                 <img src="../assets/images/logo.png" alt="Elektro Dvořák" class="logo-img">
+            </a>
+            <a href="https://obchody.heureka.cz/elektrodvorak-cz/recenze/" target="_blank" rel="noopener noreferrer" class="heureka-badge">
                 <img src="../assets/images/7469-12.png" alt="Ověřeno zákazníky" class="badge-img">
             </a>
 
@@ -576,82 +578,8 @@
     <section class="related-products">
         <div class="container">
             <h2 class="section-title">Související produkty</h2>
-            <div class="products-grid">
-                <div class="product-card" data-product-id="9">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">LED Osvětlení</div>
-                        <h3 class="product-title">LED žárovka E27 15W studená bílá</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-count">(89)</span>
-                        </div>
-                        <p class="product-description">Výkonnější varianta se studeným bílým světlem.</p>
-                        <div class="product-footer">
-                            <div class="product-price">169 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" data-product-id="10">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">LED Osvětlení</div>
-                        <h3 class="product-title">LED žárovka E14 8W teplá bílá</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(156)</span>
-                        </div>
-                        <p class="product-description">Menší provedení s paticí E14 (malý závit).</p>
-                        <div class="product-footer">
-                            <div class="product-price">129 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" data-product-id="11">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">LED Osvětlení</div>
-                        <h3 class="product-title">LED žárovka GU10 6W</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-count">(67)</span>
-                        </div>
-                        <p class="product-description">Bodovka s paticí GU10 pro halogenová svítidla.</p>
-                        <div class="product-footer">
-                            <div class="product-price">99 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-card" data-product-id="12">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔌</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">Osvětlení</div>
-                        <h3 class="product-title">Objímka keramická E27</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(234)</span>
-                        </div>
-                        <p class="product-description">Kvalitní keramická objímka pro E27 žárovky.</p>
-                        <div class="product-footer">
-                            <div class="product-price">39 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="products-grid" id="related-products-container">
+                <!-- Related products loaded dynamically -->
             </div>
         </div>
     </section>
@@ -717,6 +645,215 @@
 
     <script src="../assets/js/script.js"></script>
     <script>
+        // Load product data dynamically
+        async function loadProductData() {
+            // Get product ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (!productId) {
+                document.querySelector('.container').innerHTML = '<h2>Produkt nenalezen</h2><p>ID produktu nebylo specifikováno.</p>';
+                return;
+            }
+
+            try {
+                // Fetch products data
+                const response = await fetch('../data/products.json');
+                const data = await response.json();
+                const product = data.products.find(p => p.id === productId);
+
+                if (!product) {
+                    document.querySelector('.container').innerHTML = '<h2>Produkt nenalezen</h2><p>Požadovaný produkt nebyl nalezen v databázi.</p>';
+                    return;
+                }
+
+                // Generate images array if not present (for products with imageType/imageCount)
+                if (!product.images) {
+                    product.images = [];
+                    if (product.imageType === 'file' && product.imageCount) {
+                        for (let i = 1; i <= product.imageCount; i++) {
+                            product.images.push(`assets/images/products/${product.image}-${i}.jpg`);
+                        }
+                    } else if (product.image) {
+                        // Single image fallback
+                        product.images.push(product.image.startsWith('http') ? product.image : `assets/images/products/${product.image}.jpg`);
+                    }
+                }
+
+                // Normalize product fields (handle builder format vs expected format)
+                product.name = product.name || product.title;
+                product.reviewCount = product.reviewCount || product.ratingCount || 0;
+                product.sku = product.sku || product.id;
+                product.stockQuantity = product.stockQuantity || (product.inStock ? 10 : 0);
+                product.currency = product.currency || 'Kč';
+                product.priceWithoutVat = product.priceWithoutVat || Math.round(product.price / 1.21);
+                product.specifications = product.specifications || {};
+                product.shortDescription = product.shortDescription || (product.description ? product.description.substring(0, 200) + '...' : '');
+
+                // Update page title and meta
+                document.title = `${product.name} - Elektro Dvořák`;
+                document.querySelector('meta[name="description"]').setAttribute('content', product.shortDescription || product.description);
+
+                // Update breadcrumbs
+                const breadcrumbs = document.querySelector('.product-detail .container > div');
+                breadcrumbs.innerHTML = `
+                    <a href="../index.html" style="color: var(--text-light);">Domů</a> /
+                    <a href="categories.html" style="color: var(--text-light);">Produkty</a> /
+                    <a href="categories.html?cat=${product.category}" style="color: var(--text-light);">${product.categoryName}</a> /
+                    <span style="color: var(--text-color);">${product.name}</span>
+                `;
+
+                // Update main image
+                const mainImageContainer = document.querySelector('.main-image-container');
+                mainImageContainer.innerHTML = `<img src="../${product.images[0]}" alt="${product.name}" class="main-product-image" id="main-image">`;
+
+                // Update thumbnails
+                const thumbnailsContainer = document.querySelector('.gallery-thumbnails');
+                thumbnailsContainer.innerHTML = product.images.map((img, index) =>
+                    `<div class="gallery-thumbnail ${index === 0 ? 'active' : ''}" onclick="changeImage('../${img}', ${index})">
+                        <img src="../${img}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>`
+                ).join('');
+
+                // Update product info
+                document.querySelector('.product-category').textContent = product.categoryName.toUpperCase();
+                document.querySelector('.product-detail-info h1').textContent = product.name;
+
+                // Update rating
+                const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+                document.querySelector('.product-meta').innerHTML = `
+                    <div class="product-rating">
+                        <span class="stars" style="color: #ffc107; font-size: 1.2rem;">${stars}</span>
+                        <span class="rating-count">(${product.reviewCount} hodnocení)</span>
+                    </div>
+                    <div class="product-sku">Kód: ${product.sku}</div>
+                    <div class="product-availability ${product.inStock ? '' : 'out-of-stock'}">
+                        <span style="font-size: 1.2rem;">${product.inStock ? '✓' : '✗'}</span>
+                        <span>${product.inStock ? `Skladem (${product.stockQuantity} ks)` : 'Vyprodáno'}</span>
+                    </div>
+                `;
+
+                // Update price
+const priceWithoutVat = product.priceWithoutVat || Math.round(product.price / 1.21);
+document.querySelector('.price-section').innerHTML = `
+    ${product.oldPrice ? `<div class="old-price">${product.oldPrice.toLocaleString('cs-CZ')} ${product.currency}</div>` : ''}
+    <div class="current-price">${product.price.toLocaleString('cs-CZ')} ${product.currency}</div>
+    <div class="price-info">Cena včetně DPH | Cena bez DPH: ${priceWithoutVat.toLocaleString('cs-CZ')} ${product.currency}</div>
+`;
+
+                // Update description
+                const descriptionP = document.querySelector('.product-detail-info > p');
+                descriptionP.textContent = product.shortDescription || product.description;
+
+                // Update features/stock locations
+                const featuresList = document.querySelector('.product-features');
+                if (product.stockLocations && product.stockLocations.length > 0) {
+                    featuresList.innerHTML = `
+                        <li><strong>Skladem na pobočkách:</strong></li>
+                        ${product.stockLocations.map(loc => `<li>📍 ${loc}</li>`).join('')}
+                    `;
+                }
+
+                // Update tab content - description
+                document.querySelector('#description').innerHTML = `
+                    <h3>Podrobný popis produktu</h3>
+                    ${product.description.split('\n').map(p => `<p style="line-height: 1.8; margin: 20px 0;">${p}</p>`).join('')}
+                `;
+
+                // Update tab content - specs
+                const specsTable = document.querySelector('#specs .specs-table');
+                specsTable.innerHTML = Object.entries(product.specifications)
+                    .map(([key, value]) => `
+                        <tr>
+                            <td>${key}</td>
+                            <td>${value}</td>
+                        </tr>
+                    `).join('');
+
+                // Update reviews count in tab
+                document.querySelector('.tab-buttons button:nth-child(3)').textContent = `Hodnocení (${product.reviewCount})`;
+
+                // Load related products
+                renderRelatedProducts(data.products, product);
+
+            } catch (error) {
+                console.error('Chyba při načítání produktu:', error);
+                document.querySelector('.container').innerHTML = '<h2>Chyba při načítání</h2><p>Nepodařilo se načíst data produktu.</p>';
+            }
+        }
+
+        function renderRelatedProducts(allProducts, currentProduct) {
+            const container = document.getElementById('related-products-container');
+            if (!container) return;
+
+            // Get products excluding current one
+            let relatedProducts = allProducts.filter(p => p.id !== currentProduct.id);
+
+            // Prefer same category products
+            const sameCategoryProducts = relatedProducts.filter(p => p.category === currentProduct.category);
+            const otherProducts = relatedProducts.filter(p => p.category !== currentProduct.category);
+
+            // Combine: same category first, then others, limit to 4
+            relatedProducts = [...sameCategoryProducts, ...otherProducts].slice(0, 4);
+
+            if (relatedProducts.length === 0) {
+                container.innerHTML = '<p>Žádné související produkty</p>';
+                return;
+            }
+
+            container.innerHTML = relatedProducts.map(product => {
+                const stars = '★'.repeat(Math.floor(product.rating)) + '☆'.repeat(5 - Math.floor(product.rating));
+
+                let imageHTML = '';
+                if (product.imageType === 'emoji') {
+                    imageHTML = `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">${product.image}</div>`;
+                } else {
+                    imageHTML = `<img src="../assets/images/products/${product.image}-1.jpg" alt="${product.title}" loading="lazy">`;
+                }
+
+                const priceHTML = product.oldPrice
+                    ? `<span class="old-price">${product.oldPrice.toLocaleString('cs-CZ')} Kč</span> ${product.price.toLocaleString('cs-CZ')} Kč`
+                    : `${product.price.toLocaleString('cs-CZ')} Kč`;
+
+                return `
+                    <div class="product-card" data-product-id="${product.id}" data-category="${product.category}" data-manufacturer="${product.manufacturer}">
+                        <div class="product-image">
+                            ${imageHTML}
+                            ${product.badge ? `<span class="product-badge ${product.badge}">${product.badgeText}</span>` : ''}
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">${product.categoryName}</div>
+                            <h3 class="product-title">
+                                <a href="product.html?id=${product.id}">${product.title}</a>
+                            </h3>
+                            <div class="product-rating">
+                                <span class="stars">${stars}</span>
+                                <span class="rating-count">(${product.ratingCount})</span>
+                            </div>
+                            <p class="product-description">${product.description.substring(0, 100)}...</p>
+                            <div class="product-footer">
+                                <div class="product-price">${priceHTML}</div>
+                                ${product.inStock ? '<button class="btn-add-cart">Do košíku</button>' : '<button class="btn-add-cart" disabled>Vyprodáno</button>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function changeImage(imagePath, index) {
+            const mainImage = document.getElementById('main-image');
+            mainImage.src = imagePath;
+
+            // Update active thumbnail
+            document.querySelectorAll('.gallery-thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        // Load product when page loads
+        document.addEventListener('DOMContentLoaded', loadProductData);
+
         function switchTab(tabName) {
             // Skrýt všechny taby
             document.querySelectorAll('.tab-content').forEach(tab => {

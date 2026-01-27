@@ -19,6 +19,8 @@
         <div class="header-container">
             <a href="index.html" class="logo">
                 <img src="assets/images/logo.png" alt="Elektro Dvořák" class="logo-img">
+            </a>
+            <a href="https://obchody.heureka.cz/elektrodvorak-cz/recenze/" target="_blank" rel="noopener noreferrer" class="heureka-badge">
                 <img src="assets/images/7469-12.png" alt="Ověřeno zákazníky" class="badge-img">
             </a>
 
@@ -131,196 +133,25 @@
                     <h3>Nářadí</h3>
                     <p>Pro profesionály</p>
                 </div>
+                <div class="category-card" onclick="window.location.href='pages/categories.html?cat=kotle-kamna-krby'">
+                    <div class="category-icon">🔥</div>
+                    <h3>Kotle, kamna, krby</h3>
+                    <p>Topení a ohřev vody</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- DOPORUČENÉ PRODUKTY -->
+    <!-- NAŠE PRODUKTY -->
     <section class="section" style="background: var(--light-gray);">
         <div class="container">
-            <h2 class="section-title">Doporučené produkty</h2>
-            <div class="products-grid">
-                <!-- Produkt 1 -->
-                <div class="product-card" data-product-id="1" data-category="osvetleni" data-manufacturer="philips">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">💡</div>
-                        <span class="product-badge new">Novinka</span>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">LED Osvětlení</div>
-                        <h3 class="product-title">LED žárovka E27 12W teplá bílá</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(127)</span>
-                        </div>
-                        <p class="product-description">Energeticky úsporná LED žárovka s dlouhou životností. Ideální náhrada za klasické 75W žárovky.</p>
-                        <div class="product-footer">
-                            <div class="product-price">149 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produkt 2 -->
-                <div class="product-card" data-product-id="2" data-category="zasuvky" data-manufacturer="legrand">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔌</div>
-                        <span class="product-badge sale">-20%</span>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">Zásuvky</div>
-                        <h3 class="product-title">Zásuvka SCHUKO s dětskou ochranou bílá</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-count">(89)</span>
-                        </div>
-                        <p class="product-description">Moderní zásuvka s ochranou proti dotyku. Snadná montáž, elegantní design.</p>
-                        <div class="product-footer">
-                            <div class="product-price">
-                                <span class="old-price">299 Kč</span>
-                                239 Kč
-                            </div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produkt 3 -->
-                <div class="product-card" data-product-id="3" data-category="kabely" data-manufacturer="prysmian">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔗</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">Kabely</div>
-                        <h3 class="product-title">Kabel CYKYLo 3x1,5 mm² (100m)</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(203)</span>
-                        </div>
-                        <p class="product-description">Instalační kabel pro pevné uložení. Vhodný pro domácí i průmyslové instalace.</p>
-                        <div class="product-footer">
-                            <div class="product-price">1 890 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produkt 4 -->
-                <div class="product-card" data-product-id="4" data-category="osvetleni" data-manufacturer="osram">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🎆</div>
-                        <span class="product-badge new">Novinka</span>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">LED Pásky</div>
-                        <h3 class="product-title">LED pásek RGB 5m s ovladačem</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-count">(64)</span>
-                        </div>
-                        <p class="product-description">Dekorativní LED pásek s dálkovým ovladačem. 16 milionů barev, různé efekty.</p>
-                        <div class="product-footer">
-                            <div class="product-price">799 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
+            <h2 class="section-title">Naše produkty</h2>
+            <div class="products-grid" id="products-container">
+                <!-- Products loaded dynamically from products.js -->
             </div>
 
             <div class="text-center mt-3">
                 <a href="pages/categories.html" class="btn btn-primary">Zobrazit všechny produkty</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEJPRODÁVANĚJŠÍ -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title">Nejprodávanější</h2>
-            <div class="products-grid">
-                <!-- Produkt 5 -->
-                <div class="product-card" data-product-id="5" data-category="jistice" data-manufacturer="abb">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">⚡</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">Jističe</div>
-                        <h3 class="product-title">Jistič modulární 1P 16A B-charakteristika</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(312)</span>
-                        </div>
-                        <p class="product-description">Kvalitní modulární jistič pro ochranu elektrických obvodů. Snadná instalace.</p>
-                        <div class="product-footer">
-                            <div class="product-price">189 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produkt 6 -->
-                <div class="product-card" data-product-id="6" data-category="instalace" data-manufacturer="obo">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">📦</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">Instalace</div>
-                        <h3 class="product-title">Krabice přístrojová KP 68/35 (100ks)</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-count">(156)</span>
-                        </div>
-                        <p class="product-description">Standardní přístrojová krabice pro montáž do zdiva. Balení 100 kusů.</p>
-                        <div class="product-footer">
-                            <div class="product-price">890 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produkt 7 -->
-                <div class="product-card" data-product-id="7" data-category="naradi" data-manufacturer="knipex">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔧</div>
-                        <span class="product-badge sale">-15%</span>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">Nářadí</div>
-                        <h3 class="product-title">Kleště elektrikářské 180mm izolované</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(98)</span>
-                        </div>
-                        <p class="product-description">Profesionální kleště s izolací do 1000V. Ergonomická rukojeť, dlouhá životnost.</p>
-                        <div class="product-footer">
-                            <div class="product-price">
-                                <span class="old-price">599 Kč</span>
-                                509 Kč
-                            </div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produkt 8 -->
-                <div class="product-card" data-product-id="8" data-category="osvetleni" data-manufacturer="philips">
-                    <div class="product-image">
-                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px;">🔦</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">Osvětlení</div>
-                        <h3 class="product-title">LED panel 60x60cm 40W studená bílá</h3>
-                        <div class="product-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(174)</span>
-                        </div>
-                        <p class="product-description">Moderní LED panel pro závěsné stropy. Vysoká svítivost, nízká spotřeba.</p>
-                        <div class="product-footer">
-                            <div class="product-price">1 290 Kč</div>
-                            <button class="btn-add-cart">Do košíku</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -410,6 +241,7 @@
     </footer>
 
     <!-- JavaScript -->
+    <script src="assets/js/products.js"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>
