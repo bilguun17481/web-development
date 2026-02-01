@@ -82,7 +82,7 @@ class ProductManager {
                             📋
                         </button>
                         <button class="btn-primary" id="addProductBtn">
-                            <span>+</span> Přidat produkt
+                            <span>➕</span> Přidat produkt
                         </button>
                     </div>
                 </div>
