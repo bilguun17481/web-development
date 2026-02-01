@@ -323,6 +323,9 @@ class EditorController {
 
         // Update Edit button context
         this.updateEditButtonContext();
+
+        // Dispatch event for visual builder
+        document.dispatchEvent(new CustomEvent('elementDeselected'));
     }
 
     selectElement(element) {
@@ -341,8 +344,12 @@ class EditorController {
         element.classList.remove('builder-hover');
         element.setAttribute('data-element-type', displayName);
 
-        // Update properties panel
-        this.updatePropertiesPanel(element);
+        // Update properties panel (use visual builder if available)
+        if (window.visualBuilder) {
+            window.visualBuilder.renderSmartProperties(element);
+        } else {
+            this.updatePropertiesPanel(element);
+        }
 
         // Update Edit button context
         this.updateEditButtonContext();
@@ -352,6 +359,11 @@ class EditorController {
         if (propertiesTab) {
             propertiesTab.click();
         }
+
+        // Dispatch event for visual builder
+        document.dispatchEvent(new CustomEvent('elementSelected', {
+            detail: { element: element }
+        }));
 
         this.addToHistory(`Selected element: ${tagName}`);
     }
