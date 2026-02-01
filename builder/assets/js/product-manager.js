@@ -95,127 +95,144 @@ class ProductManager {
                     <!-- Products will be loaded here -->
                 </div>
             </div>
-
-            <!-- Product Form Modal -->
-            <div class="product-modal" id="productModal">
-                <div class="modal-content modal-large">
-                    <div class="modal-header">
-                        <h2 id="modalTitle">Nový produkt</h2>
-                        <button class="modal-close" id="closeProductModal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="productForm" class="product-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="productTitle">Název produktu *</label>
-                                    <input type="text" id="productTitle" required>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="productCategory">Kategorie *</label>
-                                    <div style="display: flex; gap: 8px;">
-                                        <select id="productCategory" required style="flex: 1;">
-                                            <option value="">Vyberte kategorii</option>
-                                            ${this.categories.map(cat => `
-                                                <option value="${cat.id}">${cat.name}</option>
-                                            `).join('')}
-                                        </select>
-                                        <button type="button" class="btn-icon" id="addCategoryBtn" title="Přidat kategorii">
-                                            ➕
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="productManufacturer">Výrobce *</label>
-                                    <div style="display: flex; gap: 8px;">
-                                        <select id="productManufacturer" required style="flex: 1;">
-                                            <option value="">Vyberte výrobce</option>
-                                            ${this.manufacturers.map(man => `
-                                                <option value="${man.id}">${man.name}</option>
-                                            `).join('')}
-                                        </select>
-                                        <button type="button" class="btn-icon" id="addManufacturerBtn" title="Přidat výrobce">
-                                            ➕
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="productPrice">Cena (Kč) *</label>
-                                    <input type="number" id="productPrice" min="0" step="1" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="productOldPrice">Původní cena (Kč)</label>
-                                    <input type="number" id="productOldPrice" min="0" step="1">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="productImage">Obrázky (emoji, nebo nahrát více fotek)</label>
-                                    <div style="display: flex; gap: 8px; align-items: flex-end;">
-                                        <input type="text" id="productImage" placeholder="💡 nebo nahrát fotky..." style="flex: 1;">
-                                        <button type="button" class="btn-upload-small" id="uploadProductImageBtn" title="Nahrát obrázky">
-                                            📤 Nahrát
-                                        </button>
-                                    </div>
-                                    <input type="file" id="productImageUpload" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" multiple style="display: none;">
-                                    <div id="imagePreview" style="margin-top: 8px; display: none; flex-wrap: wrap; gap: 8px;">
-                                    </div>
-                                    <small style="color: #666; display: block; margin-top: 4px;">Můžete vybrat více obrázků najednou</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="productBadge">Odznak</label>
-                                    <select id="productBadge">
-                                        <option value="">Žádný</option>
-                                        <option value="new">Novinka</option>
-                                        <option value="sale">Sleva</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="productRating">Hodnocení (1-5)</label>
-                                    <input type="number" id="productRating" min="1" max="5" value="5">
-                                </div>
-                                <div class="form-group">
-                                    <label for="productRatingCount">Počet hodnocení</label>
-                                    <input type="number" id="productRatingCount" min="0" value="0">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="productDescription">Popis *</label>
-                                <textarea id="productDescription" rows="3" required></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>
-                                    <input type="checkbox" id="productInStock" checked>
-                                    Skladem
-                                </label>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn-secondary" id="cancelProduct">Zrušit</button>
-                        <button class="btn-primary" id="saveProduct">
-                            <span>💾</span> Uložit produkt
-                        </button>
-                    </div>
-                </div>
-            </div>
         `;
+
+        // Create the modal as a separate element in body (floating)
+        this.createProductModal();
 
         // Setup add button
         document.getElementById('addProductBtn')?.addEventListener('click', () => {
             this.showProductForm();
         });
+    }
+
+    createProductModal() {
+        // Remove existing modal if present
+        const existingModal = document.getElementById('productModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Create modal element
+        const modal = document.createElement('div');
+        modal.className = 'product-modal-floating';
+        modal.id = 'productModal';
+        modal.innerHTML = `
+            <div class="product-modal-overlay"></div>
+            <div class="product-modal-content">
+                <div class="product-modal-header">
+                    <h2 id="modalTitle">Nový produkt</h2>
+                    <button class="modal-close" id="closeProductModal">&times;</button>
+                </div>
+                <div class="product-modal-body">
+                    <form id="productForm" class="product-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productTitle">Název produktu *</label>
+                                <input type="text" id="productTitle" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productCategory">Kategorie *</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <select id="productCategory" required style="flex: 1;">
+                                        <option value="">Vyberte kategorii</option>
+                                        ${this.categories.map(cat => `
+                                            <option value="${cat.id}">${cat.name}</option>
+                                        `).join('')}
+                                    </select>
+                                    <button type="button" class="btn-icon" id="addCategoryBtn" title="Přidat kategorii">
+                                        ➕
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="productManufacturer">Výrobce *</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <select id="productManufacturer" required style="flex: 1;">
+                                        <option value="">Vyberte výrobce</option>
+                                        ${this.manufacturers.map(man => `
+                                            <option value="${man.id}">${man.name}</option>
+                                        `).join('')}
+                                    </select>
+                                    <button type="button" class="btn-icon" id="addManufacturerBtn" title="Přidat výrobce">
+                                        ➕
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productPrice">Cena (Kč) *</label>
+                                <input type="number" id="productPrice" min="0" step="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productOldPrice">Původní cena (Kč)</label>
+                                <input type="number" id="productOldPrice" min="0" step="1">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productImage">Obrázky (emoji, nebo nahrát více fotek)</label>
+                                <div style="display: flex; gap: 8px; align-items: flex-end;">
+                                    <input type="text" id="productImage" placeholder="💡 nebo nahrát fotky..." style="flex: 1;">
+                                    <button type="button" class="btn-upload-small" id="uploadProductImageBtn" title="Nahrát obrázky">
+                                        📤 Nahrát
+                                    </button>
+                                </div>
+                                <input type="file" id="productImageUpload" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" multiple style="display: none;">
+                                <div id="imagePreview" style="margin-top: 8px; display: none; flex-wrap: wrap; gap: 8px;">
+                                </div>
+                                <small style="color: #666; display: block; margin-top: 4px;">Můžete vybrat více obrázků najednou</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="productBadge">Odznak</label>
+                                <select id="productBadge">
+                                    <option value="">Žádný</option>
+                                    <option value="new">Novinka</option>
+                                    <option value="sale">Sleva</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productRating">Hodnocení (1-5)</label>
+                                <input type="number" id="productRating" min="1" max="5" value="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="productRatingCount">Počet hodnocení</label>
+                                <input type="number" id="productRatingCount" min="0" value="0">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productDescription">Popis *</label>
+                            <textarea id="productDescription" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="productInStock" checked>
+                                Skladem
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="product-modal-footer">
+                    <button class="btn-secondary" id="cancelProduct">Zrušit</button>
+                    <button class="btn-primary" id="saveProduct">
+                        <span>💾</span> Uložit produkt
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
     }
 
     renderProductList() {
@@ -262,12 +279,19 @@ class ProductManager {
         const closeBtn = document.getElementById('closeProductModal');
         const cancelBtn = document.getElementById('cancelProduct');
         const saveBtn = document.getElementById('saveProduct');
+        const overlay = modal?.querySelector('.product-modal-overlay');
 
         closeBtn?.addEventListener('click', () => this.hideProductForm());
         cancelBtn?.addEventListener('click', () => this.hideProductForm());
 
-        modal?.addEventListener('click', (e) => {
-            if (e.target === modal) this.hideProductForm();
+        // Close on overlay click
+        overlay?.addEventListener('click', () => this.hideProductForm());
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal?.classList.contains('show')) {
+                this.hideProductForm();
+            }
         });
 
         saveBtn?.addEventListener('click', () => this.saveProduct());
