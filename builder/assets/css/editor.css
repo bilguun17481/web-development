@@ -1381,3 +1381,78 @@ body {
     margin-top: 4px;
 }
 
+/* ==========================================
+   ENHANCED ELEMENT INFO SECTION
+   ========================================== */
+
+.element-info-section {
+    background: linear-gradient(135deg, #f8f9fc 0%, #f0f4ff 100%);
+}
+
+.element-type-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.element-type-badge .badge-icon {
+    font-size: 1.5rem;
+}
+
+.element-type-badge .badge-text {
+    flex: 1;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.element-type-badge .badge-tag {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-family: monospace;
+}
+
+.element-id-display,
+.element-classes-display {
+    background: #f0f0f0 !important;
+    font-family: monospace;
+    font-size: 0.85rem !important;
+    color: #666 !important;
+}
+
+/* Form hints */
+.form-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Size section styling */
+.property-section h4 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Text inputs in size fields */
+.input-with-unit input[type="text"] {
+    font-family: monospace;
+}
+
+/* Responsive form groups */
+@media (max-width: 400px) {
+    .form-row-2col {
+        grid-template-columns: 1fr;
+    }
+}
+

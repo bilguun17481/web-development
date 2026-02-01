@@ -69,11 +69,33 @@ class EditorController {
             'a': 'Link',
             'img': 'Image',
             'button': 'Button',
-            'span': 'Text',
+            'span': 'Text Span',
             'div': 'Container',
-            'section': 'Section'
+            'section': 'Section',
+            'header': 'Header',
+            'footer': 'Footer',
+            'nav': 'Navigation',
+            'ul': 'Unordered List',
+            'ol': 'Ordered List',
+            'li': 'List Item',
+            'label': 'Label',
+            'input': 'Input Field',
+            'textarea': 'Text Area',
+            'form': 'Form'
         };
         return names[tagName] || tagName.toUpperCase();
+    }
+
+    getElementIcon(tagName) {
+        const icons = {
+            'h1': '📰', 'h2': '📰', 'h3': '📰', 'h4': '📰', 'h5': '📰', 'h6': '📰',
+            'p': '📝', 'a': '🔗', 'img': '🖼️', 'button': '🔘',
+            'span': '✏️', 'div': '📦', 'section': '📐',
+            'header': '🔝', 'footer': '🔚', 'nav': '🧭',
+            'ul': '📋', 'ol': '🔢', 'li': '•',
+            'label': '🏷️', 'input': '⌨️', 'textarea': '📄', 'form': '📋'
+        };
+        return icons[tagName] || '📋';
     }
 
     setupUndoRedoButtons() {
@@ -144,6 +166,9 @@ class EditorController {
     }
 
     loadPage(pagePath) {
+        // Deselect current element before loading new page
+        this.deselectElement();
+
         this.currentPage = pagePath;
         const iframe = document.getElementById('editorFrame');
         iframe.src = `../${pagePath}`;
@@ -335,30 +360,48 @@ class EditorController {
         const propertiesContent = document.getElementById('propertiesContent');
         const tagName = element.tagName.toLowerCase();
         const displayName = this.getElementDisplayName(tagName);
+        const elementIcon = this.getElementIcon(tagName);
 
         // Get iframe context for computed styles
         const iframe = document.getElementById('editorFrame');
         const iframeWindow = iframe.contentWindow;
         const computedStyle = iframeWindow.getComputedStyle(element);
 
+        // Get element ID and classes
+        const elementId = element.id || '';
+        const elementClasses = element.className.replace(/builder-\S+/g, '').trim() || '';
+
         let html = '<div class="properties-form">';
 
-        // Element header
+        // Element header with enhanced display
         html += `
-            <div class="property-section">
+            <div class="property-section element-info-section">
                 <div class="property-section-header">
-                    <span class="section-icon">📋</span>
+                    <span class="section-icon">${elementIcon}</span>
                     <h4>Element Info</h4>
                 </div>
-                <div class="form-group">
-                    <label>Element Type</label>
-                    <input type="text" value="${displayName}" disabled class="element-type-display">
+                <div class="element-type-badge">
+                    <span class="badge-icon">${elementIcon}</span>
+                    <span class="badge-text">${displayName}</span>
+                    <span class="badge-tag">&lt;${tagName}&gt;</span>
                 </div>
+                ${elementId ? `
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="text" value="#${elementId}" disabled class="element-id-display">
+                </div>
+                ` : ''}
+                ${elementClasses ? `
+                <div class="form-group">
+                    <label>Classes</label>
+                    <input type="text" value="${elementClasses}" disabled class="element-classes-display">
+                </div>
+                ` : ''}
             </div>
         `;
 
         // Content section for text elements
-        if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'button', 'span'].includes(tagName)) {
+        if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'button', 'span', 'label', 'li'].includes(tagName)) {
             html += `
                 <div class="property-section">
                     <div class="property-section-header">
@@ -388,8 +431,8 @@ class EditorController {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Image Source URL</label>
-                        <input type="text" id="propImageSrc" value="${element.src}" class="live-preview">
+                        <label>Target URL (src)</label>
+                        <input type="text" id="propImageSrc" value="${element.src}" class="live-preview" placeholder="https://... or /path/to/image">
                     </div>
                     <div class="form-group">
                         <label>Upload New Image</label>
@@ -405,16 +448,6 @@ class EditorController {
                         <label>Alt Text</label>
                         <input type="text" id="propImageAlt" value="${this.escapeHtml(element.alt)}" placeholder="Describe the image...">
                     </div>
-                    <div class="form-row-2col">
-                        <div class="form-group">
-                            <label>Width</label>
-                            <input type="text" id="propImageWidth" value="${element.width || 'auto'}" placeholder="auto">
-                        </div>
-                        <div class="form-group">
-                            <label>Height</label>
-                            <input type="text" id="propImageHeight" value="${element.height || 'auto'}" placeholder="auto">
-                        </div>
-                    </div>
                 </div>
             `;
         }
@@ -428,8 +461,8 @@ class EditorController {
                         <h4>Link Settings</h4>
                     </div>
                     <div class="form-group">
-                        <label>Link URL</label>
-                        <input type="text" id="propLinkHref" value="${element.href}" placeholder="https://...">
+                        <label>Target URL (href)</label>
+                        <input type="text" id="propLinkHref" value="${element.href}" placeholder="https://... or /page.html">
                     </div>
                     <div class="form-group">
                         <label>Open In</label>
@@ -441,6 +474,71 @@ class EditorController {
                 </div>
             `;
         }
+
+        // Button section with URL/action
+        if (tagName === 'button') {
+            const onclickValue = element.getAttribute('onclick') || '';
+            const dataHref = element.getAttribute('data-href') || '';
+            html += `
+                <div class="property-section">
+                    <div class="property-section-header">
+                        <span class="section-icon">🔘</span>
+                        <h4>Button Settings</h4>
+                    </div>
+                    <div class="form-group">
+                        <label>Target URL (data-href)</label>
+                        <input type="text" id="propButtonHref" value="${dataHref}" placeholder="https://... or /page.html">
+                        <small class="form-hint">URL to navigate to when clicked</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Button Type</label>
+                        <select id="propButtonType">
+                            <option value="button" ${element.type === 'button' ? 'selected' : ''}>Button</option>
+                            <option value="submit" ${element.type === 'submit' ? 'selected' : ''}>Submit</option>
+                            <option value="reset" ${element.type === 'reset' ? 'selected' : ''}>Reset</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Size section for ALL elements
+        html += `
+            <div class="property-section">
+                <div class="property-section-header">
+                    <span class="section-icon">📐</span>
+                    <h4>Size</h4>
+                </div>
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label>Width</label>
+                        <div class="input-with-unit">
+                            <input type="text" id="propWidth" value="${element.style.width || computedStyle.width}" placeholder="auto" class="live-preview">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Height</label>
+                        <div class="input-with-unit">
+                            <input type="text" id="propHeight" value="${element.style.height || computedStyle.height}" placeholder="auto" class="live-preview">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label>Min Width</label>
+                        <div class="input-with-unit">
+                            <input type="text" id="propMinWidth" value="${element.style.minWidth || ''}" placeholder="none">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Max Width</label>
+                        <div class="input-with-unit">
+                            <input type="text" id="propMaxWidth" value="${element.style.maxWidth || ''}" placeholder="none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
 
         // Style section
         html += `
@@ -589,22 +687,47 @@ class EditorController {
         // Image properties
         const imageSrc = document.getElementById('propImageSrc');
         const imageAlt = document.getElementById('propImageAlt');
-        const imageWidth = document.getElementById('propImageWidth');
-        const imageHeight = document.getElementById('propImageHeight');
         if (imageSrc && imageSrc.value) element.src = imageSrc.value;
         if (imageAlt) element.alt = imageAlt.value;
-        if (imageWidth && imageWidth.value && imageWidth.value !== 'auto') {
-            element.style.width = imageWidth.value + (isNaN(imageWidth.value) ? '' : 'px');
-        }
-        if (imageHeight && imageHeight.value && imageHeight.value !== 'auto') {
-            element.style.height = imageHeight.value + (isNaN(imageHeight.value) ? '' : 'px');
-        }
 
         // Link properties
         const linkHref = document.getElementById('propLinkHref');
         const linkTarget = document.getElementById('propLinkTarget');
         if (linkHref) element.href = linkHref.value;
         if (linkTarget) element.target = linkTarget.value;
+
+        // Button properties
+        const buttonHref = document.getElementById('propButtonHref');
+        const buttonType = document.getElementById('propButtonType');
+        if (buttonHref && buttonHref.value) {
+            element.setAttribute('data-href', buttonHref.value);
+            // Add onclick handler if not exists
+            if (!element.onclick) {
+                element.onclick = function() {
+                    window.location.href = this.getAttribute('data-href');
+                };
+            }
+        }
+        if (buttonType) element.type = buttonType.value;
+
+        // Size properties (for ALL elements)
+        const width = document.getElementById('propWidth');
+        const height = document.getElementById('propHeight');
+        const minWidth = document.getElementById('propMinWidth');
+        const maxWidth = document.getElementById('propMaxWidth');
+
+        if (width && width.value) {
+            element.style.width = this.formatSizeValue(width.value);
+        }
+        if (height && height.value) {
+            element.style.height = this.formatSizeValue(height.value);
+        }
+        if (minWidth && minWidth.value) {
+            element.style.minWidth = this.formatSizeValue(minWidth.value);
+        }
+        if (maxWidth && maxWidth.value) {
+            element.style.maxWidth = this.formatSizeValue(maxWidth.value);
+        }
 
         // Style properties
         const bgColor = document.getElementById('propBgColor');
@@ -620,6 +743,16 @@ class EditorController {
         if (padding) element.style.padding = padding.value + 'px';
         if (margin) element.style.margin = margin.value + 'px';
         if (borderRadius) element.style.borderRadius = borderRadius.value + 'px';
+    }
+
+    formatSizeValue(value) {
+        // If it's just a number, add 'px'
+        // If it already has a unit (px, %, em, rem, vw, vh), keep it
+        if (!value || value === 'auto' || value === 'none') return value;
+        if (/^\d+(\.\d+)?$/.test(value)) {
+            return value + 'px';
+        }
+        return value;
     }
 
     setupLivePreview(element) {
@@ -669,6 +802,12 @@ class EditorController {
                 break;
             case 'propBorderRadius':
                 element.style.borderRadius = input.value + 'px';
+                break;
+            case 'propWidth':
+                element.style.width = this.formatSizeValue(input.value);
+                break;
+            case 'propHeight':
+                element.style.height = this.formatSizeValue(input.value);
                 break;
         }
     }
