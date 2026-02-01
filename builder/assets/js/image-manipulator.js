@@ -23,6 +23,12 @@ class ImageManipulator {
         this.bgStartX = 0;
         this.bgStartY = 0;
 
+        // Zoom properties
+        this.currentZoom = 100; // percentage
+        this.minZoom = 10;
+        this.maxZoom = 500;
+        this.zoomStep = 10;
+
         this.init();
     }
 
@@ -52,13 +58,22 @@ class ImageManipulator {
             <div class="resize-handle handle-w" data-handle="w"></div>
             <div class="manipulator-info">
                 <span class="info-dimensions"></span>
+                <span class="info-zoom"></span>
             </div>
             <div class="manipulator-toolbar">
+                <div class="toolbar-group zoom-controls">
+                    <button class="manipulator-btn" data-action="zoomOut" title="Zoom Out (-)">➖</button>
+                    <input type="range" class="zoom-slider" min="10" max="500" value="100" title="Zoom Level">
+                    <button class="manipulator-btn" data-action="zoomIn" title="Zoom In (+)">➕</button>
+                    <span class="zoom-value">100%</span>
+                </div>
+                <div class="toolbar-divider"></div>
                 <button class="manipulator-btn" data-action="aspectRatio" title="Lock Aspect Ratio">
                     <span class="icon-locked">🔒</span>
                     <span class="icon-unlocked" style="display:none">🔓</span>
                 </button>
                 <button class="manipulator-btn" data-action="fitContainer" title="Fit to Container">📐</button>
+                <button class="manipulator-btn" data-action="zoomReset" title="Reset Zoom to 100%">🔍</button>
                 <button class="manipulator-btn" data-action="resetSize" title="Reset to Original">↩️</button>
             </div>
         `;
@@ -71,7 +86,10 @@ class ImageManipulator {
         });
 
         this.infoDisplay = this.overlay.querySelector('.info-dimensions');
+        this.zoomInfoDisplay = this.overlay.querySelector('.info-zoom');
         this.toolbar = this.overlay.querySelector('.manipulator-toolbar');
+        this.zoomSlider = this.overlay.querySelector('.zoom-slider');
+        this.zoomValueDisplay = this.overlay.querySelector('.zoom-value');
     }
 
     // ==========================================
@@ -121,6 +139,44 @@ class ImageManipulator {
             });
         });
 
+        // Zoom slider
+        this.zoomSlider.addEventListener('input', (e) => {
+            e.stopPropagation();
+            const zoomLevel = parseInt(e.target.value);
+            this.setZoom(zoomLevel);
+        });
+
+        // Mouse wheel zoom on overlay
+        this.overlay.addEventListener('wheel', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                e.stopPropagation();
+                const delta = e.deltaY > 0 ? -this.zoomStep : this.zoomStep;
+                this.setZoom(this.currentZoom + delta);
+            }
+        }, { passive: false });
+
+        // Keyboard shortcuts for zoom when image is selected
+        document.addEventListener('keydown', (e) => {
+            if (!this.selectedImage) return;
+
+            // Don't trigger if typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+                return;
+            }
+
+            if (e.key === '+' || e.key === '=') {
+                e.preventDefault();
+                this.zoomIn();
+            } else if (e.key === '-' || e.key === '_') {
+                e.preventDefault();
+                this.zoomOut();
+            } else if (e.key === '0' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                this.zoomReset();
+            }
+        });
+
         // Update overlay position on scroll/resize
         window.addEventListener('resize', () => this.updateOverlayPosition());
 
@@ -155,15 +211,22 @@ class ImageManipulator {
                 element.dataset.originalWidth = element.naturalWidth || element.offsetWidth;
                 element.dataset.originalHeight = element.naturalHeight || element.offsetHeight;
             }
+
+            // Read current zoom from transform if exists
+            this.currentZoom = this.getImageZoomLevel(element);
         } else {
             // Background image - get container dimensions
             this.startWidth = element.offsetWidth;
             this.startHeight = element.offsetHeight;
+
+            // Calculate zoom from background-size
+            this.currentZoom = this.getBgZoomLevel(element);
         }
 
         this.updateOverlayPosition();
         this.overlay.style.display = 'block';
         this.updateInfoDisplay();
+        this.updateZoomUI();
 
         // Update toolbar for bg image mode
         if (isBgImage) {
@@ -171,6 +234,33 @@ class ImageManipulator {
         } else {
             this.overlay.classList.remove('bg-mode');
         }
+    }
+
+    getImageZoomLevel(element) {
+        // Check for transform scale
+        const transform = element.style.transform || window.getComputedStyle(element).transform;
+        if (transform && transform !== 'none') {
+            const match = transform.match(/scale\(([^)]+)\)/);
+            if (match) {
+                return Math.round(parseFloat(match[1]) * 100);
+            }
+        }
+        return 100;
+    }
+
+    getBgZoomLevel(element) {
+        const bgSize = window.getComputedStyle(element).backgroundSize;
+        if (bgSize === 'cover' || bgSize === 'contain' || bgSize === 'auto') {
+            return 100;
+        }
+        // Try to parse percentage or pixel value
+        const match = bgSize.match(/(\d+(?:\.\d+)?)(px|%)/);
+        if (match) {
+            if (match[2] === '%') {
+                return parseInt(match[1]);
+            }
+        }
+        return 100;
     }
 
     detach() {
@@ -472,6 +562,104 @@ class ImageManipulator {
     }
 
     // ==========================================
+    // ZOOM FUNCTIONALITY
+    // ==========================================
+
+    setZoom(zoomLevel) {
+        if (!this.selectedImage) return;
+
+        // Clamp zoom level
+        zoomLevel = Math.max(this.minZoom, Math.min(this.maxZoom, zoomLevel));
+
+        if (zoomLevel === this.currentZoom) return;
+
+        // Save state for undo only on significant changes
+        if (Math.abs(zoomLevel - this.currentZoom) >= this.zoomStep) {
+            window.editor?.saveState('Zoom image');
+        }
+
+        this.currentZoom = zoomLevel;
+
+        if (this.isBgImage) {
+            this.applyBgZoom(zoomLevel);
+        } else {
+            this.applyImageZoom(zoomLevel);
+        }
+
+        this.updateZoomUI();
+        this.updateInfoDisplay();
+        this.updateOverlayPosition();
+
+        // Update properties panel
+        if (window.visualBuilder) {
+            window.visualBuilder.renderSmartProperties(this.selectedImage);
+        }
+    }
+
+    applyImageZoom(zoomLevel) {
+        const scale = zoomLevel / 100;
+
+        // Use transform scale for zooming - this preserves image quality
+        this.selectedImage.style.transform = `scale(${scale})`;
+        this.selectedImage.style.transformOrigin = 'center center';
+
+        // Ensure the image doesn't clip or overflow incorrectly
+        if (zoomLevel > 100) {
+            this.selectedImage.style.overflow = 'visible';
+        }
+    }
+
+    applyBgZoom(zoomLevel) {
+        // For background images, adjust background-size as percentage
+        const currentBgSize = window.getComputedStyle(this.selectedImage).backgroundSize;
+
+        if (currentBgSize === 'cover' || currentBgSize === 'contain') {
+            // Convert cover/contain to explicit size first
+            this.selectedImage.style.backgroundSize = `${zoomLevel}%`;
+        } else {
+            this.selectedImage.style.backgroundSize = `${zoomLevel}%`;
+        }
+    }
+
+    zoomIn() {
+        this.setZoom(this.currentZoom + this.zoomStep);
+    }
+
+    zoomOut() {
+        this.setZoom(this.currentZoom - this.zoomStep);
+    }
+
+    zoomReset() {
+        window.editor?.saveState('Reset zoom');
+        this.setZoom(100);
+        window.editor?.showToast('Zoom reset to 100%');
+    }
+
+    updateZoomUI() {
+        // Update slider
+        this.zoomSlider.value = this.currentZoom;
+
+        // Update percentage display
+        this.zoomValueDisplay.textContent = `${this.currentZoom}%`;
+
+        // Update zoom info in overlay
+        if (this.zoomInfoDisplay) {
+            this.zoomInfoDisplay.textContent = `${this.currentZoom}%`;
+        }
+
+        // Visual feedback for zoom level
+        if (this.currentZoom > 100) {
+            this.overlay.classList.add('zoomed-in');
+            this.overlay.classList.remove('zoomed-out');
+        } else if (this.currentZoom < 100) {
+            this.overlay.classList.add('zoomed-out');
+            this.overlay.classList.remove('zoomed-in');
+        } else {
+            this.overlay.classList.remove('zoomed-in', 'zoomed-out');
+        }
+    }
+
+    // ==========================================
     // TOOLBAR ACTIONS
     // ==========================================
 
@@ -479,6 +667,15 @@ class ImageManipulator {
         if (!this.selectedImage) return;
 
         switch (action) {
+            case 'zoomIn':
+                this.zoomIn();
+                break;
+            case 'zoomOut':
+                this.zoomOut();
+                break;
+            case 'zoomReset':
+                this.zoomReset();
+                break;
             case 'aspectRatio':
                 this.toggleAspectRatio();
                 break;
@@ -558,7 +755,15 @@ class ImageManipulator {
             this.selectedImage.style.left = '';
             this.selectedImage.style.top = '';
             this.selectedImage.style.position = '';
+
+            // Also reset zoom/transform
+            this.selectedImage.style.transform = '';
+            this.selectedImage.style.transformOrigin = '';
         }
+
+        // Reset zoom level
+        this.currentZoom = 100;
+        this.updateZoomUI();
 
         // Recalculate aspect ratio
         this.aspectRatio = this.selectedImage.offsetWidth / this.selectedImage.offsetHeight;

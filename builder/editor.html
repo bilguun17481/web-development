@@ -22,6 +22,19 @@
                 <span>↷</span> Redo
             </button>
             <div class="divider"></div>
+            <button class="toolbar-btn btn-add-element" id="addElementBtn" title="Add Element">
+                <span>➕</span> Add
+            </button>
+            <button class="toolbar-btn" id="copyBtn" title="Copy (Ctrl+C)">
+                <span>📋</span> Copy
+            </button>
+            <button class="toolbar-btn" id="pasteBtn" title="Paste (Ctrl+V)">
+                <span>📄</span> Paste
+            </button>
+            <button class="toolbar-btn btn-delete" id="deleteBtn" title="Delete (Del)">
+                <span>🗑️</span> Delete
+            </button>
+            <div class="divider"></div>
             <button class="toolbar-btn" id="desktopView" title="Desktop View">
                 <span>🖥</span> Desktop
             </button>
@@ -77,51 +90,126 @@
             <!-- Elements Panel -->
             <div class="sidebar-panel active" id="elementsPanel">
                 <h3>Add Elements</h3>
+                <p style="font-size: 0.8rem; color: #888; margin-bottom: 15px;">Click to add to page</p>
                 <div class="element-categories">
-                    <div class="element-category">
-                        <h4>Layout</h4>
-                        <div class="element-list">
-                            <div class="element-item" draggable="true" data-type="section">
-                                <span>📐</span> Section
+                    <div class="elements-category">
+                        <div class="elements-category-title">Layout</div>
+                        <div class="elements-grid">
+                            <div class="element-item" data-template="section">
+                                <span class="element-icon">📦</span>
+                                <span class="element-name">Section</span>
                             </div>
-                            <div class="element-item" draggable="true" data-type="container">
-                                <span>📦</span> Container
+                            <div class="element-item" data-template="container">
+                                <span class="element-icon">📋</span>
+                                <span class="element-name">Container</span>
                             </div>
-                            <div class="element-item" draggable="true" data-type="grid">
-                                <span>▦</span> Grid
+                            <div class="element-item" data-template="row">
+                                <span class="element-icon">↔️</span>
+                                <span class="element-name">Row (Flex)</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="element-category">
-                        <h4>Content</h4>
-                        <div class="element-list">
-                            <div class="element-item" draggable="true" data-type="heading">
-                                <span>H</span> Heading
+                            <div class="element-item" data-template="grid2">
+                                <span class="element-icon">⊞</span>
+                                <span class="element-name">2-Column</span>
                             </div>
-                            <div class="element-item" draggable="true" data-type="text">
-                                <span>T</span> Text
+                            <div class="element-item" data-template="grid3">
+                                <span class="element-icon">⊟</span>
+                                <span class="element-name">3-Column</span>
                             </div>
-                            <div class="element-item" draggable="true" data-type="image">
-                                <span>🖼</span> Image
-                            </div>
-                            <div class="element-item" draggable="true" data-type="button">
-                                <span>🔘</span> Button
+                            <div class="element-item" data-template="grid4">
+                                <span class="element-icon">▦</span>
+                                <span class="element-name">4-Column</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="element-category">
-                        <h4>Components</h4>
-                        <div class="element-list">
-                            <div class="element-item" draggable="true" data-type="product-card">
-                                <span>🛍</span> Product Card
+                    <div class="elements-category">
+                        <div class="elements-category-title">Content Blocks</div>
+                        <div class="elements-grid">
+                            <div class="element-item" data-template="card">
+                                <span class="element-icon">🃏</span>
+                                <span class="element-name">Card</span>
                             </div>
-                            <div class="element-item" draggable="true" data-type="feature-card">
-                                <span>⭐</span> Feature Card
+                            <div class="element-item" data-template="featureBox">
+                                <span class="element-icon">⭐</span>
+                                <span class="element-name">Feature Box</span>
                             </div>
-                            <div class="element-item" draggable="true" data-type="category-card">
-                                <span>📂</span> Category Card
+                            <div class="element-item" data-template="testimonial">
+                                <span class="element-icon">💬</span>
+                                <span class="element-name">Testimonial</span>
+                            </div>
+                            <div class="element-item" data-template="pricingCard">
+                                <span class="element-icon">💳</span>
+                                <span class="element-name">Pricing</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="elements-category">
+                        <div class="elements-category-title">Hero Sections</div>
+                        <div class="elements-grid">
+                            <div class="element-item" data-template="heroBasic">
+                                <span class="element-icon">🎯</span>
+                                <span class="element-name">Hero Basic</span>
+                            </div>
+                            <div class="element-item" data-template="heroSplit">
+                                <span class="element-icon">🖼️</span>
+                                <span class="element-name">Hero Split</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="elements-category">
+                        <div class="elements-category-title">Basic Elements</div>
+                        <div class="elements-grid">
+                            <div class="element-item" data-template="heading">
+                                <span class="element-icon">H</span>
+                                <span class="element-name">Heading</span>
+                            </div>
+                            <div class="element-item" data-template="paragraph">
+                                <span class="element-icon">¶</span>
+                                <span class="element-name">Paragraph</span>
+                            </div>
+                            <div class="element-item" data-template="image">
+                                <span class="element-icon">🖼️</span>
+                                <span class="element-name">Image</span>
+                            </div>
+                            <div class="element-item" data-template="button">
+                                <span class="element-icon">🔘</span>
+                                <span class="element-name">Button</span>
+                            </div>
+                            <div class="element-item" data-template="divider">
+                                <span class="element-icon">➖</span>
+                                <span class="element-name">Divider</span>
+                            </div>
+                            <div class="element-item" data-template="spacer">
+                                <span class="element-icon">↕️</span>
+                                <span class="element-name">Spacer</span>
+                            </div>
+                            <div class="element-item" data-template="list">
+                                <span class="element-icon">📝</span>
+                                <span class="element-name">List</span>
+                            </div>
+                            <div class="element-item" data-template="video">
+                                <span class="element-icon">▶️</span>
+                                <span class="element-name">Video</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="elements-category">
+                        <div class="elements-category-title">Forms & Navigation</div>
+                        <div class="elements-grid">
+                            <div class="element-item" data-template="form">
+                                <span class="element-icon">📧</span>
+                                <span class="element-name">Contact Form</span>
+                            </div>
+                            <div class="element-item" data-template="navbar">
+                                <span class="element-icon">🧭</span>
+                                <span class="element-name">Navbar</span>
+                            </div>
+                            <div class="element-item" data-template="footer">
+                                <span class="element-icon">🦶</span>
+                                <span class="element-name">Footer</span>
                             </div>
                         </div>
                     </div>
@@ -298,6 +386,19 @@
         </div>
     </div>
 
+    <!-- Quick Actions Bar (visible when element selected) -->
+    <div class="quick-actions-bar" id="quickActionsBar">
+        <button class="quick-action-btn" id="quickCopy" title="Copy (Ctrl+C)">📋</button>
+        <button class="quick-action-btn" id="quickCut" title="Cut (Ctrl+X)">✂️</button>
+        <button class="quick-action-btn" id="quickPaste" title="Paste (Ctrl+V)">📄</button>
+        <div class="quick-action-divider"></div>
+        <button class="quick-action-btn" id="quickDuplicate" title="Duplicate (Ctrl+D)">⧉</button>
+        <button class="quick-action-btn" id="quickMoveUp" title="Move Up">↑</button>
+        <button class="quick-action-btn" id="quickMoveDown" title="Move Down">↓</button>
+        <div class="quick-action-divider"></div>
+        <button class="quick-action-btn danger" id="quickDelete" title="Delete (Del)">🗑️</button>
+    </div>
+
     <!-- Scripts -->
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/editor.js"></script>
@@ -311,5 +412,78 @@
     <script src="assets/js/slideout-editor.js"></script>
     <script src="assets/js/visual-builder.js"></script>
     <script src="assets/js/image-manipulator.js"></script>
+    <script src="assets/js/element-manager.js"></script>
+
+    <!-- Initialize toolbar and quick actions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quickActionsBar = document.getElementById('quickActionsBar');
+
+            // Show/hide quick actions bar based on selection
+            document.addEventListener('elementSelected', () => {
+                quickActionsBar.classList.add('visible');
+            });
+
+            document.addEventListener('elementDeselected', () => {
+                quickActionsBar.classList.remove('visible');
+            });
+
+            // Quick action buttons
+            document.getElementById('quickCopy')?.addEventListener('click', () => {
+                window.elementManager?.copyElement(window.editor?.selectedElement);
+            });
+
+            document.getElementById('quickCut')?.addEventListener('click', () => {
+                window.elementManager?.cutElement(window.editor?.selectedElement);
+            });
+
+            document.getElementById('quickPaste')?.addEventListener('click', () => {
+                window.elementManager?.pasteElement(window.editor?.selectedElement);
+            });
+
+            document.getElementById('quickDuplicate')?.addEventListener('click', () => {
+                window.elementManager?.duplicateElement(window.editor?.selectedElement);
+            });
+
+            document.getElementById('quickMoveUp')?.addEventListener('click', () => {
+                window.elementManager?.moveUp(window.editor?.selectedElement);
+            });
+
+            document.getElementById('quickMoveDown')?.addEventListener('click', () => {
+                window.elementManager?.moveDown(window.editor?.selectedElement);
+            });
+
+            document.getElementById('quickDelete')?.addEventListener('click', () => {
+                window.elementManager?.deleteElement(window.editor?.selectedElement);
+            });
+
+            // Toolbar buttons
+            document.getElementById('addElementBtn')?.addEventListener('click', () => {
+                window.elementManager?.showInsertMenu('after');
+            });
+
+            document.getElementById('copyBtn')?.addEventListener('click', () => {
+                window.elementManager?.copyElement(window.editor?.selectedElement);
+            });
+
+            document.getElementById('pasteBtn')?.addEventListener('click', () => {
+                window.elementManager?.pasteElement(window.editor?.selectedElement);
+            });
+
+            document.getElementById('deleteBtn')?.addEventListener('click', () => {
+                window.elementManager?.deleteElement(window.editor?.selectedElement);
+            });
+
+            // Elements panel - click to add
+            document.querySelectorAll('#elementsPanel .element-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const templateKey = item.dataset.template;
+                    if (templateKey && window.elementManager) {
+                        window.elementManager.addElementToPage(templateKey);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
