@@ -2088,3 +2088,203 @@ body {
     }
 }
 
+/* ==========================================
+   IMAGE MANIPULATOR - Drag & Resize
+   ========================================== */
+
+.image-manipulator-overlay {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.image-manipulator-overlay .manipulator-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #667eea;
+    pointer-events: auto;
+    cursor: move;
+    background: transparent;
+}
+
+.image-manipulator-overlay.resizing .manipulator-border,
+.image-manipulator-overlay.dragging .manipulator-border {
+    border-color: #43e97b;
+}
+
+/* Resize Handles */
+.resize-handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 2px;
+    pointer-events: auto;
+    z-index: 10;
+    transition: transform 0.1s ease, background 0.1s ease;
+}
+
+.resize-handle:hover {
+    background: #667eea;
+    transform: scale(1.2);
+}
+
+.image-manipulator-overlay.resizing .resize-handle {
+    border-color: #43e97b;
+}
+
+.image-manipulator-overlay.resizing .resize-handle:hover {
+    background: #43e97b;
+}
+
+/* Corner handles */
+.handle-nw {
+    top: -6px;
+    left: -6px;
+    cursor: nw-resize;
+}
+
+.handle-ne {
+    top: -6px;
+    right: -6px;
+    cursor: ne-resize;
+}
+
+.handle-se {
+    bottom: -6px;
+    right: -6px;
+    cursor: se-resize;
+}
+
+.handle-sw {
+    bottom: -6px;
+    left: -6px;
+    cursor: sw-resize;
+}
+
+/* Edge handles */
+.handle-n {
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: n-resize;
+    width: 24px;
+    height: 10px;
+    border-radius: 4px;
+}
+
+.handle-s {
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: s-resize;
+    width: 24px;
+    height: 10px;
+    border-radius: 4px;
+}
+
+.handle-e {
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: e-resize;
+    width: 10px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.handle-w {
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: w-resize;
+    width: 10px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+/* Info Display */
+.manipulator-info {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: monospace;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.info-dimensions {
+    font-weight: 500;
+}
+
+/* Toolbar */
+.manipulator-toolbar {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    background: white;
+    padding: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
+}
+
+.manipulator-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.manipulator-btn:hover {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+}
+
+.manipulator-btn:active {
+    transform: scale(0.95);
+}
+
+/* Background image mode */
+.image-manipulator-overlay.bg-mode .manipulator-border {
+    border-style: dashed;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.image-manipulator-overlay.bg-mode .manipulator-info {
+    background: rgba(102, 126, 234, 0.9);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .manipulator-toolbar {
+        top: auto;
+        bottom: -50px;
+    }
+
+    .manipulator-info {
+        bottom: -55px;
+    }
+}
+
