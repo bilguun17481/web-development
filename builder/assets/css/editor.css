@@ -1850,3 +1850,241 @@ body {
     padding: 12px;
 }
 
+/* ==========================================
+   UNIFIED PROPERTIES PANEL - ENHANCED
+   ========================================== */
+
+/* Child Section Styling */
+.child-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e8eaf0;
+}
+
+.child-section-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #555;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.child-edit-group {
+    margin-bottom: 10px;
+}
+
+.child-edit-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Background Image Preview */
+.bg-image-preview {
+    position: relative;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.bg-image-preview img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.btn-remove-bg {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.btn-remove-bg:hover {
+    background: rgba(220, 53, 69, 0.9);
+}
+
+/* Mini Image Preview */
+.mini-preview {
+    margin-bottom: 8px;
+}
+
+.mini-preview img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.child-image-preview {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Visibility Controls */
+.visibility-controls {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e8eaf0;
+}
+
+.visibility-controls .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.visibility-controls input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* Source Input Group Enhancement */
+.source-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.source-input-group input {
+    flex: 1;
+}
+
+.source-input-group .btn-icon {
+    flex-shrink: 0;
+}
+
+/* Enhance Property Section Headers */
+.property-section.collapsible .section-header {
+    user-select: none;
+}
+
+/* Smooth section body animation */
+.property-section.collapsible .section-body {
+    overflow: hidden;
+}
+
+/* Smart Properties Container */
+.smart-properties {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+/* Property Header Enhancement */
+.property-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Panel Scrolling */
+#propertiesContent {
+    overflow-y: auto;
+    max-height: calc(100vh - 180px);
+}
+
+/* Form Group in Property Sections */
+.property-section .form-group {
+    margin-bottom: 14px;
+}
+
+.property-section .form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Select Styling */
+.property-section select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dde0e6;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.property-section select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+/* Checkbox Label Styling */
+.property-section label:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.property-section input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+/* Toast notification for actions */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    z-index: 10000;
+    animation: toastSlideUp 0.3s ease-out;
+}
+
+@keyframes toastSlideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Responsive adjustments for properties panel */
+@media (max-width: 1400px) {
+    .sidebar-right {
+        width: 300px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .sidebar-right {
+        width: 280px;
+    }
+
+    .form-row-2col {
+        gap: 8px;
+    }
+}
+
