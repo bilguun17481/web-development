@@ -11,6 +11,7 @@ class EditorController {
         this.maxHistory = 50;
         this.undoStack = [];
         this.redoStack = [];
+        this.uploadedImages = new Map(); // Store uploaded images
 
         this.init();
     }
@@ -22,7 +23,57 @@ class EditorController {
         this.setupIframe();
         this.setupKeyboardShortcuts();
         this.setupUndoRedoButtons();
+        this.setupEditButtonContext();
         this.loadAssets();
+    }
+
+    setupEditButtonContext() {
+        // Update Edit button to show selection context
+        const editBtn = document.getElementById('floatingEditBtn');
+        if (editBtn) {
+            // Store original content
+            editBtn.dataset.originalText = editBtn.innerHTML;
+        }
+    }
+
+    updateEditButtonContext() {
+        const editBtn = document.getElementById('floatingEditBtn');
+        if (!editBtn) return;
+
+        if (this.selectedElement) {
+            const tagName = this.selectedElement.tagName.toLowerCase();
+            const displayName = this.getElementDisplayName(tagName);
+            editBtn.innerHTML = `
+                <span class="edit-icon">✏️</span>
+                <span class="edit-text">Edit ${displayName}</span>
+            `;
+            editBtn.classList.add('has-selection');
+        } else {
+            editBtn.innerHTML = editBtn.dataset.originalText || `
+                <span class="edit-icon">✏️</span>
+                <span class="edit-text">Edit</span>
+            `;
+            editBtn.classList.remove('has-selection');
+        }
+    }
+
+    getElementDisplayName(tagName) {
+        const names = {
+            'h1': 'Heading 1',
+            'h2': 'Heading 2',
+            'h3': 'Heading 3',
+            'h4': 'Heading 4',
+            'h5': 'Heading 5',
+            'h6': 'Heading 6',
+            'p': 'Paragraph',
+            'a': 'Link',
+            'img': 'Image',
+            'button': 'Button',
+            'span': 'Text',
+            'div': 'Container',
+            'section': 'Section'
+        };
+        return names[tagName] || tagName.toUpperCase();
     }
 
     setupUndoRedoButtons() {
@@ -134,6 +185,9 @@ class EditorController {
         const iframe = document.getElementById('editorFrame');
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
+        // Inject editor styles into iframe
+        this.injectEditorStyles(iframeDoc);
+
         // Save initial state if this is the first initialization
         if (this.undoStack.length === 0) {
             setTimeout(() => {
@@ -142,9 +196,13 @@ class EditorController {
         }
 
         // Add hover and click effects to all editable elements
-        const editableElements = iframeDoc.querySelectorAll('h1, h2, h3, h4, h5, h6, p, a, button, img, .product-card, .feature-card, .category-card');
+        const editableElements = iframeDoc.querySelectorAll('h1, h2, h3, h4, h5, h6, p, a, button, img, span, div, section, .product-card, .feature-card, .category-card');
 
         editableElements.forEach(el => {
+            // Skip if already has listener
+            if (el.dataset.builderInit) return;
+            el.dataset.builderInit = 'true';
+
             // Hover effect
             el.addEventListener('mouseenter', () => {
                 if (el !== this.selectedElement) {
@@ -163,146 +221,522 @@ class EditorController {
                 this.selectElement(el);
             });
         });
+
+        // Click on empty space to deselect
+        iframeDoc.addEventListener('click', (e) => {
+            if (e.target === iframeDoc.body || e.target === iframeDoc.documentElement) {
+                this.deselectElement();
+            }
+        });
+    }
+
+    injectEditorStyles(iframeDoc) {
+        // Check if styles already injected
+        if (iframeDoc.getElementById('builder-styles')) return;
+
+        const styleEl = iframeDoc.createElement('style');
+        styleEl.id = 'builder-styles';
+        styleEl.textContent = `
+            /* Hover state */
+            .builder-hover {
+                outline: 2px dashed #667eea !important;
+                outline-offset: 2px !important;
+                cursor: pointer !important;
+                transition: outline 0.15s ease !important;
+            }
+
+            /* Selected state */
+            .builder-selected {
+                outline: 3px solid #667eea !important;
+                outline-offset: 2px !important;
+                box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2) !important;
+                position: relative !important;
+            }
+
+            .builder-selected::after {
+                content: attr(data-element-type);
+                position: absolute;
+                top: -28px;
+                left: 0;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                font-size: 11px;
+                font-weight: 600;
+                padding: 4px 10px;
+                border-radius: 4px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                z-index: 10000;
+                white-space: nowrap;
+                box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+            }
+
+            /* Animation for selection */
+            @keyframes builder-pulse {
+                0%, 100% { box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2); }
+                50% { box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.3); }
+            }
+
+            .builder-selected {
+                animation: builder-pulse 2s ease-in-out infinite;
+            }
+        `;
+        iframeDoc.head.appendChild(styleEl);
+    }
+
+    deselectElement() {
+        if (this.selectedElement) {
+            this.selectedElement.classList.remove('builder-selected');
+            this.selectedElement.removeAttribute('data-element-type');
+            this.selectedElement = null;
+        }
+
+        // Reset properties panel
+        const propertiesContent = document.getElementById('propertiesContent');
+        if (propertiesContent) {
+            propertiesContent.innerHTML = '<p class="no-selection">Select an element to edit its properties</p>';
+        }
+
+        // Update Edit button context
+        this.updateEditButtonContext();
     }
 
     selectElement(element) {
         // Remove previous selection
         if (this.selectedElement) {
             this.selectedElement.classList.remove('builder-selected');
+            this.selectedElement.removeAttribute('data-element-type');
         }
 
         // Add new selection
         this.selectedElement = element;
+        const tagName = element.tagName.toLowerCase();
+        const displayName = this.getElementDisplayName(tagName);
+
         element.classList.add('builder-selected');
         element.classList.remove('builder-hover');
+        element.setAttribute('data-element-type', displayName);
 
         // Update properties panel
         this.updatePropertiesPanel(element);
 
-        this.addToHistory(`Selected element: ${element.tagName.toLowerCase()}`);
+        // Update Edit button context
+        this.updateEditButtonContext();
+
+        // Switch to Properties tab in right sidebar
+        const propertiesTab = document.querySelector('.sidebar-right .sidebar-tab[data-panel="properties"]');
+        if (propertiesTab) {
+            propertiesTab.click();
+        }
+
+        this.addToHistory(`Selected element: ${tagName}`);
     }
 
     updatePropertiesPanel(element) {
         const propertiesContent = document.getElementById('propertiesContent');
         const tagName = element.tagName.toLowerCase();
+        const displayName = this.getElementDisplayName(tagName);
+
+        // Get iframe context for computed styles
+        const iframe = document.getElementById('editorFrame');
+        const iframeWindow = iframe.contentWindow;
+        const computedStyle = iframeWindow.getComputedStyle(element);
 
         let html = '<div class="properties-form">';
 
-        // Common properties
+        // Element header
         html += `
-            <div class="form-group">
-                <label>Element Type</label>
-                <input type="text" value="${tagName}" disabled>
+            <div class="property-section">
+                <div class="property-section-header">
+                    <span class="section-icon">📋</span>
+                    <h4>Element Info</h4>
+                </div>
+                <div class="form-group">
+                    <label>Element Type</label>
+                    <input type="text" value="${displayName}" disabled class="element-type-display">
+                </div>
             </div>
         `;
 
-        // Text content for text elements
+        // Content section for text elements
         if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'button', 'span'].includes(tagName)) {
             html += `
-                <div class="form-group">
-                    <label>Text Content</label>
-                    <textarea id="propTextContent">${element.textContent}</textarea>
+                <div class="property-section">
+                    <div class="property-section-header">
+                        <span class="section-icon">✏️</span>
+                        <h4>Content</h4>
+                    </div>
+                    <div class="form-group">
+                        <label>Text Content</label>
+                        <textarea id="propTextContent" rows="3" class="live-preview">${this.escapeHtml(element.textContent)}</textarea>
+                    </div>
                 </div>
             `;
         }
 
-        // Image source for images
+        // Image section for images
         if (tagName === 'img') {
             html += `
-                <div class="form-group">
-                    <label>Image Source</label>
-                    <input type="text" id="propImageSrc" value="${element.src}">
-                </div>
-                <div class="form-group">
-                    <label>Alt Text</label>
-                    <input type="text" id="propImageAlt" value="${element.alt}">
+                <div class="property-section">
+                    <div class="property-section-header">
+                        <span class="section-icon">🖼️</span>
+                        <h4>Image Settings</h4>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Image</label>
+                        <div class="image-preview-container">
+                            <img src="${element.src}" alt="Preview" class="image-preview-thumb" id="imagePreviewThumb">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Image Source URL</label>
+                        <input type="text" id="propImageSrc" value="${element.src}" class="live-preview">
+                    </div>
+                    <div class="form-group">
+                        <label>Upload New Image</label>
+                        <div class="image-upload-area">
+                            <input type="file" id="propImageUpload" accept=".jpg,.jpeg,.png" style="display:none;">
+                            <button type="button" class="btn-upload-image" id="uploadImageTrigger">
+                                <span>📤</span> Choose File (.jpg, .png)
+                            </button>
+                            <span class="upload-filename" id="uploadFilename">No file selected</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Alt Text</label>
+                        <input type="text" id="propImageAlt" value="${this.escapeHtml(element.alt)}" placeholder="Describe the image...">
+                    </div>
+                    <div class="form-row-2col">
+                        <div class="form-group">
+                            <label>Width</label>
+                            <input type="text" id="propImageWidth" value="${element.width || 'auto'}" placeholder="auto">
+                        </div>
+                        <div class="form-group">
+                            <label>Height</label>
+                            <input type="text" id="propImageHeight" value="${element.height || 'auto'}" placeholder="auto">
+                        </div>
+                    </div>
                 </div>
             `;
         }
 
-        // Link href for anchors
+        // Link section for anchors
         if (tagName === 'a') {
             html += `
-                <div class="form-group">
-                    <label>Link URL</label>
-                    <input type="text" id="propLinkHref" value="${element.href}">
+                <div class="property-section">
+                    <div class="property-section-header">
+                        <span class="section-icon">🔗</span>
+                        <h4>Link Settings</h4>
+                    </div>
+                    <div class="form-group">
+                        <label>Link URL</label>
+                        <input type="text" id="propLinkHref" value="${element.href}" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Open In</label>
+                        <select id="propLinkTarget">
+                            <option value="_self" ${element.target !== '_blank' ? 'selected' : ''}>Same Window</option>
+                            <option value="_blank" ${element.target === '_blank' ? 'selected' : ''}>New Tab</option>
+                        </select>
+                    </div>
                 </div>
             `;
         }
 
-        // Style properties
-        const computedStyle = window.getComputedStyle(element);
+        // Style section
         html += `
-            <div class="form-group">
-                <label>Background Color</label>
-                <input type="color" id="propBgColor" value="${this.rgbToHex(computedStyle.backgroundColor)}">
-            </div>
-            <div class="form-group">
-                <label>Text Color</label>
-                <input type="color" id="propTextColor" value="${this.rgbToHex(computedStyle.color)}">
-            </div>
-            <div class="form-group">
-                <label>Font Size (px)</label>
-                <input type="number" id="propFontSize" value="${parseInt(computedStyle.fontSize)}" min="8" max="72">
-            </div>
-            <div class="form-group">
-                <label>Padding (px)</label>
-                <input type="number" id="propPadding" value="${parseInt(computedStyle.padding)}" min="0" max="100">
-            </div>
-            <div class="form-group">
-                <label>Margin (px)</label>
-                <input type="number" id="propMargin" value="${parseInt(computedStyle.margin)}" min="0" max="100">
+            <div class="property-section">
+                <div class="property-section-header">
+                    <span class="section-icon">🎨</span>
+                    <h4>Styling</h4>
+                </div>
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label>Background</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" id="propBgColor" value="${this.rgbToHex(computedStyle.backgroundColor)}" class="live-preview">
+                            <span class="color-value">${this.rgbToHex(computedStyle.backgroundColor)}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Text Color</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" id="propTextColor" value="${this.rgbToHex(computedStyle.color)}" class="live-preview">
+                            <span class="color-value">${this.rgbToHex(computedStyle.color)}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Font Size</label>
+                    <div class="slider-input-wrapper">
+                        <input type="range" id="propFontSizeSlider" min="8" max="72" value="${parseInt(computedStyle.fontSize)}" class="live-preview">
+                        <input type="number" id="propFontSize" value="${parseInt(computedStyle.fontSize)}" min="8" max="72" class="slider-value live-preview">
+                        <span>px</span>
+                    </div>
+                </div>
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label>Padding</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="propPadding" value="${parseInt(computedStyle.padding) || 0}" min="0" max="100" class="live-preview">
+                            <span>px</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Margin</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="propMargin" value="${parseInt(computedStyle.margin) || 0}" min="0" max="100" class="live-preview">
+                            <span>px</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Border Radius</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="propBorderRadius" value="${parseInt(computedStyle.borderRadius) || 0}" min="0" max="100" class="live-preview">
+                        <span>px</span>
+                    </div>
+                </div>
             </div>
         `;
 
-        html += '<button class="btn-primary" id="applyPropertiesBtn">Apply Changes</button>';
+        // Action buttons
+        html += `
+            <div class="property-actions">
+                <button class="btn-secondary" id="resetPropertiesBtn">
+                    <span>↩️</span> Reset
+                </button>
+                <button class="btn-primary" id="applyPropertiesBtn">
+                    <span>✅</span> Apply Changes
+                </button>
+            </div>
+        `;
+
         html += '</div>';
 
         propertiesContent.innerHTML = html;
 
         // Setup property change handlers
         this.setupPropertyHandlers(element);
+        this.setupLivePreview(element);
+        this.setupImageUpload(element);
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     setupPropertyHandlers(element) {
         const applyBtn = document.getElementById('applyPropertiesBtn');
-        if (!applyBtn) return;
+        const resetBtn = document.getElementById('resetPropertiesBtn');
 
-        applyBtn.addEventListener('click', () => {
-            // Save state before making changes
-            this.saveState('Updated element properties');
+        if (applyBtn) {
+            applyBtn.addEventListener('click', () => {
+                // Save state before making changes
+                this.saveState('Updated element properties');
 
-            // Text content
-            const textContent = document.getElementById('propTextContent');
-            if (textContent) {
-                element.textContent = textContent.value;
+                // Apply all current values
+                this.applyAllProperties(element);
+
+                this.addToHistory('Applied element properties');
+                this.showToast('Properties applied successfully!');
+            });
+        }
+
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                // Re-read element and update panel
+                this.updatePropertiesPanel(element);
+                this.showToast('Properties reset');
+            });
+        }
+
+        // Sync font size slider with input
+        const fontSizeSlider = document.getElementById('propFontSizeSlider');
+        const fontSizeInput = document.getElementById('propFontSize');
+        if (fontSizeSlider && fontSizeInput) {
+            fontSizeSlider.addEventListener('input', () => {
+                fontSizeInput.value = fontSizeSlider.value;
+            });
+            fontSizeInput.addEventListener('input', () => {
+                fontSizeSlider.value = fontSizeInput.value;
+            });
+        }
+
+        // Update color value displays
+        const bgColor = document.getElementById('propBgColor');
+        const textColor = document.getElementById('propTextColor');
+        if (bgColor) {
+            bgColor.addEventListener('input', () => {
+                bgColor.nextElementSibling.textContent = bgColor.value;
+            });
+        }
+        if (textColor) {
+            textColor.addEventListener('input', () => {
+                textColor.nextElementSibling.textContent = textColor.value;
+            });
+        }
+    }
+
+    applyAllProperties(element) {
+        // Text content
+        const textContent = document.getElementById('propTextContent');
+        if (textContent) {
+            element.textContent = textContent.value;
+        }
+
+        // Image properties
+        const imageSrc = document.getElementById('propImageSrc');
+        const imageAlt = document.getElementById('propImageAlt');
+        const imageWidth = document.getElementById('propImageWidth');
+        const imageHeight = document.getElementById('propImageHeight');
+        if (imageSrc && imageSrc.value) element.src = imageSrc.value;
+        if (imageAlt) element.alt = imageAlt.value;
+        if (imageWidth && imageWidth.value && imageWidth.value !== 'auto') {
+            element.style.width = imageWidth.value + (isNaN(imageWidth.value) ? '' : 'px');
+        }
+        if (imageHeight && imageHeight.value && imageHeight.value !== 'auto') {
+            element.style.height = imageHeight.value + (isNaN(imageHeight.value) ? '' : 'px');
+        }
+
+        // Link properties
+        const linkHref = document.getElementById('propLinkHref');
+        const linkTarget = document.getElementById('propLinkTarget');
+        if (linkHref) element.href = linkHref.value;
+        if (linkTarget) element.target = linkTarget.value;
+
+        // Style properties
+        const bgColor = document.getElementById('propBgColor');
+        const textColor = document.getElementById('propTextColor');
+        const fontSize = document.getElementById('propFontSize');
+        const padding = document.getElementById('propPadding');
+        const margin = document.getElementById('propMargin');
+        const borderRadius = document.getElementById('propBorderRadius');
+
+        if (bgColor) element.style.backgroundColor = bgColor.value;
+        if (textColor) element.style.color = textColor.value;
+        if (fontSize) element.style.fontSize = fontSize.value + 'px';
+        if (padding) element.style.padding = padding.value + 'px';
+        if (margin) element.style.margin = margin.value + 'px';
+        if (borderRadius) element.style.borderRadius = borderRadius.value + 'px';
+    }
+
+    setupLivePreview(element) {
+        // Add live preview for inputs marked with .live-preview
+        const liveInputs = document.querySelectorAll('.live-preview');
+
+        liveInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                this.previewProperty(element, input);
+            });
+        });
+    }
+
+    previewProperty(element, input) {
+        const id = input.id;
+
+        switch (id) {
+            case 'propTextContent':
+                element.textContent = input.value;
+                break;
+            case 'propImageSrc':
+                element.src = input.value;
+                // Update preview thumbnail
+                const thumb = document.getElementById('imagePreviewThumb');
+                if (thumb) thumb.src = input.value;
+                break;
+            case 'propBgColor':
+                element.style.backgroundColor = input.value;
+                break;
+            case 'propTextColor':
+                element.style.color = input.value;
+                break;
+            case 'propFontSize':
+            case 'propFontSizeSlider':
+                element.style.fontSize = input.value + 'px';
+                // Sync both inputs
+                const slider = document.getElementById('propFontSizeSlider');
+                const number = document.getElementById('propFontSize');
+                if (slider && id !== 'propFontSizeSlider') slider.value = input.value;
+                if (number && id !== 'propFontSize') number.value = input.value;
+                break;
+            case 'propPadding':
+                element.style.padding = input.value + 'px';
+                break;
+            case 'propMargin':
+                element.style.margin = input.value + 'px';
+                break;
+            case 'propBorderRadius':
+                element.style.borderRadius = input.value + 'px';
+                break;
+        }
+    }
+
+    setupImageUpload(element) {
+        const uploadTrigger = document.getElementById('uploadImageTrigger');
+        const uploadInput = document.getElementById('propImageUpload');
+        const filenameDisplay = document.getElementById('uploadFilename');
+
+        if (!uploadTrigger || !uploadInput) return;
+
+        uploadTrigger.addEventListener('click', () => {
+            uploadInput.click();
+        });
+
+        uploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                this.showToast('Only .jpg and .png files are allowed');
+                return;
             }
 
-            // Image properties
-            const imageSrc = document.getElementById('propImageSrc');
-            const imageAlt = document.getElementById('propImageAlt');
-            if (imageSrc) element.src = imageSrc.value;
-            if (imageAlt) element.alt = imageAlt.value;
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                this.showToast('File size must be under 5MB');
+                return;
+            }
 
-            // Link properties
-            const linkHref = document.getElementById('propLinkHref');
-            if (linkHref) element.href = linkHref.value;
+            // Update filename display
+            if (filenameDisplay) {
+                filenameDisplay.textContent = file.name;
+            }
 
-            // Style properties
-            const bgColor = document.getElementById('propBgColor');
-            const textColor = document.getElementById('propTextColor');
-            const fontSize = document.getElementById('propFontSize');
-            const padding = document.getElementById('propPadding');
-            const margin = document.getElementById('propMargin');
+            // Read file and create data URL
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const dataUrl = event.target.result;
 
-            if (bgColor) element.style.backgroundColor = bgColor.value;
-            if (textColor) element.style.color = textColor.value;
-            if (fontSize) element.style.fontSize = fontSize.value + 'px';
-            if (padding) element.style.padding = padding.value + 'px';
-            if (margin) element.style.margin = margin.value + 'px';
+                // Update image source input
+                const srcInput = document.getElementById('propImageSrc');
+                if (srcInput) {
+                    srcInput.value = dataUrl;
+                }
 
-            this.addToHistory('Updated element properties');
-            this.showToast('Properties updated successfully!');
+                // Update preview thumbnail
+                const thumb = document.getElementById('imagePreviewThumb');
+                if (thumb) {
+                    thumb.src = dataUrl;
+                }
+
+                // Live preview on the element
+                element.src = dataUrl;
+
+                // Store in uploaded images map
+                this.uploadedImages.set(file.name, dataUrl);
+
+                this.showToast(`Image "${file.name}" loaded`);
+            };
+
+            reader.onerror = () => {
+                this.showToast('Error reading file');
+            };
+
+            reader.readAsDataURL(file);
         });
     }
 
