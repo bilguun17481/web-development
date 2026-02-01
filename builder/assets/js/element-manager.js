@@ -903,10 +903,22 @@ class ElementManager {
     showInsertMenu(position) {
         this.insertPosition = position;
 
-        // Position near context menu or center
-        const rect = this.contextMenu.getBoundingClientRect();
-        this.insertMenu.style.left = rect.left + 'px';
-        this.insertMenu.style.top = rect.top + 'px';
+        // Position the menu
+        let menuX, menuY;
+
+        if (this.contextMenu.style.display === 'block') {
+            // Position near context menu if visible
+            const rect = this.contextMenu.getBoundingClientRect();
+            menuX = rect.left;
+            menuY = rect.top;
+        } else {
+            // Position in center of screen
+            menuX = (window.innerWidth - 320) / 2; // 320 is menu width
+            menuY = (window.innerHeight - 500) / 2; // 500 is approximate menu height
+        }
+
+        this.insertMenu.style.left = Math.max(10, menuX) + 'px';
+        this.insertMenu.style.top = Math.max(10, menuY) + 'px';
         this.insertMenu.style.display = 'block';
 
         // Clear search
