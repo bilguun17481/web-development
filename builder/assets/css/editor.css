@@ -996,3 +996,295 @@ body {
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+/* ==========================================
+   FLOATING EDIT BUTTON
+   ========================================== */
+
+.floating-edit-btn {
+    position: fixed;
+    left: 295px;
+    top: 120px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    box-shadow: 4px 4px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.floating-edit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+    transition: left 0.5s ease;
+}
+
+.floating-edit-btn:hover {
+    transform: translateX(5px);
+    box-shadow: 6px 6px 25px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #7b8ff0 0%, #8b5fbf 100%);
+}
+
+.floating-edit-btn:hover::before {
+    left: 100%;
+}
+
+.floating-edit-btn:active {
+    transform: translateX(2px);
+}
+
+.floating-edit-btn .edit-icon {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.floating-edit-btn:hover .edit-icon {
+    transform: rotate(-15deg) scale(1.1);
+}
+
+.floating-edit-btn .edit-text {
+    letter-spacing: 0.5px;
+}
+
+/* Active state when sidebar is open */
+.floating-edit-btn.active {
+    background: linear-gradient(135deg, #5a6fd6 0%, #6a4199 100%);
+    box-shadow: 2px 2px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* ==========================================
+   SLIDE-OUT EDITOR SIDEBAR
+   ========================================== */
+
+.slideout-editor {
+    position: fixed;
+    left: 295px;
+    top: 170px;
+    width: 280px;
+    max-height: calc(100vh - 200px);
+    background: white;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 8px 8px 40px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(102, 126, 234, 0.1);
+    z-index: 999;
+    transform: translateX(-120%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.slideout-editor.open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.slideout-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.slideout-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.slideout-close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.slideout-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.slideout-content {
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.slideout-section {
+    margin-bottom: 20px;
+}
+
+.slideout-section:last-child {
+    margin-bottom: 0;
+}
+
+.slideout-section h4 {
+    margin: 0 0 12px 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Quick Actions Grid */
+.quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 10px;
+    background: #f8f9fc;
+    border: 1px solid #e8eaf0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #444;
+    transition: all 0.25s ease;
+}
+
+.quick-action-btn span {
+    font-size: 1.4rem;
+}
+
+.quick-action-btn:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Style Presets Grid */
+.style-presets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.preset-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 6px;
+    background: white;
+    border: 1px solid #e8eaf0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.preset-btn:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.preset-preview {
+    width: 36px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.preset-preview.modern {
+    background: linear-gradient(135deg, #667eea 50%, #764ba2 50%);
+}
+
+.preset-preview.classic {
+    background: linear-gradient(135deg, #2c3e50 50%, #bdc3c7 50%);
+}
+
+.preset-preview.minimal {
+    background: linear-gradient(135deg, #ffffff 50%, #f5f5f5 50%);
+    border: 1px solid #e0e0e0;
+}
+
+.preset-preview.bold {
+    background: linear-gradient(135deg, #e74c3c 50%, #f39c12 50%);
+}
+
+/* Color Palette Grid */
+.color-palette {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+}
+
+.color-swatch {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.color-swatch:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-color: white;
+}
+
+.color-swatch:active {
+    transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .floating-edit-btn {
+        left: 20px;
+        top: 80px;
+        border-radius: 12px;
+    }
+
+    .slideout-editor {
+        left: 0;
+        top: 130px;
+        border-radius: 0 16px 16px 0;
+    }
+}
+
