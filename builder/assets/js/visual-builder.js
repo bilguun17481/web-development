@@ -1,5 +1,6 @@
 // ==========================================
-// VISUAL BUILDER - WIX-LEVEL EDITOR SYSTEM
+// VISUAL BUILDER - UNIFIED PROPERTIES PANEL
+// Figma-style Inspector with Context-Aware Controls
 // ==========================================
 
 class VisualBuilder {
@@ -66,16 +67,7 @@ class VisualBuilder {
                     gridTemplateColumns: 'repeat(3, 1fr)',
                     gap: '20px'
                 },
-                properties: ['content', 'styling', 'layout', 'behavior'],
-                specificProps: {
-                    columns: 3,
-                    rows: 'auto',
-                    gap: '20px',
-                    responsive: {
-                        tablet: { columns: 2 },
-                        mobile: { columns: 1 }
-                    }
-                }
+                properties: ['content', 'styling', 'layout', 'behavior']
             },
             heading: {
                 name: 'Heading',
@@ -88,11 +80,7 @@ class VisualBuilder {
                     fontWeight: '700',
                     margin: '0 0 16px 0'
                 },
-                properties: ['content', 'styling'],
-                specificProps: {
-                    level: 'h2',
-                    text: 'Your Heading'
-                }
+                properties: ['content', 'styling']
             },
             text: {
                 name: 'Text',
@@ -117,14 +105,7 @@ class VisualBuilder {
                     height: 'auto',
                     objectFit: 'cover'
                 },
-                properties: ['content', 'styling', 'behavior'],
-                specificProps: {
-                    src: '',
-                    alt: '',
-                    aspectRatio: 'auto',
-                    lazyLoad: true,
-                    objectFit: 'cover'
-                }
+                properties: ['content', 'styling', 'behavior']
             },
             button: {
                 name: 'Button',
@@ -138,14 +119,7 @@ class VisualBuilder {
                     fontWeight: '600',
                     cursor: 'pointer'
                 },
-                properties: ['content', 'styling', 'behavior'],
-                specificProps: {
-                    label: 'Click Me',
-                    url: '',
-                    target: '_self',
-                    icon: null,
-                    hoverAnimation: 'lift'
-                }
+                properties: ['content', 'styling', 'behavior']
             },
             productCard: {
                 name: 'Product Card',
@@ -158,15 +132,7 @@ class VisualBuilder {
                     overflow: 'hidden',
                     boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
                 },
-                properties: ['content', 'styling', 'behavior', 'data'],
-                specificProps: {
-                    dataSource: 'manual',
-                    showPrice: true,
-                    showRating: true,
-                    showBadge: true,
-                    quickAddToCart: true,
-                    priceFormat: 'Kč'
-                }
+                properties: ['content', 'styling', 'behavior', 'data']
             },
             categoryCard: {
                 name: 'Category Card',
@@ -179,12 +145,7 @@ class VisualBuilder {
                     overflow: 'hidden',
                     position: 'relative'
                 },
-                properties: ['content', 'styling', 'behavior', 'data'],
-                specificProps: {
-                    dataSource: 'manual',
-                    showCount: true,
-                    overlayStyle: 'gradient'
-                }
+                properties: ['content', 'styling', 'behavior', 'data']
             },
             featureCard: {
                 name: 'Feature Card',
@@ -197,12 +158,7 @@ class VisualBuilder {
                     borderRadius: '12px',
                     textAlign: 'center'
                 },
-                properties: ['content', 'styling'],
-                specificProps: {
-                    icon: '⭐',
-                    title: 'Feature Title',
-                    description: 'Feature description goes here'
-                }
+                properties: ['content', 'styling']
             },
             link: {
                 name: 'Link',
@@ -240,6 +196,18 @@ class VisualBuilder {
                     height: '40px'
                 },
                 properties: ['styling']
+            },
+            hero: {
+                name: 'Hero Section',
+                icon: '🎯',
+                description: 'Main hero/banner section',
+                category: 'layout',
+                canContain: ['*'],
+                defaultStyles: {
+                    minHeight: '500px',
+                    padding: '80px 20px'
+                },
+                properties: ['content', 'styling', 'layout', 'behavior']
             }
         };
     }
@@ -250,15 +218,10 @@ class VisualBuilder {
 
     defineSmartDefaults() {
         return {
-            // Inside a product section, suggest product cards
             'section[data-type="products"]': ['productCard', 'grid'],
-            // Inside a features section, suggest feature cards
             'section[data-type="features"]': ['featureCard', 'grid'],
-            // Inside a grid, suggest various content
             'grid': ['container', 'image', 'text', 'productCard'],
-            // Inside a container, suggest content elements
             'container': ['heading', 'text', 'button', 'image'],
-            // Default suggestions
             'default': ['section', 'container', 'grid', 'heading', 'text', 'image', 'button']
         };
     }
@@ -269,7 +232,6 @@ class VisualBuilder {
 
     defineConversionRules() {
         return {
-            // What each type can be converted to
             container: ['section', 'grid', 'featureCard'],
             section: ['container', 'grid'],
             grid: ['container', 'section'],
@@ -298,13 +260,12 @@ class VisualBuilder {
         const elementsPanel = document.getElementById('elementsPanel');
         if (!elementsPanel) return;
 
-        // Create new structure
         let html = `
             <div class="element-panel-header">
                 <h3>Elements</h3>
             </div>
 
-            <!-- Selected Element Info (shown when element selected) -->
+            <!-- Selected Element Info -->
             <div class="selected-element-info" id="selectedElementInfo" style="display: none;">
                 <div class="current-element-type">
                     <span class="element-icon" id="currentElementIcon">📦</span>
@@ -324,7 +285,7 @@ class VisualBuilder {
                 ${this.renderElementCategories()}
             </div>
 
-            <!-- Smart Suggestions (context-aware) -->
+            <!-- Smart Suggestions -->
             <div class="smart-suggestions" id="smartSuggestions" style="display: none;">
                 <h4>💡 Suggested</h4>
                 <div class="suggestion-list" id="suggestionList"></div>
@@ -387,7 +348,6 @@ class VisualBuilder {
                 card.classList.remove('dragging');
             });
 
-            // Click to insert at selected position
             card.addEventListener('click', () => {
                 const type = card.dataset.elementType;
                 this.insertElement(type);
@@ -416,10 +376,7 @@ class VisualBuilder {
         document.getElementById('currentElementName').textContent = typeInfo.name;
         document.getElementById('currentElementTag').textContent = `<${element.tagName.toLowerCase()}>`;
 
-        // Render conversion options
         this.renderConversionOptions(detectedType);
-
-        // Show smart suggestions
         this.showSmartSuggestions(element);
     }
 
@@ -444,7 +401,6 @@ class VisualBuilder {
             `;
         }).join('');
 
-        // Add click handlers
         convertButtons.querySelectorAll('.convert-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 this.convertElement(this.selectedElement, btn.dataset.targetType);
@@ -481,17 +437,18 @@ class VisualBuilder {
     }
 
     // ==========================================
-    // RIGHT PANEL - SMART PROPERTIES
+    // RIGHT PANEL - UNIFIED SMART PROPERTIES
     // ==========================================
 
     setupRightPanel() {
-        // This will be called by the editor when an element is selected
+        // Panel setup is handled dynamically when elements are selected
     }
 
     renderSmartProperties(element) {
         const propertiesContent = document.getElementById('propertiesContent');
         if (!propertiesContent || !element) return;
 
+        this.selectedElement = element;
         const detectedType = this.detectElementType(element);
         const typeInfo = this.elementTypes[detectedType] || { properties: ['content', 'styling'] };
 
@@ -499,17 +456,20 @@ class VisualBuilder {
         const iframeWindow = iframe?.contentWindow;
         const computedStyle = iframeWindow ? iframeWindow.getComputedStyle(element) : window.getComputedStyle(element);
 
+        // Detect child elements for context-aware content editing
+        const childElements = this.detectChildElements(element);
+
         let html = '<div class="smart-properties">';
 
         // Element type header
         html += this.renderPropertyHeader(element, detectedType, typeInfo);
 
-        // Content section
+        // Content section - context-aware
         if (typeInfo.properties.includes('content')) {
-            html += this.renderContentSection(element, detectedType, typeInfo);
+            html += this.renderContentSection(element, detectedType, typeInfo, childElements);
         }
 
-        // Styling section
+        // Styling section - with background image support
         if (typeInfo.properties.includes('styling')) {
             html += this.renderStylingSection(element, computedStyle);
         }
@@ -545,12 +505,92 @@ class VisualBuilder {
 
         propertiesContent.innerHTML = html;
 
-        // Setup collapsible sections
+        // Setup interactions
         this.setupCollapsibleSections();
-
-        // Setup property handlers
         this.setupSmartPropertyHandlers(element);
+
+        // Auto-scroll to most relevant section
+        this.scrollToRelevantSection(detectedType);
     }
+
+    // ==========================================
+    // CHILD ELEMENT DETECTION
+    // ==========================================
+
+    detectChildElements(element) {
+        const children = {
+            headings: [],
+            paragraphs: [],
+            buttons: [],
+            links: [],
+            images: [],
+            icons: []
+        };
+
+        // Find headings
+        element.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((el, i) => {
+            children.headings.push({
+                element: el,
+                tag: el.tagName.toLowerCase(),
+                text: el.textContent.trim(),
+                index: i
+            });
+        });
+
+        // Find paragraphs/descriptions
+        element.querySelectorAll('p').forEach((el, i) => {
+            children.paragraphs.push({
+                element: el,
+                text: el.textContent.trim(),
+                index: i
+            });
+        });
+
+        // Find buttons
+        element.querySelectorAll('button, .btn, .btn-primary, .btn-secondary, a.btn').forEach((el, i) => {
+            children.buttons.push({
+                element: el,
+                text: el.textContent.trim(),
+                href: el.getAttribute('href') || el.getAttribute('data-href') || '',
+                index: i
+            });
+        });
+
+        // Find links (excluding button-styled links)
+        element.querySelectorAll('a:not(.btn):not(.btn-primary):not(.btn-secondary)').forEach((el, i) => {
+            children.links.push({
+                element: el,
+                text: el.textContent.trim(),
+                href: el.href,
+                index: i
+            });
+        });
+
+        // Find images
+        element.querySelectorAll('img').forEach((el, i) => {
+            children.images.push({
+                element: el,
+                src: el.src,
+                alt: el.alt,
+                index: i
+            });
+        });
+
+        // Find icons (emoji spans, icon classes)
+        element.querySelectorAll('.feature-icon, .category-icon, [class*="icon"]').forEach((el, i) => {
+            children.icons.push({
+                element: el,
+                content: el.textContent.trim() || el.innerHTML,
+                index: i
+            });
+        });
+
+        return children;
+    }
+
+    // ==========================================
+    // PROPERTY SECTIONS
+    // ==========================================
 
     renderPropertyHeader(element, detectedType, typeInfo) {
         return `
@@ -566,12 +606,12 @@ class VisualBuilder {
         `;
     }
 
-    renderContentSection(element, detectedType, typeInfo) {
+    renderContentSection(element, detectedType, typeInfo, childElements) {
         const tagName = element.tagName.toLowerCase();
         let content = '';
 
-        // Text content for text-based elements
-        if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'button', 'a', 'label'].includes(tagName)) {
+        // Direct text content for text-based elements
+        if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'label'].includes(tagName)) {
             content += `
                 <div class="form-group">
                     <label>Text Content</label>
@@ -580,9 +620,57 @@ class VisualBuilder {
             `;
         }
 
+        // Button text and URL
+        if (tagName === 'button' || (tagName === 'a' && element.classList.contains('btn'))) {
+            content += `
+                <div class="form-group">
+                    <label>Button Text</label>
+                    <input type="text" id="propButtonText" value="${this.escapeHtml(element.textContent.trim())}" class="live-preview">
+                </div>
+                <div class="form-group">
+                    <label>Link URL</label>
+                    <input type="text" id="propButtonUrl" value="${element.getAttribute('data-href') || element.href || ''}" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Open In</label>
+                    <select id="propButtonTarget">
+                        <option value="_self">Same Window</option>
+                        <option value="_blank">New Tab</option>
+                    </select>
+                </div>
+            `;
+        }
+
+        // Link-specific
+        if (tagName === 'a' && !element.classList.contains('btn')) {
+            content += `
+                <div class="form-group">
+                    <label>Link Text</label>
+                    <input type="text" id="propLinkText" value="${this.escapeHtml(element.textContent.trim())}" class="live-preview">
+                </div>
+                <div class="form-group">
+                    <label>Link URL</label>
+                    <input type="text" id="propLinkHref" value="${element.href}" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Open In</label>
+                    <select id="propLinkTarget">
+                        <option value="_self" ${element.target !== '_blank' ? 'selected' : ''}>Same Window</option>
+                        <option value="_blank" ${element.target === '_blank' ? 'selected' : ''}>New Tab</option>
+                    </select>
+                </div>
+            `;
+        }
+
         // Image-specific
         if (tagName === 'img') {
             content += `
+                <div class="form-group">
+                    <label>Image Preview</label>
+                    <div class="image-preview-container">
+                        <img src="${element.src}" alt="Preview" class="image-preview-thumb" id="imagePreviewThumb">
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>Image Source</label>
                     <div class="source-input-group">
@@ -595,56 +683,118 @@ class VisualBuilder {
                     <label>Alt Text</label>
                     <input type="text" id="propImageAlt" value="${element.alt || ''}" placeholder="Describe the image...">
                 </div>
-                <div class="form-group">
-                    <label>Aspect Ratio</label>
-                    <select id="propAspectRatio">
-                        <option value="auto">Auto</option>
-                        <option value="1/1">1:1 Square</option>
-                        <option value="4/3">4:3</option>
-                        <option value="16/9">16:9 Widescreen</option>
-                        <option value="3/2">3:2</option>
-                        <option value="2/3">2:3 Portrait</option>
-                    </select>
-                </div>
             `;
         }
 
-        // Button-specific
-        if (tagName === 'button' || (tagName === 'a' && element.classList.contains('btn'))) {
-            content += `
-                <div class="form-group">
-                    <label>Link URL</label>
-                    <input type="text" id="propButtonUrl" value="${element.getAttribute('data-href') || element.href || ''}" placeholder="https://...">
-                </div>
-                <div class="form-group">
-                    <label>Open In</label>
-                    <select id="propButtonTarget">
-                        <option value="_self">Same Window</option>
-                        <option value="_blank">New Tab</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Icon</label>
-                    <div class="icon-picker" id="iconPicker">
-                        <button class="icon-option" data-icon="">None</button>
-                        <button class="icon-option" data-icon="→">→</button>
-                        <button class="icon-option" data-icon="↗">↗</button>
-                        <button class="icon-option" data-icon="🛒">🛒</button>
-                        <button class="icon-option" data-icon="📧">📧</button>
-                        <button class="icon-option" data-icon="📞">📞</button>
-                    </div>
-                </div>
-            `;
-        }
+        // Child elements editing for containers/sections
+        if (['div', 'section', 'header', 'footer', 'article', 'main'].includes(tagName) ||
+            element.classList.contains('hero') ||
+            element.classList.contains('feature-card') ||
+            element.classList.contains('product-card') ||
+            element.classList.contains('category-card')) {
 
-        // Link-specific
-        if (tagName === 'a') {
-            content += `
-                <div class="form-group">
-                    <label>Link URL</label>
-                    <input type="text" id="propLinkHref" value="${element.href}" placeholder="https://...">
-                </div>
-            `;
+            // Child Headings
+            if (childElements.headings.length > 0) {
+                content += `<div class="child-section"><h5 class="child-section-title">📰 Headings</h5>`;
+                childElements.headings.forEach((h, i) => {
+                    content += `
+                        <div class="form-group child-edit-group">
+                            <label>${h.tag.toUpperCase()} ${i > 0 ? `#${i + 1}` : ''}</label>
+                            <input type="text"
+                                   class="child-heading-input live-preview"
+                                   data-child-type="heading"
+                                   data-child-index="${i}"
+                                   value="${this.escapeHtml(h.text)}">
+                        </div>
+                    `;
+                });
+                content += '</div>';
+            }
+
+            // Child Paragraphs/Descriptions
+            if (childElements.paragraphs.length > 0) {
+                content += `<div class="child-section"><h5 class="child-section-title">📝 Descriptions</h5>`;
+                childElements.paragraphs.forEach((p, i) => {
+                    content += `
+                        <div class="form-group child-edit-group">
+                            <label>Paragraph ${i > 0 ? `#${i + 1}` : ''}</label>
+                            <textarea class="child-paragraph-input live-preview"
+                                      data-child-type="paragraph"
+                                      data-child-index="${i}"
+                                      rows="2">${this.escapeHtml(p.text)}</textarea>
+                        </div>
+                    `;
+                });
+                content += '</div>';
+            }
+
+            // Child Buttons
+            if (childElements.buttons.length > 0) {
+                content += `<div class="child-section"><h5 class="child-section-title">🔘 Buttons</h5>`;
+                childElements.buttons.forEach((b, i) => {
+                    content += `
+                        <div class="form-group child-edit-group">
+                            <label>Button ${i > 0 ? `#${i + 1}` : ''} Text</label>
+                            <input type="text"
+                                   class="child-button-text live-preview"
+                                   data-child-type="button-text"
+                                   data-child-index="${i}"
+                                   value="${this.escapeHtml(b.text)}">
+                        </div>
+                        <div class="form-group child-edit-group">
+                            <label>Button ${i > 0 ? `#${i + 1}` : ''} URL</label>
+                            <input type="text"
+                                   class="child-button-url"
+                                   data-child-type="button-url"
+                                   data-child-index="${i}"
+                                   value="${b.href}"
+                                   placeholder="https://...">
+                        </div>
+                    `;
+                });
+                content += '</div>';
+            }
+
+            // Child Icons
+            if (childElements.icons.length > 0) {
+                content += `<div class="child-section"><h5 class="child-section-title">😀 Icons</h5>`;
+                childElements.icons.forEach((icon, i) => {
+                    content += `
+                        <div class="form-group child-edit-group">
+                            <label>Icon ${i > 0 ? `#${i + 1}` : ''}</label>
+                            <input type="text"
+                                   class="child-icon-input live-preview"
+                                   data-child-type="icon"
+                                   data-child-index="${i}"
+                                   value="${this.escapeHtml(icon.content)}">
+                            <small class="form-hint">Enter emoji or icon HTML</small>
+                        </div>
+                    `;
+                });
+                content += '</div>';
+            }
+
+            // Child Images (for cards/containers)
+            if (childElements.images.length > 0) {
+                content += `<div class="child-section"><h5 class="child-section-title">🖼️ Images</h5>`;
+                childElements.images.forEach((img, i) => {
+                    content += `
+                        <div class="form-group child-edit-group">
+                            <label>Image ${i > 0 ? `#${i + 1}` : ''}</label>
+                            <div class="mini-preview">
+                                <img src="${img.src}" class="child-image-preview" data-child-index="${i}">
+                            </div>
+                            <input type="text"
+                                   class="child-image-src live-preview"
+                                   data-child-type="image-src"
+                                   data-child-index="${i}"
+                                   value="${img.src}"
+                                   placeholder="Image URL">
+                        </div>
+                    `;
+                });
+                content += '</div>';
+            }
         }
 
         if (!content) {
@@ -655,7 +805,7 @@ class VisualBuilder {
             <div class="property-section collapsible" data-section="content">
                 <div class="section-header" data-toggle="content">
                     <span class="section-icon">✏️</span>
-                    <h4>Content</h4>
+                    <h4>CONTENT</h4>
                     <span class="collapse-icon">▼</span>
                 </div>
                 <div class="section-body">
@@ -666,14 +816,20 @@ class VisualBuilder {
     }
 
     renderStylingSection(element, computedStyle) {
+        // Get background image if exists
+        const bgImage = element.style.backgroundImage || computedStyle.backgroundImage;
+        const hasBgImage = bgImage && bgImage !== 'none';
+        const bgImageUrl = hasBgImage ? bgImage.replace(/url\(['"]?(.+?)['"]?\)/i, '$1') : '';
+
         return `
             <div class="property-section collapsible" data-section="styling">
                 <div class="section-header" data-toggle="styling">
                     <span class="section-icon">🎨</span>
-                    <h4>Styling</h4>
+                    <h4>STYLING</h4>
                     <span class="collapse-icon">▼</span>
                 </div>
                 <div class="section-body">
+                    <!-- Colors -->
                     <div class="form-row-2col">
                         <div class="form-group">
                             <label>Background</label>
@@ -691,6 +847,42 @@ class VisualBuilder {
                         </div>
                     </div>
 
+                    <!-- Background Image -->
+                    <div class="form-group">
+                        <label>Background Image</label>
+                        <div class="source-input-group">
+                            <input type="text" id="propBgImage" value="${bgImageUrl}" placeholder="URL or upload" class="live-preview">
+                            <button type="button" class="btn-icon" id="uploadBgImageBtn" title="Upload">📤</button>
+                        </div>
+                        <input type="file" id="propBgImageUpload" accept=".jpg,.jpeg,.png,.webp" style="display:none;">
+                        ${hasBgImage ? `
+                            <div class="bg-image-preview">
+                                <img src="${bgImageUrl}" alt="Background preview">
+                                <button type="button" class="btn-remove-bg" id="removeBgImage" title="Remove">✕</button>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="form-row-2col">
+                        <div class="form-group">
+                            <label>Background Size</label>
+                            <select id="propBgSize" class="live-preview">
+                                <option value="cover" ${computedStyle.backgroundSize === 'cover' ? 'selected' : ''}>Cover</option>
+                                <option value="contain" ${computedStyle.backgroundSize === 'contain' ? 'selected' : ''}>Contain</option>
+                                <option value="auto" ${computedStyle.backgroundSize === 'auto' ? 'selected' : ''}>Auto</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Background Position</label>
+                            <select id="propBgPosition" class="live-preview">
+                                <option value="center" ${computedStyle.backgroundPosition.includes('center') ? 'selected' : ''}>Center</option>
+                                <option value="top" ${computedStyle.backgroundPosition.includes('top') ? 'selected' : ''}>Top</option>
+                                <option value="bottom" ${computedStyle.backgroundPosition.includes('bottom') ? 'selected' : ''}>Bottom</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Font Size -->
                     <div class="form-group">
                         <label>Font Size</label>
                         <div class="slider-input-wrapper">
@@ -700,6 +892,7 @@ class VisualBuilder {
                         </div>
                     </div>
 
+                    <!-- Border Radius -->
                     <div class="form-group">
                         <label>Border Radius</label>
                         <div class="slider-input-wrapper">
@@ -709,6 +902,7 @@ class VisualBuilder {
                         </div>
                     </div>
 
+                    <!-- Padding & Margin -->
                     <div class="form-row-2col">
                         <div class="form-group">
                             <label>Padding</label>
@@ -726,6 +920,7 @@ class VisualBuilder {
                         </div>
                     </div>
 
+                    <!-- Box Shadow -->
                     <div class="form-group">
                         <label>Box Shadow</label>
                         <select id="propBoxShadow" class="live-preview">
@@ -734,7 +929,25 @@ class VisualBuilder {
                             <option value="0 4px 15px rgba(0,0,0,0.1)">Medium</option>
                             <option value="0 8px 30px rgba(0,0,0,0.15)">Strong</option>
                             <option value="0 20px 50px rgba(0,0,0,0.2)">Dramatic</option>
+                            <option value="inset 0 2px 10px rgba(0,0,0,0.1)">Inner</option>
                         </select>
+                    </div>
+
+                    <!-- Border -->
+                    <div class="form-row-2col">
+                        <div class="form-group">
+                            <label>Border Width</label>
+                            <div class="input-with-unit">
+                                <input type="number" id="propBorderWidth" value="${parseInt(computedStyle.borderWidth) || 0}" min="0" max="10" class="live-preview">
+                                <span>px</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Border Color</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="propBorderColor" value="${this.rgbToHex(computedStyle.borderColor)}" class="live-preview">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -749,7 +962,7 @@ class VisualBuilder {
             <div class="property-section collapsible" data-section="layout">
                 <div class="section-header" data-toggle="layout">
                     <span class="section-icon">📐</span>
-                    <h4>Layout</h4>
+                    <h4>LAYOUT</h4>
                     <span class="collapse-icon">▼</span>
                 </div>
                 <div class="section-body">
@@ -764,6 +977,17 @@ class VisualBuilder {
                         </div>
                     </div>
 
+                    <div class="form-row-2col">
+                        <div class="form-group">
+                            <label>Min Width</label>
+                            <input type="text" id="propMinWidth" value="${element.style.minWidth || ''}" placeholder="none">
+                        </div>
+                        <div class="form-group">
+                            <label>Max Width</label>
+                            <input type="text" id="propMaxWidth" value="${element.style.maxWidth || ''}" placeholder="none">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>Display</label>
                         <select id="propDisplay" class="live-preview">
@@ -771,6 +995,7 @@ class VisualBuilder {
                             <option value="flex" ${isFlex ? 'selected' : ''}>Flex</option>
                             <option value="grid" ${isGrid ? 'selected' : ''}>Grid</option>
                             <option value="inline-block" ${computedStyle.display === 'inline-block' ? 'selected' : ''}>Inline Block</option>
+                            <option value="inline" ${computedStyle.display === 'inline' ? 'selected' : ''}>Inline</option>
                         </select>
                     </div>
 
@@ -784,6 +1009,16 @@ class VisualBuilder {
                             <span>px</span>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label>Position</label>
+                        <select id="propPosition" class="live-preview">
+                            <option value="static" ${computedStyle.position === 'static' ? 'selected' : ''}>Static</option>
+                            <option value="relative" ${computedStyle.position === 'relative' ? 'selected' : ''}>Relative</option>
+                            <option value="absolute" ${computedStyle.position === 'absolute' ? 'selected' : ''}>Absolute</option>
+                            <option value="fixed" ${computedStyle.position === 'fixed' ? 'selected' : ''}>Fixed</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         `;
@@ -792,18 +1027,20 @@ class VisualBuilder {
     renderGridControls(element, computedStyle) {
         return `
             <div class="grid-controls">
-                <div class="form-group">
-                    <label>Columns</label>
-                    <input type="number" id="propGridCols" value="3" min="1" max="12" class="live-preview">
-                </div>
-                <div class="form-group">
-                    <label>Rows</label>
-                    <select id="propGridRows">
-                        <option value="auto">Auto</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label>Columns</label>
+                        <input type="number" id="propGridCols" value="3" min="1" max="12" class="live-preview">
+                    </div>
+                    <div class="form-group">
+                        <label>Rows</label>
+                        <select id="propGridRows">
+                            <option value="auto">Auto</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         `;
@@ -817,25 +1054,37 @@ class VisualBuilder {
                     <select id="propFlexDirection" class="live-preview">
                         <option value="row" ${computedStyle.flexDirection === 'row' ? 'selected' : ''}>Row</option>
                         <option value="column" ${computedStyle.flexDirection === 'column' ? 'selected' : ''}>Column</option>
+                        <option value="row-reverse">Row Reverse</option>
+                        <option value="column-reverse">Column Reverse</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Justify</label>
-                    <select id="propJustifyContent" class="live-preview">
-                        <option value="flex-start">Start</option>
-                        <option value="center">Center</option>
-                        <option value="flex-end">End</option>
-                        <option value="space-between">Space Between</option>
-                        <option value="space-around">Space Around</option>
-                    </select>
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label>Justify</label>
+                        <select id="propJustifyContent" class="live-preview">
+                            <option value="flex-start" ${computedStyle.justifyContent === 'flex-start' ? 'selected' : ''}>Start</option>
+                            <option value="center" ${computedStyle.justifyContent === 'center' ? 'selected' : ''}>Center</option>
+                            <option value="flex-end" ${computedStyle.justifyContent === 'flex-end' ? 'selected' : ''}>End</option>
+                            <option value="space-between" ${computedStyle.justifyContent === 'space-between' ? 'selected' : ''}>Space Between</option>
+                            <option value="space-around" ${computedStyle.justifyContent === 'space-around' ? 'selected' : ''}>Space Around</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Align</label>
+                        <select id="propAlignItems" class="live-preview">
+                            <option value="stretch" ${computedStyle.alignItems === 'stretch' ? 'selected' : ''}>Stretch</option>
+                            <option value="flex-start" ${computedStyle.alignItems === 'flex-start' ? 'selected' : ''}>Start</option>
+                            <option value="center" ${computedStyle.alignItems === 'center' ? 'selected' : ''}>Center</option>
+                            <option value="flex-end" ${computedStyle.alignItems === 'flex-end' ? 'selected' : ''}>End</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Align</label>
-                    <select id="propAlignItems" class="live-preview">
-                        <option value="stretch">Stretch</option>
-                        <option value="flex-start">Start</option>
-                        <option value="center">Center</option>
-                        <option value="flex-end">End</option>
+                    <label>Wrap</label>
+                    <select id="propFlexWrap" class="live-preview">
+                        <option value="nowrap" ${computedStyle.flexWrap === 'nowrap' ? 'selected' : ''}>No Wrap</option>
+                        <option value="wrap" ${computedStyle.flexWrap === 'wrap' ? 'selected' : ''}>Wrap</option>
+                        <option value="wrap-reverse">Wrap Reverse</option>
                     </select>
                 </div>
             </div>
@@ -846,6 +1095,7 @@ class VisualBuilder {
         const tagName = element.tagName.toLowerCase();
         let content = '';
 
+        // Click actions for buttons and links
         if (tagName === 'button' || tagName === 'a') {
             content += `
                 <div class="form-group">
@@ -856,16 +1106,27 @@ class VisualBuilder {
                         <option value="scale">Scale</option>
                         <option value="glow">Glow</option>
                         <option value="underline">Underline</option>
+                        <option value="slide">Slide Background</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Click Action</label>
+                    <select id="propClickAction">
+                        <option value="navigate">Navigate to URL</option>
+                        <option value="scroll">Scroll to Section</option>
+                        <option value="modal">Open Modal</option>
+                        <option value="none">No Action</option>
                     </select>
                 </div>
             `;
         }
 
+        // Image behaviors
         if (tagName === 'img') {
             content += `
                 <div class="form-group">
                     <label>
-                        <input type="checkbox" id="propLazyLoad" checked>
+                        <input type="checkbox" id="propLazyLoad" ${element.loading === 'lazy' ? 'checked' : ''}>
                         Lazy Load
                     </label>
                 </div>
@@ -876,23 +1137,42 @@ class VisualBuilder {
                         <option value="contain">Contain</option>
                         <option value="fill">Fill</option>
                         <option value="none">None</option>
+                        <option value="scale-down">Scale Down</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>On Click</label>
+                    <select id="propImageClick">
+                        <option value="none">Nothing</option>
+                        <option value="lightbox">Open Lightbox</option>
+                        <option value="link">Navigate to URL</option>
                     </select>
                 </div>
             `;
         }
 
+        // Visibility controls for all elements
         content += `
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" id="propHideOnMobile">
-                    Hide on Mobile
-                </label>
-            </div>
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" id="propHideOnDesktop">
-                    Hide on Desktop
-                </label>
+            <div class="visibility-controls">
+                <h5 class="child-section-title">👁️ Visibility</h5>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="propHideOnMobile" ${element.classList.contains('hide-mobile') ? 'checked' : ''}>
+                        Hide on Mobile
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="propHideOnTablet" ${element.classList.contains('hide-tablet') ? 'checked' : ''}>
+                        Hide on Tablet
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="propHideOnDesktop" ${element.classList.contains('hide-desktop') ? 'checked' : ''}>
+                        Hide on Desktop
+                    </label>
+                </div>
             </div>
         `;
 
@@ -900,7 +1180,7 @@ class VisualBuilder {
             <div class="property-section collapsible" data-section="behavior">
                 <div class="section-header" data-toggle="behavior">
                     <span class="section-icon">⚡</span>
-                    <h4>Behavior</h4>
+                    <h4>BEHAVIOR</h4>
                     <span class="collapse-icon">▼</span>
                 </div>
                 <div class="section-body">
@@ -914,14 +1194,14 @@ class VisualBuilder {
         let content = '';
 
         if (detectedType === 'productCard') {
+            // Find price element
+            const priceEl = element.querySelector('.product-price, .price');
+            const priceText = priceEl ? priceEl.textContent : '';
+
             content = `
                 <div class="form-group">
-                    <label>Data Source</label>
-                    <select id="propDataSource">
-                        <option value="manual">Manual</option>
-                        <option value="collection">From Collection</option>
-                        <option value="category">By Category</option>
-                    </select>
+                    <label>Price</label>
+                    <input type="text" id="propProductPrice" value="${this.escapeHtml(priceText)}" placeholder="e.g. 1 299 Kč">
                 </div>
                 <div class="form-group">
                     <label>
@@ -937,7 +1217,7 @@ class VisualBuilder {
                 </div>
                 <div class="form-group">
                     <label>
-                        <input type="checkbox" id="propShowBadge" checked>
+                        <input type="checkbox" id="propShowBadge">
                         Show Badge (Sale/New)
                     </label>
                 </div>
@@ -953,16 +1233,22 @@ class VisualBuilder {
         if (detectedType === 'categoryCard') {
             content = `
                 <div class="form-group">
-                    <label>Category</label>
-                    <select id="propCategory">
-                        <option value="">Select Category</option>
-                    </select>
+                    <label>Category Name</label>
+                    <input type="text" id="propCategoryName" value="${element.querySelector('.category-title')?.textContent || ''}">
                 </div>
                 <div class="form-group">
                     <label>
                         <input type="checkbox" id="propShowCount" checked>
                         Show Product Count
                     </label>
+                </div>
+                <div class="form-group">
+                    <label>Overlay Style</label>
+                    <select id="propOverlayStyle">
+                        <option value="gradient">Gradient</option>
+                        <option value="solid">Solid Color</option>
+                        <option value="none">None</option>
+                    </select>
                 </div>
             `;
         }
@@ -973,7 +1259,7 @@ class VisualBuilder {
             <div class="property-section collapsible" data-section="data">
                 <div class="section-header" data-toggle="data">
                     <span class="section-icon">📊</span>
-                    <h4>Data</h4>
+                    <h4>DATA</h4>
                     <span class="collapse-icon">▼</span>
                 </div>
                 <div class="section-body">
@@ -982,6 +1268,10 @@ class VisualBuilder {
             </div>
         `;
     }
+
+    // ==========================================
+    // INTERACTION HANDLERS
+    // ==========================================
 
     setupCollapsibleSections() {
         document.querySelectorAll('.section-header[data-toggle]').forEach(header => {
@@ -992,6 +1282,24 @@ class VisualBuilder {
         });
     }
 
+    scrollToRelevantSection(detectedType) {
+        // Scroll to the most relevant section based on element type
+        let targetSection = 'content';
+
+        if (['container', 'section', 'grid', 'divider', 'spacer'].includes(detectedType)) {
+            targetSection = 'layout';
+        } else if (['productCard', 'categoryCard'].includes(detectedType)) {
+            targetSection = 'data';
+        }
+
+        const section = document.querySelector(`[data-section="${targetSection}"]`);
+        if (section) {
+            setTimeout(() => {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }
+
     setupSmartPropertyHandlers(element) {
         // Live preview handlers
         document.querySelectorAll('.live-preview').forEach(input => {
@@ -1000,8 +1308,14 @@ class VisualBuilder {
             });
         });
 
+        // Child element handlers
+        this.setupChildElementHandlers(element);
+
         // Slider sync
         this.syncSliders();
+
+        // Color value displays
+        this.setupColorDisplays();
 
         // Apply button
         const applyBtn = document.getElementById('applyPropertiesBtn');
@@ -1022,13 +1336,86 @@ class VisualBuilder {
             });
         }
 
-        // Image upload
-        const uploadBtn = document.getElementById('uploadImageBtn');
-        const uploadInput = document.getElementById('propImageUpload');
-        if (uploadBtn && uploadInput) {
-            uploadBtn.addEventListener('click', () => uploadInput.click());
-            uploadInput.addEventListener('change', (e) => this.handleImageUpload(e, element));
-        }
+        // Image upload handlers
+        this.setupImageUploadHandlers(element);
+
+        // Background image upload
+        this.setupBgImageUploadHandlers(element);
+    }
+
+    setupChildElementHandlers(element) {
+        // Heading inputs
+        document.querySelectorAll('.child-heading-input').forEach(input => {
+            input.addEventListener('input', () => {
+                const index = parseInt(input.dataset.childIndex);
+                const headings = element.querySelectorAll('h1, h2, h3, h4, h5, h6');
+                if (headings[index]) {
+                    headings[index].textContent = input.value;
+                }
+            });
+        });
+
+        // Paragraph inputs
+        document.querySelectorAll('.child-paragraph-input').forEach(input => {
+            input.addEventListener('input', () => {
+                const index = parseInt(input.dataset.childIndex);
+                const paragraphs = element.querySelectorAll('p');
+                if (paragraphs[index]) {
+                    paragraphs[index].textContent = input.value;
+                }
+            });
+        });
+
+        // Button text inputs
+        document.querySelectorAll('.child-button-text').forEach(input => {
+            input.addEventListener('input', () => {
+                const index = parseInt(input.dataset.childIndex);
+                const buttons = element.querySelectorAll('button, .btn, .btn-primary, .btn-secondary, a.btn');
+                if (buttons[index]) {
+                    buttons[index].textContent = input.value;
+                }
+            });
+        });
+
+        // Button URL inputs
+        document.querySelectorAll('.child-button-url').forEach(input => {
+            input.addEventListener('change', () => {
+                const index = parseInt(input.dataset.childIndex);
+                const buttons = element.querySelectorAll('button, .btn, .btn-primary, .btn-secondary, a.btn');
+                if (buttons[index]) {
+                    if (buttons[index].tagName === 'A') {
+                        buttons[index].href = input.value;
+                    } else {
+                        buttons[index].setAttribute('data-href', input.value);
+                    }
+                }
+            });
+        });
+
+        // Icon inputs
+        document.querySelectorAll('.child-icon-input').forEach(input => {
+            input.addEventListener('input', () => {
+                const index = parseInt(input.dataset.childIndex);
+                const icons = element.querySelectorAll('.feature-icon, .category-icon, [class*="icon"]');
+                if (icons[index]) {
+                    icons[index].textContent = input.value;
+                }
+            });
+        });
+
+        // Image src inputs
+        document.querySelectorAll('.child-image-src').forEach(input => {
+            input.addEventListener('input', () => {
+                const index = parseInt(input.dataset.childIndex);
+                const images = element.querySelectorAll('img');
+                if (images[index]) {
+                    images[index].src = input.value;
+                    // Update preview
+                    const preview = document.querySelector(`.child-image-preview[data-child-index="${index}"]`);
+                    if (preview) preview.src = input.value;
+                }
+            });
+        });
     }
 
     syncSliders() {
@@ -1047,6 +1434,193 @@ class VisualBuilder {
         });
     }
 
+    setupColorDisplays() {
+        ['propBgColor', 'propTextColor', 'propBorderColor'].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.addEventListener('input', () => {
+                    const valueDisplay = input.nextElementSibling;
+                    if (valueDisplay && valueDisplay.classList.contains('color-value')) {
+                        valueDisplay.textContent = input.value;
+                    }
+                });
+            }
+        });
+    }
+
+    setupImageUploadHandlers(element) {
+        const uploadBtn = document.getElementById('uploadImageBtn');
+        const uploadInput = document.getElementById('propImageUpload');
+
+        if (uploadBtn && uploadInput) {
+            uploadBtn.addEventListener('click', () => uploadInput.click());
+            uploadInput.addEventListener('change', (e) => this.handleImageUpload(e, element));
+        }
+    }
+
+    setupBgImageUploadHandlers(element) {
+        const uploadBtn = document.getElementById('uploadBgImageBtn');
+        const uploadInput = document.getElementById('propBgImageUpload');
+        const removeBtn = document.getElementById('removeBgImage');
+
+        if (uploadBtn && uploadInput) {
+            uploadBtn.addEventListener('click', () => uploadInput.click());
+            uploadInput.addEventListener('change', (e) => this.handleBgImageUpload(e, element));
+        }
+
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => {
+                element.style.backgroundImage = 'none';
+                document.getElementById('propBgImage').value = '';
+                removeBtn.parentElement.remove();
+                window.editor?.showToast('Background image removed');
+            });
+        }
+    }
+
+    handleImageUpload(e, element) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const srcInput = document.getElementById('propImageSrc');
+            const previewThumb = document.getElementById('imagePreviewThumb');
+
+            if (srcInput) srcInput.value = event.target.result;
+            if (previewThumb) previewThumb.src = event.target.result;
+            element.src = event.target.result;
+
+            window.editor?.showToast('Image uploaded');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    handleBgImageUpload(e, element) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const bgInput = document.getElementById('propBgImage');
+            if (bgInput) bgInput.value = event.target.result;
+
+            element.style.backgroundImage = `url('${event.target.result}')`;
+            element.style.backgroundSize = 'cover';
+            element.style.backgroundPosition = 'center';
+
+            window.editor?.showToast('Background image uploaded');
+
+            // Refresh panel to show preview
+            this.renderSmartProperties(element);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ==========================================
+    // PROPERTY APPLICATION
+    // ==========================================
+
+    previewProperty(element, input) {
+        const id = input.id;
+        const value = input.type === 'checkbox' ? input.checked : input.value;
+
+        const propertyMap = {
+            propTextContent: () => element.textContent = value,
+            propButtonText: () => element.textContent = value,
+            propLinkText: () => element.textContent = value,
+            propImageSrc: () => element.src = value,
+            propBgColor: () => element.style.backgroundColor = value,
+            propTextColor: () => {
+                element.style.color = value;
+                // Also apply to child text elements
+                element.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a').forEach(el => {
+                    el.style.color = value;
+                });
+            },
+            propBgImage: () => {
+                if (value) {
+                    element.style.backgroundImage = `url('${value}')`;
+                    element.style.backgroundSize = 'cover';
+                    element.style.backgroundPosition = 'center';
+                } else {
+                    element.style.backgroundImage = 'none';
+                }
+            },
+            propBgSize: () => element.style.backgroundSize = value,
+            propBgPosition: () => element.style.backgroundPosition = value,
+            propFontSize: () => element.style.fontSize = value + 'px',
+            propFontSizeSlider: () => element.style.fontSize = value + 'px',
+            propBorderRadius: () => element.style.borderRadius = value + 'px',
+            propBorderRadiusSlider: () => element.style.borderRadius = value + 'px',
+            propPadding: () => element.style.padding = value + 'px',
+            propMargin: () => element.style.margin = value + 'px',
+            propWidth: () => element.style.width = this.formatSize(value),
+            propHeight: () => element.style.height = this.formatSize(value),
+            propGap: () => element.style.gap = value + 'px',
+            propDisplay: () => element.style.display = value,
+            propFlexDirection: () => element.style.flexDirection = value,
+            propJustifyContent: () => element.style.justifyContent = value,
+            propAlignItems: () => element.style.alignItems = value,
+            propFlexWrap: () => element.style.flexWrap = value,
+            propBoxShadow: () => element.style.boxShadow = value,
+            propObjectFit: () => element.style.objectFit = value,
+            propPosition: () => element.style.position = value,
+            propBorderWidth: () => element.style.borderWidth = value + 'px',
+            propBorderColor: () => element.style.borderColor = value,
+            propGridCols: () => element.style.gridTemplateColumns = `repeat(${value}, 1fr)`
+        };
+
+        if (propertyMap[id]) {
+            propertyMap[id]();
+        }
+    }
+
+    applyAllProperties(element) {
+        // Apply all property inputs
+        const propertyIds = [
+            'propTextContent', 'propButtonText', 'propLinkText', 'propImageSrc', 'propImageAlt',
+            'propBgColor', 'propTextColor', 'propBgImage', 'propBgSize', 'propBgPosition',
+            'propFontSize', 'propBorderRadius', 'propPadding', 'propMargin',
+            'propWidth', 'propHeight', 'propMinWidth', 'propMaxWidth',
+            'propGap', 'propDisplay', 'propFlexDirection', 'propJustifyContent', 'propAlignItems',
+            'propFlexWrap', 'propBoxShadow', 'propObjectFit', 'propPosition',
+            'propBorderWidth', 'propBorderColor', 'propGridCols',
+            'propButtonUrl', 'propLinkHref', 'propButtonTarget', 'propLinkTarget'
+        ];
+
+        propertyIds.forEach(propId => {
+            const input = document.getElementById(propId);
+            if (input) {
+                this.previewProperty(element, input);
+            }
+        });
+
+        // Apply button/link URLs
+        const buttonUrl = document.getElementById('propButtonUrl');
+        const buttonTarget = document.getElementById('propButtonTarget');
+        if (buttonUrl && buttonUrl.value) {
+            if (element.tagName === 'A') {
+                element.href = buttonUrl.value;
+            } else {
+                element.setAttribute('data-href', buttonUrl.value);
+            }
+        }
+        if (buttonTarget) {
+            element.target = buttonTarget.value;
+        }
+
+        // Apply link href
+        const linkHref = document.getElementById('propLinkHref');
+        const linkTarget = document.getElementById('propLinkTarget');
+        if (linkHref) element.href = linkHref.value;
+        if (linkTarget) element.target = linkTarget.value;
+
+        // Apply image alt
+        const imageAlt = document.getElementById('propImageAlt');
+        if (imageAlt) element.alt = imageAlt.value;
+    }
+
     // ==========================================
     // ELEMENT OPERATIONS
     // ==========================================
@@ -1058,6 +1632,7 @@ class VisualBuilder {
         const classes = element.className || '';
 
         // Check for specific component classes
+        if (classes.includes('hero')) return 'hero';
         if (classes.includes('product-card')) return 'productCard';
         if (classes.includes('category-card')) return 'categoryCard';
         if (classes.includes('feature-card')) return 'featureCard';
@@ -1065,6 +1640,8 @@ class VisualBuilder {
         // Check by tag name
         const tagMapping = {
             'section': 'section',
+            'header': 'section',
+            'footer': 'section',
             'div': 'container',
             'h1': 'heading', 'h2': 'heading', 'h3': 'heading',
             'h4': 'heading', 'h5': 'heading', 'h6': 'heading',
@@ -1077,9 +1654,8 @@ class VisualBuilder {
         };
 
         // Check for grid display
-        if (element.style.display === 'grid' || window.getComputedStyle(element).display === 'grid') {
-            return 'grid';
-        }
+        const style = element.style;
+        if (style.display === 'grid') return 'grid';
 
         return tagMapping[tagName] || 'container';
     }
@@ -1092,21 +1668,14 @@ class VisualBuilder {
 
         window.editor?.saveState(`Converted to ${typeInfo.name}`);
 
-        // Store children
-        const children = Array.from(element.children);
-        const content = element.textContent;
-
-        // Apply default styles
         Object.entries(typeInfo.defaultStyles || {}).forEach(([prop, value]) => {
             element.style[prop] = value;
         });
 
-        // Add type class
-        element.className = element.className.replace(/builder-\S+/g, '').trim();
+        element.className = element.className.replace(/builder-type-\S+/g, '').trim();
         element.classList.add(`builder-type-${targetType}`);
         element.setAttribute('data-builder-type', targetType);
 
-        // Update properties panel
         this.renderSmartProperties(element);
         this.updateSelectedElementInfo(element);
 
@@ -1123,20 +1692,16 @@ class VisualBuilder {
 
         window.editor?.saveState(`Added ${typeInfo.name}`);
 
-        // Create new element
         const newElement = iframeDoc.createElement(this.getTagForType(type));
         newElement.setAttribute('data-builder-type', type);
         newElement.classList.add(`builder-type-${type}`);
 
-        // Apply default styles
         Object.entries(typeInfo.defaultStyles || {}).forEach(([prop, value]) => {
             newElement.style[prop] = value;
         });
 
-        // Add default content
         this.addDefaultContent(newElement, type, typeInfo);
 
-        // Insert element
         if (afterElement) {
             afterElement.parentNode.insertBefore(newElement, afterElement.nextSibling);
         } else if (this.selectedElement) {
@@ -1145,7 +1710,6 @@ class VisualBuilder {
             iframeDoc.body.appendChild(newElement);
         }
 
-        // Select the new element
         window.editor?.selectElement(newElement);
         window.editor?.showToast(`Added ${typeInfo.name}`);
     }
@@ -1154,6 +1718,7 @@ class VisualBuilder {
         const tagMap = {
             container: 'div',
             section: 'section',
+            hero: 'section',
             grid: 'div',
             heading: 'h2',
             text: 'p',
@@ -1199,7 +1764,6 @@ class VisualBuilder {
     // ==========================================
 
     setupCanvasListeners() {
-        // Listen for selection changes from main editor
         document.addEventListener('elementSelected', (e) => {
             this.selectedElement = e.detail.element;
             this.updateSelectedElementInfo(e.detail.element);
@@ -1209,6 +1773,11 @@ class VisualBuilder {
         document.addEventListener('elementDeselected', () => {
             this.selectedElement = null;
             this.updateSelectedElementInfo(null);
+
+            const propertiesContent = document.getElementById('propertiesContent');
+            if (propertiesContent) {
+                propertiesContent.innerHTML = '<p class="no-selection">Select an element to edit its properties</p>';
+            }
         });
     }
 
@@ -1220,13 +1789,17 @@ class VisualBuilder {
         document.addEventListener('keydown', (e) => {
             if (!this.selectedElement) return;
 
+            // Skip if typing in input
+            if (document.activeElement.tagName === 'INPUT' ||
+                document.activeElement.tagName === 'TEXTAREA' ||
+                document.activeElement.tagName === 'SELECT') {
+                return;
+            }
+
             // Delete element
             if (e.key === 'Delete' || e.key === 'Backspace') {
-                if (document.activeElement.tagName !== 'INPUT' &&
-                    document.activeElement.tagName !== 'TEXTAREA') {
-                    e.preventDefault();
-                    this.deleteElement(this.selectedElement);
-                }
+                e.preventDefault();
+                this.deleteElement(this.selectedElement);
             }
 
             // Duplicate element
@@ -1255,6 +1828,7 @@ class VisualBuilder {
         element.remove();
         this.selectedElement = null;
         this.updateSelectedElementInfo(null);
+        window.editor?.deselectElement();
         window.editor?.showToast('Element deleted');
     }
 
@@ -1270,6 +1844,7 @@ class VisualBuilder {
     moveElement(element, direction) {
         if (!element) return;
         const parent = element.parentNode;
+        window.editor?.saveState(`Moved element ${direction}`);
         if (direction === 'up' && element.previousElementSibling) {
             parent.insertBefore(element, element.previousElementSibling);
         } else if (direction === 'down' && element.nextElementSibling) {
@@ -1281,71 +1856,8 @@ class VisualBuilder {
     // UTILITIES
     // ==========================================
 
-    previewProperty(element, input) {
-        const id = input.id;
-        const value = input.type === 'checkbox' ? input.checked : input.value;
-
-        const propertyMap = {
-            propTextContent: () => element.textContent = value,
-            propImageSrc: () => element.src = value,
-            propBgColor: () => element.style.backgroundColor = value,
-            propTextColor: () => element.style.color = value,
-            propFontSize: () => element.style.fontSize = value + 'px',
-            propFontSizeSlider: () => element.style.fontSize = value + 'px',
-            propBorderRadius: () => element.style.borderRadius = value + 'px',
-            propBorderRadiusSlider: () => element.style.borderRadius = value + 'px',
-            propPadding: () => element.style.padding = value + 'px',
-            propMargin: () => element.style.margin = value + 'px',
-            propWidth: () => element.style.width = this.formatSize(value),
-            propHeight: () => element.style.height = this.formatSize(value),
-            propGap: () => element.style.gap = value + 'px',
-            propDisplay: () => element.style.display = value,
-            propFlexDirection: () => element.style.flexDirection = value,
-            propJustifyContent: () => element.style.justifyContent = value,
-            propAlignItems: () => element.style.alignItems = value,
-            propBoxShadow: () => element.style.boxShadow = value,
-            propObjectFit: () => element.style.objectFit = value
-        };
-
-        if (propertyMap[id]) {
-            propertyMap[id]();
-        }
-    }
-
-    applyAllProperties(element) {
-        // This applies all current form values to the element
-        const props = [
-            'propTextContent', 'propImageSrc', 'propImageAlt', 'propBgColor',
-            'propTextColor', 'propFontSize', 'propBorderRadius', 'propPadding',
-            'propMargin', 'propWidth', 'propHeight', 'propGap', 'propDisplay',
-            'propFlexDirection', 'propJustifyContent', 'propAlignItems',
-            'propBoxShadow', 'propObjectFit', 'propButtonUrl', 'propLinkHref'
-        ];
-
-        props.forEach(propId => {
-            const input = document.getElementById(propId);
-            if (input) {
-                this.previewProperty(element, input);
-            }
-        });
-    }
-
-    handleImageUpload(e, element) {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const srcInput = document.getElementById('propImageSrc');
-            if (srcInput) srcInput.value = event.target.result;
-            element.src = event.target.result;
-            window.editor?.showToast('Image uploaded');
-        };
-        reader.readAsDataURL(file);
-    }
-
     formatSize(value) {
-        if (!value || value === 'auto') return value;
+        if (!value || value === 'auto' || value === 'none') return value;
         if (/^\d+$/.test(value)) return value + 'px';
         return value;
     }
