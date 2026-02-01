@@ -980,6 +980,23 @@ class EditorController {
         const previousState = this.undoStack.pop();
         iframeDoc.body.innerHTML = previousState.html;
 
+        // Clear data-builderInit attributes so elements can be re-initialized
+        // Use the same selector as initializeIframeInteractions for consistency
+        const editableElements = iframeDoc.querySelectorAll('h1, h2, h3, h4, h5, h6, p, a, button, img, span, div, section, .product-card, .feature-card, .category-card');
+        editableElements.forEach(el => {
+            delete el.dataset.builderInit;
+        });
+
+        // Also remove builder selection classes that may have been saved
+        iframeDoc.querySelectorAll('.builder-selected, .builder-hover').forEach(el => {
+            el.classList.remove('builder-selected', 'builder-hover');
+            el.removeAttribute('data-element-type');
+        });
+
+        // Clear selection as restored element reference is no longer valid
+        this.selectedElement = null;
+        this.deselectElement();
+
         // Re-initialize interactions
         setTimeout(() => {
             this.initializeIframeInteractions();
@@ -1013,6 +1030,23 @@ class EditorController {
         // Pop and restore next state
         const nextState = this.redoStack.pop();
         iframeDoc.body.innerHTML = nextState.html;
+
+        // Clear data-builderInit attributes so elements can be re-initialized
+        // Use the same selector as initializeIframeInteractions for consistency
+        const editableElements = iframeDoc.querySelectorAll('h1, h2, h3, h4, h5, h6, p, a, button, img, span, div, section, .product-card, .feature-card, .category-card');
+        editableElements.forEach(el => {
+            delete el.dataset.builderInit;
+        });
+
+        // Also remove builder selection classes that may have been saved
+        iframeDoc.querySelectorAll('.builder-selected, .builder-hover').forEach(el => {
+            el.classList.remove('builder-selected', 'builder-hover');
+            el.removeAttribute('data-element-type');
+        });
+
+        // Clear selection as restored element reference is no longer valid
+        this.selectedElement = null;
+        this.deselectElement();
 
         // Re-initialize interactions
         setTimeout(() => {
